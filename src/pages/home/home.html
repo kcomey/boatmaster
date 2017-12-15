@@ -1,14 +1,22 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="secondary">
     <ion-title>
-      Ionic Blank
+      Boat Master
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content padding class="custom">
+  <ion-card>
+      <ion-list>
+        <button ion-item (click)="showBudgetPage()">
+          <ion-icon name="pricetag" item-left></ion-icon>
+          Budget
+        </button>
+        <button ion-item (click)="showChecklistPage()">
+          <ion-icon name="checkbox-outline" item-left></ion-icon>
+          Cruising Checklist
+        </button>
+      </ion-list>
+    </ion-card>
 </ion-content>
