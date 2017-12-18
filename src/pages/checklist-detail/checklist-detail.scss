@@ -1,6 +1,7 @@
 page-checklist-detail {
-
 }
+
+
 
 body > ion-app > ion-alert > div > div.alert-button-group > button:nth-child(1) > span {
     color: map-get($colors, warning);
@@ -13,3 +14,14 @@ body > ion-app > ion-alert > div > div.alert-button-group > button:nth-child(2) 
     color: white;
     border-radius: 5px;
 }
+
+[ion-item] span {
+    display: block;
+    color: map-get($colors, secondary);
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+
+
+

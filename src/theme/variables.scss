@@ -41,7 +41,8 @@ $colors: (
   dark:       #222,
   proceed:    #8cff1a,
   warning:    #C21400,
-  header:     #35A3F3
+  header:     #35A3F3,
+  exLight:    #ffffff
 );
 
 
@@ -56,6 +57,10 @@ $colors: (
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
+$checkbox-md-icon-background-color-on: map-get($colors, proceed);
+$checkbox-md-icon-border-color-off: map-get($colors, warning);
+$checkbox-md-icon-checkmark-color: map-get($colors, exLight);
+$checkbox-md-icon-border-color-on: map-get($colors, proceed);
 
 
 

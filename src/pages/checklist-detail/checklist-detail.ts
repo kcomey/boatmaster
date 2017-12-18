@@ -15,7 +15,7 @@ export class ChecklistDetailPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ChecklistDetailPage');
+
   }
 
   addItem(): void {
