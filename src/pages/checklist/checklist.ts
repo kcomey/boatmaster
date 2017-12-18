@@ -91,14 +91,22 @@ export class ChecklistPage {
 
   }
 
-  // viewChecklist(checklist): void {
+  viewChecklist(checklist): void {
+    this.navCtrl.push(ChecklistDetailPage, {
+      checklist: checklist
+    });
+  }
 
-  // }
+  removeChecklist(checklist, slidingItem: ItemSliding): void {
+    let index = this.checklists.indexOf(checklist);
 
-  // removeChecklist(checklist): void {
+    if (index > -1) {
+      this.checklists.splice(index, 1);
+      this.save();
+      slidingItem.close();
+    }
 
-
-  // }
+  }
 
   save(): void {
 

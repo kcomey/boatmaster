@@ -1,6 +1,6 @@
 <ion-header>
 
-  <ion-navbar color="secondary">
+  <ion-navbar color="header">
     <ion-title>Checklists</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="addChecklist()"><ion-icon
@@ -21,14 +21,15 @@
          </button>
 
           <ion-item-options>
-            <button ion-button icon-only color="light"
+            <button ion-button outline icon-only color="proceed"
             (click)="renameChecklist(checklist, slidingItem)"><ion-icon
-            name="clipboard"></ion-icon> Edit</button>
-            <button ion-button icon-only color="danger"
+            name="clipboard"></ion-icon></button>
+            <button ion-button outline icon-only color="warning"
             (click)="removeChecklist(checklist, slidingItem)"><ion-icon
-            name="trash"></ion-icon> Delete</button>
+            name="trash"></ion-icon></button>
           </ion-item-options>
         </ion-item-sliding>
         </ion-list>
       </ion-card>
 </ion-content>
+

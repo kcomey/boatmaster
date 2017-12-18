@@ -1,3 +1,18 @@
 page-checklist {
 
+
 }
+
+body > ion-app > ion-alert > div > div.alert-button-group > button:nth-child(1) > span {
+    color: map-get($colors, warning);
+    text-transform: lowercase;
+}
+
+body > ion-app > ion-alert > div > div.alert-button-group > button:nth-child(2) > span {
+    background-color: map-get($colors, proceed);
+    padding: 3px 10px;
+    color: white;
+    border-radius: 5px;
+}
+
+
