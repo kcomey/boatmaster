@@ -10,7 +10,15 @@ import { HomePage } from '../pages/home/home';
 import { BudgetPage } from '../pages/budget/budget';
 import { ChecklistPage } from '../pages/checklist/checklist';
 import { ChecklistDetailPage } from '../pages/checklist-detail/checklist-detail';
+import { LocationPage } from '../pages/location/location';
+import { BoatDetailsPage } from '../pages/boat-details/boat-details';
+import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
+import { LocationHomePage } from '../pages/location-home/location-home';
+import { Geolocation } from '@ionic-native/geolocation';
 import { DataChecklistProvider } from '../providers/data-checklist/data-checklist';
+import { DataLocationProvider } from '../providers/data-location/data-location';
+import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
+import { ConnectivityProvider } from '../providers/connectivity/connectivity';
 
 @NgModule({
   declarations: [
@@ -18,7 +26,11 @@ import { DataChecklistProvider } from '../providers/data-checklist/data-checklis
     HomePage,
     BudgetPage,
     ChecklistPage,
-    ChecklistDetailPage
+    ChecklistDetailPage,
+    LocationPage,
+    LocationHomePage,
+    BoatDetailsPage,
+    MooringDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -31,14 +43,22 @@ import { DataChecklistProvider } from '../providers/data-checklist/data-checklis
     HomePage,
     BudgetPage,
     ChecklistPage,
-    ChecklistDetailPage
+    ChecklistDetailPage,
+    LocationPage,
+    LocationHomePage,
+    BoatDetailsPage,
+    MooringDetailsPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DataChecklistProvider,
-    Keyboard
+    Keyboard,
+    DataLocationProvider,
+    GoogleMapsProvider,
+    ConnectivityProvider,
+    Geolocation
   ]
 })
 export class AppModule {}

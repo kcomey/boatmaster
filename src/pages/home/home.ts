@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 
 import { BudgetPage } from '../budget/budget';
 import { ChecklistPage } from '../checklist/checklist';
+import { LocationHomePage } from '../location-home/location-home';
 
 @Component({
   selector: 'page-home',
@@ -20,6 +21,10 @@ export class HomePage {
 
   showChecklistPage() {
     this.navCtrl.push(ChecklistPage);
+  }
+
+  showLocationHomePage() {
+    this.navCtrl.push(LocationHomePage);
   }
 
 }

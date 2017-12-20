@@ -1,0 +1,22 @@
+<ion-header>
+
+  <ion-navbar color="header">
+    <ion-title>Travel Log - Location</ion-title>
+    <ion-buttons end>
+      <button ion-button outline icon-only (click)="setLocation()">
+        <ion-icon name="pin"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+
+<ion-content padding>
+ <div #pleaseConnect id="please-connect">
+   <p>Please connect to the Internet...</p>
+ </div>
+
+ <div #map id="map"></div>
+
+</ion-content>
