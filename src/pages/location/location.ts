@@ -20,12 +20,50 @@ export class LocationPage {
     public dataService: DataLocationProvider, public alertCtrl: AlertController, public geolocation: Geolocation, public navParams: NavParams) {
   }
 
-  ionViewDidLoad() {
-  
+  ionViewDidLoad(): void {
+    this.platform.ready().then(() => {
+      this.dataService.getLocation().then((location) => {
+        let savedLocation: any = false;
+
+        if (location && typeof(location) != "undefined") {
+          savedLocation = JSON.parse(location);
+        }
+
+        let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
+          if (savedLocation) {
+            this.latitude = savedLocation.latitude;
+            this.longitude = savedLocation.longitude;
+
+            this.maps.changeMarker(this.latitude, this.longitude);
+          }
+        });
+      });
+    });
   }
 
-  setLocation(): void {
 
+
+  setLocation(): void {
+    this.geolocation.getCurrentPosition().then((position) => {
+      this.latitude = position.coords.latitude;
+      this.longitude = position.coords.longitude;
+
+      this.maps.changeMarker(position.coords.latitude, position.coords.longitude);
+
+      let data = {
+        latitude: this.latitude,
+        longitude: this.longitude
+      };
+
+      //this.dataService.setLocation(data);
+
+      let alert = this.alertCtrl.create({
+        title: 'Location set!',
+        buttons: [{text: 'OK'}]
+      });
+
+      alert.present();
+    });
   }
 
 }

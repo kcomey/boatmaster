@@ -11,9 +11,20 @@ import { DataLocationProvider } from '../../providers/data-location/data-locatio
   templateUrl: 'boat-details.html',
 })
 export class BoatDetailsPage {
+  boatDetailsForm: FormGroup;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, 
     public dataService: DataLocationProvider) {
+      this.boatDetailsForm = formBuilder.group({
+        name: [''],
+        draft: [''],
+        beam: [''],
+        clearance: [''],
+        fuelDiesel: [''],
+        fuelGas: [''],
+        water: [''],
+        waste: ['']
+      })
   }
 
   ionViewDidLoad() {
@@ -21,7 +32,8 @@ export class BoatDetailsPage {
   }
 
   saveForm(): void {
-    
+    let data = this.boatDetailsForm.value;
+    //this.dataService.setBoatDetails(data);
   }
 
 }

@@ -15,6 +15,7 @@ import { BoatDetailsPage } from '../pages/boat-details/boat-details';
 import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
 import { LocationHomePage } from '../pages/location-home/location-home';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Network } from '@ionic-native/network';
 import { DataChecklistProvider } from '../providers/data-checklist/data-checklist';
 import { DataLocationProvider } from '../providers/data-location/data-location';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
@@ -58,7 +59,8 @@ import { ConnectivityProvider } from '../providers/connectivity/connectivity';
     DataLocationProvider,
     GoogleMapsProvider,
     ConnectivityProvider,
-    Geolocation
+    Geolocation,
+    Network
   ]
 })
 export class AppModule {}

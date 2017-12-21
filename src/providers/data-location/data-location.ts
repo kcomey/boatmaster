@@ -1,17 +1,38 @@
-//import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
-/*
-  Generated class for the DataLocationProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class DataLocationProvider {
 
-  constructor() {
-    console.log('Hello DataLocationProvider Provider');
+  constructor(public storage: Storage) {
+
+  }
+
+  setBoatDetails(data: Object): void {
+    let newData = JSON.stringify(data);
+    this.storage.set('boatdetails', newData);
+  }
+
+  setMooringDetails(data: Object): void {
+    let newData = JSON.stringify(data);
+    this.storage.set('mooringdetails', newData);
+  }
+
+  setLocation(data: Object): void {
+    let newData = JSON.stringify(data);
+    this.storage.set('location', newData);
+  }
+
+  getBoatDetails(): Promise<any> {
+    return this.storage.get('boatdetails');
+  }
+
+  getMooringDetails(): Promise<any> {
+    return this.storage.get('mooringdetails');
+  }
+
+  getLocation(): Promise<any> {
+    return this.storage.get('location');
   }
 
 }
