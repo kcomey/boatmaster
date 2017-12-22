@@ -42,7 +42,6 @@ export class LocationPage {
   }
 
 
-
   setLocation(): void {
     this.geolocation.getCurrentPosition().then((position) => {
       this.latitude = position.coords.latitude;
@@ -55,7 +54,7 @@ export class LocationPage {
         longitude: this.longitude
       };
 
-      //this.dataService.setLocation(data);
+      this.dataService.setLocation(data);
 
       let alert = this.alertCtrl.create({
         title: 'Location set!',

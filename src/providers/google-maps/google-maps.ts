@@ -127,7 +127,7 @@ export class GoogleMapsProvider {
 
     let marker = new google.maps.Marker({
       map: this.map,
-      animation: google.maps.animation.DROP,
+      animation: 'DROP',
       position: latLng
     });
 
@@ -139,3 +139,4 @@ export class GoogleMapsProvider {
   }
 
 }
+
