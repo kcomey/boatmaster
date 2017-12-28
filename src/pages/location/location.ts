@@ -1,8 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, AlertController } from 'ionic-angular';
+import { App, IonicPage, NavController, NavParams, Platform, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { DataLocationProvider } from '../../providers/data-location/data-location';
+import { HomePage } from '../home/home';
+
 
 @IonicPage()
 @Component({
@@ -13,10 +15,12 @@ export class LocationPage {
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
 
+  tab1Root: any = HomePage;
+
   latitude: number;
   longitude: number;
 
-  constructor(public navCtrl: NavController, public maps: GoogleMapsProvider, public platform: Platform, 
+  constructor(public app: App, public navCtrl: NavController, public maps: GoogleMapsProvider, public platform: Platform, 
     public dataService: DataLocationProvider, public alertCtrl: AlertController, public geolocation: Geolocation, public navParams: NavParams) {
   }
 
@@ -39,6 +43,10 @@ export class LocationPage {
         });
       });
     });
+  }
+
+  goHome(): void {
+    this.app.getRootNav().setRoot(HomePage);
   }
 
 
