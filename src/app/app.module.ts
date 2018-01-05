@@ -20,6 +20,7 @@ import { DataChecklistProvider } from '../providers/data-checklist/data-checklis
 import { DataLocationProvider } from '../providers/data-location/data-location';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { ConnectivityProvider } from '../providers/connectivity/connectivity';
+import { DataCategoryProvider } from '../providers/data-category/data-category';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { ConnectivityProvider } from '../providers/connectivity/connectivity';
     GoogleMapsProvider,
     ConnectivityProvider,
     Geolocation,
-    Network
+    Network,
+    DataCategoryProvider
   ]
 })
 export class AppModule {}
