@@ -15,10 +15,12 @@
   <ion-card>
       <ion-list no-lines>
           <ion-item-sliding #slidingItem *ngFor="let category of categories">
-            <button ion-item (click)="viewChecklist(checklist)">
-          {{ category.title }}
-            <span>{{ category.items.length }} items</span>
-           </button>
+              <ion-item>
+                  <button class="text" text-capitalize item-start ion-button clear (press)="pressEvent($event, category)" (pressup)="releaseEvent($event, item)">{{ category.title }}</button>
+                  <button class="number" item-end ion-button clear> {{ category.amtAllocated | currency:'USD':true:'2.2-2'}}</button>
+                 
+        
+                </ion-item>
   
             <ion-item-options>
               <button ion-button outline icon-only color="proceed"
@@ -32,3 +34,8 @@
           </ion-list>
     </ion-card>
   </ion-content>
+
+
+
+  
+

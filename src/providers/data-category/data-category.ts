@@ -18,7 +18,6 @@ export class DataCategoryProvider {
     //Remove observables
     data.forEach(category => {
       saveData.push({
-        date: category.date,
         title: category.title,
         amtAllocated: category.amtAllocated,
         items: category.items

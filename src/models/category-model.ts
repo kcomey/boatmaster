@@ -15,7 +15,6 @@ export class CategoryModel {
 
     addItem(item, amtAllocated): void {
         this.items.push({
-            date: this.date,
             title: item,
             amtAllocated: amtAllocated
         });

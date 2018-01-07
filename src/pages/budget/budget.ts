@@ -5,6 +5,7 @@ import { CategoryModel } from '../../models/category-model';
 import { DataCategoryProvider } from '../../providers/data-category/data-category';
 import { Keyboard } from '@ionic-native/keyboard';
 import { ItemSliding } from 'ionic-angular';
+import { DecimalPipe, CurrencyPipe } from '@angular/common';
 
 import { Storage } from '@ionic/storage';
 //remove above
@@ -17,7 +18,7 @@ import { Storage } from '@ionic/storage';
 export class BudgetPage {
   categories: CategoryModel[] = [];
 
-  constructor(public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
+  constructor(public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider) {
   }
 
@@ -34,7 +35,7 @@ export class BudgetPage {
 
         if (savedCategories) {
           savedCategories.forEach(savedCategory => {
-            let loadCategory = new CategoryModel(savedCategories.title, savedCategories.amtAllocated, savedCategories.items);
+            let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.items);
 
             this.categories.push(loadCategory);
 
@@ -50,13 +51,15 @@ export class BudgetPage {
   addCategory(): void {
     let prompt = this.alertCtrl.create({
       title: 'New Category',
-      message: 'Enter the name of your new budget category below:',
+      message: 'Enter the name and allocation for your new budget category below:',
       inputs: [
         {
-          name: 'title'
+          name: 'title',
+          placeholder: 'Title'
         },
         {
-          name: 'amtAllocated'
+          name: 'amtAllocated',
+          placeholder: 'Monthly Amount'
         }
       ],
       buttons: [

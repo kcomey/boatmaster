@@ -1,3 +1,11 @@
 page-budget {
+    .text {
+        color: black;
+    }
+
+    .number {
+        color: map-get($colors, proceed);
+    }
+
 
 }
