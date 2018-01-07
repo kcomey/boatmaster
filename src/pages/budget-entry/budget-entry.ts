@@ -16,12 +16,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class BudgetEntryPage {
   budgetEntryForm: FormGroup;
   category: string;
+  today: any = new Date().toISOString().slice(0,16)
 
   constructor(public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams) {
     this.category = navParams.get('category');
     this.budgetEntryForm = formBuilder.group({
-      date: [''],
-      amount: [''],
+      date: [this.today],
+      amount: ['$'],
       details: ['']
     })
   }
