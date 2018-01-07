@@ -19,6 +19,8 @@ export class CategoryModel {
             amtAllocated: amtAllocated
         });
 
+        console.log('get there');
+
         this.categoryObserver.next(true);
     }
 

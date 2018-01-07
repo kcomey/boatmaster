@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
-//import { CategoryDetailPage } from '../../pages/checklist-detail/checklist-detail';
+import { ModalController, ViewController, IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
+//import { CategoryDetailPage } from '../checklist-detail/checklist-detail';
 import { CategoryModel } from '../../models/category-model';
 import { DataCategoryProvider } from '../../providers/data-category/data-category';
 import { Keyboard } from '@ionic-native/keyboard';
 import { ItemSliding } from 'ionic-angular';
 import { DecimalPipe, CurrencyPipe } from '@angular/common';
+import { BudgetEntryPage } from '../budget-entry/budget-entry';
+
 
 import { Storage } from '@ionic/storage';
 //remove above
@@ -13,12 +15,13 @@ import { Storage } from '@ionic/storage';
 @IonicPage()
 @Component({
   selector: 'page-budget',
-  templateUrl: 'budget.html',
+  templateUrl: 'budget.html'
 })
 export class BudgetPage {
   categories: CategoryModel[] = [];
+  today: any = Date();
 
-  constructor(public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
+  constructor(public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider) {
   }
 
@@ -142,6 +145,11 @@ export class BudgetPage {
   //     category: category
   //   });
   // }
+
+  addEntry(category): void {
+    let prompt = this.modalCtrl.create(BudgetEntryPage, { category: category });
+    prompt.present();
+  }
 
   save(): void {
     this.keyboard.close();

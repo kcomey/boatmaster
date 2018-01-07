@@ -1,0 +1,29 @@
+
+<ion-content padding class="modal">
+    <ion-list no-lines>
+    <ion-list-header>
+    Entry for {{ category.title }}
+    </ion-list-header>
+    
+    <form [formGroup]="budgetEntryForm" (ngSubmit)="saveEntry()">
+    
+    <ion-item>
+    <ion-label stacked>Date</ion-label>
+    <ion-datetime formControlName="date" displayFormat="MM/DD/YYYY"></ion-datetime>
+    </ion-item>
+    <ion-item>
+    <ion-label stacked>Amount</ion-label>
+    <ion-input formControlName="amount" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+    <ion-label stacked>Details (optional)</ion-label>
+    <ion-input formControlName="details" type="text"></ion-input>
+    </ion-item>
+    
+    <button ion-button clear type="cancel">Cancel</button>
+    <button ion-button type="submit">Save</button>
+    </form>
+    </ion-list>
+    </ion-content>
+    
+    

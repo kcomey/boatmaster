@@ -14,6 +14,7 @@ import { LocationPage } from '../pages/location/location';
 import { BoatDetailsPage } from '../pages/boat-details/boat-details';
 import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
 import { LocationHomePage } from '../pages/location-home/location-home';
+import { BudgetEntryPage } from '../pages/budget-entry/budget-entry';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Network } from '@ionic-native/network';
 import { DataChecklistProvider } from '../providers/data-checklist/data-checklist';
@@ -33,7 +34,8 @@ import { DecimalPipe, CurrencyPipe } from '@angular/common';
     LocationPage,
     LocationHomePage,
     BoatDetailsPage,
-    MooringDetailsPage
+    MooringDetailsPage,
+    BudgetEntryPage
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,8 @@ import { DecimalPipe, CurrencyPipe } from '@angular/common';
     LocationPage,
     LocationHomePage,
     BoatDetailsPage,
-    MooringDetailsPage
+    MooringDetailsPage,
+    BudgetEntryPage
   ],
   providers: [
     StatusBar,
