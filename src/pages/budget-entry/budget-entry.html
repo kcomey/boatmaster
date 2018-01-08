@@ -2,10 +2,10 @@
 <ion-content padding class="modal">
     <ion-list no-lines>
     <ion-list-header>
-    Entry for {{ category.title }}
+        Entry for {{ category.title }}
     </ion-list-header>
     
-    <form [formGroup]="budgetEntryForm" (ngSubmit)="saveEntry()">
+    <form [formGroup]="budgetEntryForm">
     
     <ion-item>
     <ion-label stacked>Date</ion-label>
@@ -20,10 +20,12 @@
     <ion-input formControlName="details" type="text"></ion-input>
     </ion-item>
     
-    <button ion-button clear type="cancel">Cancel</button>
-    <button ion-button type="submit">Save</button>
+    <button ion-button type="submit" (click)="saveEntry(category)">Save</button>
+    <button ion-button clear type="cancel" (click)="cancelForm()">Cancel</button>
+    
     </form>
     </ion-list>
     </ion-content>
     
+
     

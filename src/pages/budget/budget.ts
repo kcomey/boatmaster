@@ -20,9 +20,11 @@ import { Storage } from '@ionic/storage';
 export class BudgetPage {
   categories: CategoryModel[] = [];
   today: any = Date();
+  formData: any;
 
-  constructor(public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
+  constructor(public navParms: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider) {
+
   }
 
   ionViewDidLoad() {
@@ -148,6 +150,12 @@ export class BudgetPage {
 
   addEntry(category): void {
     let prompt = this.modalCtrl.create(BudgetEntryPage, { category: category });
+    prompt.onDidDismiss(data => {
+      let entryCategory = data.item;
+      category.addEntry(data);
+      this.save();
+
+    });
     prompt.present();
   }
 

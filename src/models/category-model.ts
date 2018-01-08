@@ -13,13 +13,15 @@ export class CategoryModel {
         });
     }
 
-    addItem(item, amtAllocated): void {
+    addEntry(item): void {
+        //Adding a budget category item
         this.items.push({
-            title: item,
-            amtAllocated: amtAllocated
+            date: item.date,
+            amount: item.amount,
+            details: item.details
         });
 
-        console.log('get there');
+        //console.log(item.date + ' and ' + item.amount);
 
         this.categoryObserver.next(true);
     }

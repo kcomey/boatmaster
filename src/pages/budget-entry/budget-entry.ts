@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ViewController } from 'ionic-angular/navigation/view-controller';
 /**
  * Generated class for the BudgetEntryPage page.
  *
@@ -18,7 +19,7 @@ export class BudgetEntryPage {
   category: string;
   today: any = new Date().toISOString().slice(0,16)
 
-  constructor(public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public viewCtrl: ViewController, public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams) {
     this.category = navParams.get('category');
     this.budgetEntryForm = formBuilder.group({
       date: [this.today],
@@ -29,6 +30,16 @@ export class BudgetEntryPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad BudgetEntryPage');
+  }
+
+  saveEntry(item) {
+    let data = this.budgetEntryForm.value;
+    data.item = item;
+    this.viewCtrl.dismiss(data);    
+  }
+
+  cancelForm() {
+    this.navCtrl.pop();
   }
 
 }
