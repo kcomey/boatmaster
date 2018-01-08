@@ -21,9 +21,15 @@ export class CategoryModel {
             details: item.details
         });
 
-        //console.log(item.date + ' and ' + item.amount);
-
         this.categoryObserver.next(true);
+    }
+
+    removeEntry(item): void {
+        
+    }
+
+    editEntry(item): void {
+        
     }
 
     removeItem(item): void {

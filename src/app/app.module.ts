@@ -12,6 +12,7 @@ import { ChecklistPage } from '../pages/checklist/checklist';
 import { ChecklistDetailPage } from '../pages/checklist-detail/checklist-detail';
 import { LocationPage } from '../pages/location/location';
 import { BoatDetailsPage } from '../pages/boat-details/boat-details';
+import { CategoryDetailPage } from '../pages/category-detail/category-detail';
 import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
 import { LocationHomePage } from '../pages/location-home/location-home';
 import { BudgetEntryPage } from '../pages/budget-entry/budget-entry';
@@ -35,7 +36,8 @@ import { DecimalPipe, CurrencyPipe } from '@angular/common';
     LocationHomePage,
     BoatDetailsPage,
     MooringDetailsPage,
-    BudgetEntryPage
+    BudgetEntryPage,
+    CategoryDetailPage
   ],
   imports: [
     BrowserModule,
@@ -53,7 +55,8 @@ import { DecimalPipe, CurrencyPipe } from '@angular/common';
     LocationHomePage,
     BoatDetailsPage,
     MooringDetailsPage,
-    BudgetEntryPage
+    BudgetEntryPage,
+    CategoryDetailPage
   ],
   providers: [
     StatusBar,

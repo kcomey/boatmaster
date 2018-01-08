@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalController, ViewController, IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
-//import { CategoryDetailPage } from '../checklist-detail/checklist-detail';
+import { CategoryDetailPage } from '../category-detail/category-detail';
 import { CategoryModel } from '../../models/category-model';
 import { DataCategoryProvider } from '../../providers/data-category/data-category';
 import { Keyboard } from '@ionic-native/keyboard';
@@ -142,19 +142,19 @@ export class BudgetPage {
 
   }
 
-  // viewCategory(category): void {
-  //   this.navCtrl.push(CategoryDetailPage, {
-  //     category: category
-  //   });
-  // }
+  viewCategoryEntries(category): void {
+    let prompt = this.modalCtrl.create(CategoryDetailPage, { category: category });
+    prompt.present();
+  }
 
   addEntry(category): void {
     let prompt = this.modalCtrl.create(BudgetEntryPage, { category: category });
     prompt.onDidDismiss(data => {
-      let entryCategory = data.item;
-      category.addEntry(data);
-      this.save();
-
+      console.log(typeof(data));
+      if (typeof(data) != "undefined") {
+        category.addEntry(data);
+        this.save();
+      }
     });
     prompt.present();
   }

@@ -2,12 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ViewController } from 'ionic-angular/navigation/view-controller';
-/**
- * Generated class for the BudgetEntryPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 
 @IonicPage()
 @Component({
@@ -39,7 +34,7 @@ export class BudgetEntryPage {
   }
 
   cancelForm() {
-    this.navCtrl.pop();
+    this.viewCtrl.dismiss(); 
   }
 
 }
