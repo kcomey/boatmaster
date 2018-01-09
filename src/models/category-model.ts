@@ -24,8 +24,12 @@ export class CategoryModel {
         this.categoryObserver.next(true);
     }
 
-    removeEntry(item): void {
-        
+    removeEntry(index): void {
+        if (index > -1) {
+          this.items.splice(index, 1);          
+        }
+
+        this.categoryObserver.next(true);
     }
 
     editEntry(item): void {
@@ -71,5 +75,9 @@ export class CategoryModel {
 
     categoryUpdates(): Observable<any> {
         return this.category;
+    }
+
+    categoryEntryUpdates(): Observable<any> {
+        return this.category.items;
     }
 }

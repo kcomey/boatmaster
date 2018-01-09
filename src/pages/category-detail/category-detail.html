@@ -3,7 +3,7 @@
   <ion-navbar color="header">
     <ion-title>{{ category.title}} Detail</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="closeModal()"><ion-icon
+      <button color="exLight" ion-button icon-only (click)="closeModal()"><ion-icon
       name="close"></ion-icon></button>
       </ion-buttons>
   </ion-navbar>
@@ -13,23 +13,32 @@
 
 <ion-content padding class="custom">
   <ion-card>
-      <ion-list no-lines>
-          <ion-item-sliding #slidingItem *ngFor="let category of categories">
+      <ion-list>
+          <ion-item-sliding #slidingItem *ngFor="let entry of category.items">
               <ion-item>
-                  <button class="text" text-capitalize item-start ion-button clear (click)="addEntry(category)">{{ category.title }}
-                    (items {{category.items.length}})
-                  </button>
-                  <button class="number" item-end ion-button clear> {{ category.amtAllocated | currency:'USD':true:'2.2-2'}}</button>
-                  <button class="text" item-end ion-button icon-only clear (click)="viewCategoryEntries(category)"><ion-icon name="arrow-dropright"></ion-icon></button>
-               
+                <div class="row">
+                <div class="col text">
+                  <button color="exDark" text-capitalize item-start ion-button clear>
+                    {{ entry.date | date:'M/d/yy'}}
+                  </button></div>
+
+                  <div class="col detail">
+                      <button color="exDark" class="number" item-end ion-button clear> {{ entry.details }}</button>
+                    </div>
+
+                  <div class="col currency">
+                  <button color="exDark" text-capitalize item-start ion-button clear item-end>
+                      {{ entry.amount | currency }}
+                    </button></div>
+                  </div>
                 </ion-item>
   
             <ion-item-options>
               <button ion-button outline icon-only color="proceed"
-              (click)="renameCategory(category, slidingItem)"><ion-icon
+              (click)="renameEntryItem(entry, slidingItem)"><ion-icon
               name="clipboard"></ion-icon></button>
               <button ion-button outline icon-only color="warning"
-              (click)="removeCategory(category, slidingItem)"><ion-icon
+              (click)="removeEntryItem(entry, slidingItem)"><ion-icon
               name="trash"></ion-icon></button>
             </ion-item-options>
           </ion-item-sliding>

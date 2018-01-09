@@ -98,7 +98,6 @@ export class BudgetPage {
       this.save();
       slidingItem.close();
     }
-
   }
 
   renameCategory(category, slidingItem: ItemSliding): void {
@@ -144,14 +143,14 @@ export class BudgetPage {
   }
 
   viewCategoryEntries(category): void {
-    let prompt = this.modalCtrl.create(CategoryDetailPage, { category: category });
+    let index = this.categories.indexOf(category);
+    let prompt = this.modalCtrl.create(CategoryDetailPage, { category: category, index: index });
     prompt.present();
   }
 
   addEntry(category): void {
     let prompt = this.modalCtrl.create(BudgetEntryPage, { category: category });
     prompt.onDidDismiss(data => {
-      console.log(typeof(data));
       if (typeof(data) != "undefined") {
         category.addEntry(data);
         category.setAmountSpent(data.amount);

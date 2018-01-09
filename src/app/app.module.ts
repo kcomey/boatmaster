@@ -23,7 +23,7 @@ import { DataLocationProvider } from '../providers/data-location/data-location';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { ConnectivityProvider } from '../providers/connectivity/connectivity';
 import { DataCategoryProvider } from '../providers/data-category/data-category';
-import { DecimalPipe, CurrencyPipe } from '@angular/common';
+import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -71,7 +71,8 @@ import { DecimalPipe, CurrencyPipe } from '@angular/common';
     Network,
     DataCategoryProvider,
     DecimalPipe,
-    CurrencyPipe
+    CurrencyPipe,
+    DatePipe
   ]
 })
 export class AppModule {}
