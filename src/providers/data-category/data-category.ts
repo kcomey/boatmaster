@@ -20,6 +20,7 @@ export class DataCategoryProvider {
       saveData.push({
         title: category.title,
         amtAllocated: category.amtAllocated,
+        amtSpent: category.amtSpent,
         items: category.items
       });
     });

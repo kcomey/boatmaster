@@ -40,7 +40,7 @@ export class BudgetPage {
 
         if (savedCategories) {
           savedCategories.forEach(savedCategory => {
-            let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.items);
+            let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.amtSpent, savedCategory.items);
 
             this.categories.push(loadCategory);
 
@@ -74,7 +74,7 @@ export class BudgetPage {
         {
           text: 'Save',
           handler: data => {
-            let newCategory = new CategoryModel(data.title, data.amtAllocated, []);
+            let newCategory = new CategoryModel(data.title, data.amtAllocated, 0, []);
             this.categories.push(newCategory);
 
             newCategory.categoryUpdates().subscribe(update => {
@@ -112,7 +112,8 @@ export class BudgetPage {
         },
         {
           name: 'amtAllocated',
-          value: category.amtAllocated
+          value: category.amtAllocated,
+          type: 'number'
         }
       ],
       buttons: [
@@ -153,6 +154,7 @@ export class BudgetPage {
       console.log(typeof(data));
       if (typeof(data) != "undefined") {
         category.addEntry(data);
+        category.setAmountSpent(data.amount);
         this.save();
       }
     });

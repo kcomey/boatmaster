@@ -19,7 +19,8 @@
                   <button class="text" text-capitalize item-start ion-button clear (click)="addEntry(category)">{{ category.title }}
                     (items {{category.items.length}})
                   </button>
-                  <button class="number" item-end ion-button clear> {{ category.amtAllocated | currency:'USD':true:'2.2-2'}}</button>
+                  <button class="number" item-end ion-button clear> {{ category.amtAllocated | currency:'USD':symbol:'2.2-2'}}</button>
+                  <button class="numberNegative" item-end ion-button clear> ({{ category.amtSpent | currency:'USD':symbol:'2.2-2'}})</button>
                   <button class="text" item-end ion-button icon-only clear (click)="viewCategoryEntries(category)"><ion-icon name="arrow-dropright"></ion-icon></button>
                
                 </ion-item>

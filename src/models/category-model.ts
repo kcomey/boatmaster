@@ -5,7 +5,7 @@ export class CategoryModel {
     categoryObserver: any;
     date: string = Date();
 
-    constructor(public title: string, public amtAllocated: number, public items: any[] ) {
+    constructor(public title: string, public amtAllocated: number, public amtSpent: number, public items: any[] ) {
         this.items = items;
         
         this.category = Observable.create(observer => {
@@ -60,6 +60,12 @@ export class CategoryModel {
 
     setAmount(amount): void {
         this.amtAllocated = amount;
+        this.categoryObserver.next(true);
+    }
+
+    setAmountSpent(amount): void {
+        this.amtSpent += amount;
+        this.amtAllocated -= amount;
         this.categoryObserver.next(true);
     }
 
