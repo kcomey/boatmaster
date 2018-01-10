@@ -24,13 +24,22 @@ export class CategoryModel {
         this.categoryObserver.next(true);
     }
 
-    removeEntry(index): void {
+    removeEntry(item): void {
+        // if (index > -1) {
+        //   this.items.splice(index, 1);          
+        // }
+
+        // this.categoryObserver.next(true);
+
+        let index = this.items.indexOf(item);
+
         if (index > -1) {
-          this.items.splice(index, 1);          
+            this.items.splice(index, 1);
         }
 
         this.categoryObserver.next(true);
     }
+    
 
     editEntry(item): void {
         
@@ -75,9 +84,5 @@ export class CategoryModel {
 
     categoryUpdates(): Observable<any> {
         return this.category;
-    }
-
-    categoryEntryUpdates(): Observable<any> {
-        return this.category.items;
     }
 }
