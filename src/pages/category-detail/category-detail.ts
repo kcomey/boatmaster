@@ -33,7 +33,6 @@ export class CategoryDetailPage {
   }
 
   editEntryItem(entry, slidingItem: ItemSliding): void {
-    console.log('edit budget entry');
     let prompt = this.modalCtrl.create(BudgetEntryPage, { category: this.category, entry: entry });
     prompt.onDidDismiss(data => {
       if (typeof(data) != "undefined") {
@@ -45,7 +44,6 @@ export class CategoryDetailPage {
   }
 
   removeEntryItem(entry, slidingItem: ItemSliding) {
-    console.log('remove budget entry');
     this.category.removeEntry(entry);
     slidingItem.close();
   }

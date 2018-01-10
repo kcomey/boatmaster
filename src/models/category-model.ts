@@ -14,7 +14,7 @@ export class CategoryModel {
     }
 
     addEntry(item): void {
-        //Adding a budget category item
+        //Add a budget entry
         this.items.push({
             date: item.date,
             amount: item.amount,
@@ -25,7 +25,11 @@ export class CategoryModel {
     }
 
     removeEntry(item): void {
+        //Remove a budget entry
         let index = this.items.indexOf(item);
+
+        let creditAmount = this.items[index].amount;
+        this.removeAmountSpent(creditAmount);
 
         if (index > -1) {
             this.items.splice(index, 1);
@@ -36,7 +40,14 @@ export class CategoryModel {
     
 
     editEntry(data, item): void {
+        //Edit a budget entry
         let index = this.items.indexOf(item);
+
+        let creditAmount = this.items[index].amount;
+        this.removeAmountSpent(creditAmount);
+
+        //Debit amount
+        this.setAmountSpent(data.amount);
 
         if (index > -1) {
             this.items[index].date = data.date;
@@ -48,6 +59,7 @@ export class CategoryModel {
     }
 
     removeItem(item): void {
+        //Remove a budget category
         let index = this.items.indexOf(item);
 
         if (index > -1) {
@@ -58,6 +70,7 @@ export class CategoryModel {
     }
 
     renameItem(item, title, amtAllocated): void {
+        //Rename a budget category
         let index = this.items.indexOf(item);
 
         if (index > -1) {
@@ -69,18 +82,30 @@ export class CategoryModel {
     }
 
     setTitle(title): void {
+        //Budget category title
         this.title = title;
         this.categoryObserver.next(true);
     }
 
     setAmount(amount): void {
+        //Budget category amount allocated
         this.amtAllocated = Number(amount);
         this.categoryObserver.next(true);
     }
 
     setAmountSpent(amount): void {
+        //Add to budget amount spent
+        //Updated on each budget entry item
         this.amtSpent += Number(amount);
         this.amtAllocated -= Number(amount);
+        this.categoryObserver.next(true);
+    }
+
+    removeAmountSpent(amount): void {
+        //Subtract from budget amount spent
+        //Updated on each budget entry item removed
+        this.amtSpent -= Number(amount);
+        this.amtAllocated += Number(amount);
         this.categoryObserver.next(true);
     }
 
