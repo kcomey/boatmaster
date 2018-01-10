@@ -25,12 +25,6 @@ export class CategoryModel {
     }
 
     removeEntry(item): void {
-        // if (index > -1) {
-        //   this.items.splice(index, 1);          
-        // }
-
-        // this.categoryObserver.next(true);
-
         let index = this.items.indexOf(item);
 
         if (index > -1) {
@@ -41,8 +35,16 @@ export class CategoryModel {
     }
     
 
-    editEntry(item): void {
-        
+    editEntry(data, item): void {
+        let index = this.items.indexOf(item);
+
+        if (index > -1) {
+            this.items[index].date = data.date;
+            this.items[index].amount = data.amount;
+            this.items[index].details = data.details;
+        }
+
+        this.categoryObserver.next(true);
     }
 
     removeItem(item): void {
@@ -72,13 +74,13 @@ export class CategoryModel {
     }
 
     setAmount(amount): void {
-        this.amtAllocated = amount;
+        this.amtAllocated = Number(amount);
         this.categoryObserver.next(true);
     }
 
     setAmountSpent(amount): void {
-        this.amtSpent += amount;
-        this.amtAllocated -= amount;
+        this.amtSpent += Number(amount);
+        this.amtAllocated -= Number(amount);
         this.categoryObserver.next(true);
     }
 

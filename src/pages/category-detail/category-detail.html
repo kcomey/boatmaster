@@ -18,12 +18,12 @@
               <ion-item>
                 <div class="row">
                 <div class="col text">
-                  <button color="exDark" text-capitalize item-start ion-button clear>
+                  <button color="exDark" item-start ion-button clear>
                     {{ entry.date | date:'M/d/yy'}}
                   </button></div>
 
                   <div class="col detail">
-                      <button color="exDark" class="number" item-end ion-button clear> {{ entry.details }}</button>
+                      <button color="exDark" class="number" text-capitalize item-end ion-button clear> {{ entry.details }}</button>
                     </div>
 
                   <div class="col currency">
@@ -35,7 +35,7 @@
   
             <ion-item-options>
               <button ion-button outline icon-only color="proceed"
-              (click)="renameEntryItem(entry, slidingItem)"><ion-icon
+              (click)="editEntryItem(entry, slidingItem)"><ion-icon
               name="clipboard"></ion-icon></button>
               <button ion-button outline icon-only color="warning"
               (click)="removeEntryItem(entry, slidingItem)"><ion-icon

@@ -144,8 +144,6 @@ export class BudgetPage {
 
   viewCategoryEntries(category): void {
     let index = this.categories.indexOf(category);
-    // let prompt = this.modalCtrl.create(CategoryDetailPage, { category: category, index: index });
-    // prompt.present();
 
     this.navCtrl.push(CategoryDetailPage, {
       category: category,
