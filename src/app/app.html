@@ -1,1 +1,19 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<!-- <ion-nav [root]="rootPage"></ion-nav> -->
+
+<ion-menu persistent="true" [content]="content">
+        <ion-content>
+            <ion-list no-lines>
+                <button ion-item (click)="openPage(settingsPage)">
+                    <ion-icon name="settings"></ion-icon> Set Monthly Budget
+                </button>
+                <button ion-item (click)="openPage(reportsPage)">
+                    <ion-icon name="document"></ion-icon> Monthly Reports
+                </button>
+                <button ion-item (click)="openPage(savingsPage)">
+                    <ion-icon name="umbrella"></ion-icon> Rainy Day Savings
+                </button>
+            </ion-list>
+        </ion-content>
+    </ion-menu>
+    
+    <ion-nav id="nav" #content [root]="rootPage"></ion-nav>

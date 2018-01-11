@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalController, ViewController, IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
+import { MenuController, ModalController, ViewController, IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { CategoryDetailPage } from '../category-detail/category-detail';
 import { CategoryModel } from '../../models/category-model';
 import { DataCategoryProvider } from '../../providers/data-category/data-category';
@@ -22,9 +22,10 @@ export class BudgetPage {
   today: any = Date();
   formData: any;
 
-  constructor(public navParms: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
+  constructor(public menu: MenuController, public navParms: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider) {
-
+    
+      this.menu.enable(true);
   }
 
   ionViewDidLoad() {
