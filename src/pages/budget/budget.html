@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="header">
-    <ion-title>Budget</ion-title>
+    <ion-title>Budget <span *ngIf="currentBudget">{{ currentBudget | currency:'USD':symbol:'2.2-2' }}</span></ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="addCategory()"><ion-icon
       name="add-circle"></ion-icon></button>
@@ -15,6 +15,10 @@
 <ion-content padding class="custom">
   <ion-card>
       <ion-list no-lines>
+          <ion-list-header>
+              {{ savedBudget.monthlyBudget - savedBudget.monthlyBudgetSpent| currency:'USD':symbol:'2.2-2' }}
+              of budget remaining
+            </ion-list-header>
           <ion-item-sliding #slidingItem *ngFor="let category of categories">
               <ion-item>
                   <button class="text" text-capitalize item-start ion-button clear (click)="addEntry(category)">{{ category.title }}

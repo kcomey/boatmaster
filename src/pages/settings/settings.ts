@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { ModalController, AlertController, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
 import { Keyboard } from '@ionic-native/keyboard';
-import { CurrencyPipe } from '@angular/common/src/pipes';
 
 @IonicPage()
 @Component({
@@ -18,18 +17,16 @@ export class SettingsPage {
   ionViewDidLoad() {
     this.platform.ready().then(() => {
       this.dataService.getData().then((budget) => {
-        let currentBudget: number = 0;
 
         if (typeof(budget) != "undefined") {
           this.budget = JSON.parse(budget);
-          currentBudget = Number(this.budget.monthlyBudget);
         }
 
         if (this.budget == null) {
-          this.budget = { monthlyBudget: 0, monthlyBudgetSpent: 0, previousMonths: []}
+          this.budget = { monthlyBudget: 0, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []}
         }
 
-        this.openModal(currentBudget);
+        this.openModal(this.budget.monthlyBudget);
       });
     });
   }

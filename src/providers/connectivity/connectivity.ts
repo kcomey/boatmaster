@@ -3,8 +3,6 @@ import { Network } from '@ionic-native/network';
 import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-declare var Connection;
-
 @Injectable()
 export class ConnectivityProvider {
   onDevice: boolean;

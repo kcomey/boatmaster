@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MenuController, ModalController, ViewController, IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { CategoryDetailPage } from '../category-detail/category-detail';
 import { CategoryModel } from '../../models/category-model';
 import { DataCategoryProvider } from '../../providers/data-category/data-category';
+import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
 import { Keyboard } from '@ionic-native/keyboard';
 import { ItemSliding } from 'ionic-angular';
-import { DecimalPipe, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { BudgetEntryPage } from '../budget-entry/budget-entry';
-
+import { SettingsPage } from '../../pages/settings/settings';
 
 import { Storage } from '@ionic/storage';
 //remove above
@@ -21,14 +22,17 @@ export class BudgetPage {
   categories: CategoryModel[] = [];
   today: any = Date();
   formData: any;
+  savedBudget: any = false;
+  currentBudget: any = false;
 
   constructor(public menu: MenuController, public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
-    public keyboard: Keyboard, public dataService: DataCategoryProvider) {
+    public keyboard: Keyboard, public dataService: DataCategoryProvider, public budgetService: DataBudgetProvider) {
       this.menu.enable(true);
   }
 
   ionViewDidLoad() {
     //this.storage.clear();
+
     this.platform.ready().then(() => {
       this.dataService.getData().then((categories) => {
         let savedCategories: any = false;
@@ -47,6 +51,20 @@ export class BudgetPage {
               this.save();
             });
           });
+        }
+      });
+
+      this.budgetService.getData().then((budget) => {
+        if (typeof(budget) != "undefined") {
+          this.savedBudget = JSON.parse(budget)
+        }
+
+        //If there is not a monthly budget yet, send to the settings page
+        if (!this.savedBudget) {
+          this.navCtrl.push(SettingsPage);
+        } 
+        else {
+          this.currentBudget = this.savedBudget.monthlyBudget;
         }
       });
     });
@@ -156,6 +174,8 @@ export class BudgetPage {
       if (typeof(data) != "undefined") {
         category.addEntry(data);
         category.setAmountSpent(data.amount);
+        this.savedBudget.monthlyBudgetSpent += Number(data.amount);
+        this.saveBudget();
         this.save();
       }
     });
@@ -165,6 +185,10 @@ export class BudgetPage {
   save(): void {
     this.keyboard.close();
     this.dataService.save(this.categories);
+  }
+
+  saveBudget(): void {
+    this.budgetService.save(this.savedBudget);
   }
 
 }

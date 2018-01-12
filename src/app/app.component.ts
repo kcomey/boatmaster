@@ -5,6 +5,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { BudgetPage } from '../pages/budget/budget';
 import { SettingsPage } from '../pages/settings/settings';
+import { BudgetReportsPage } from '../pages/budget-reports/budget-reports';
+import { RunningBudgetTotalPage } from '../pages/running-budget-total/running-budget-total';
 
 @Component({
   templateUrl: 'app.html'
@@ -16,8 +18,8 @@ export class MyApp {
 
   settingsPage: any = SettingsPage;
   budgetPage: any = BudgetPage;
-  // reportsPage: any = ReportsPage;
-  // savingsPage: any = SavingsPage;
+  reportsPage: any = BudgetReportsPage;
+  savingsPage: any = RunningBudgetTotalPage;
 
   constructor(public menu: MenuController, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
@@ -30,7 +32,7 @@ export class MyApp {
 
   openPage(page): void {
     this.menu.close();
-    this.nav.push(page, { setBudget: true });
+    this.nav.push(page);
   }
 
 }

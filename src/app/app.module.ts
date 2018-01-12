@@ -17,6 +17,8 @@ import { CategoryDetailPage } from '../pages/category-detail/category-detail';
 import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
 import { LocationHomePage } from '../pages/location-home/location-home';
 import { BudgetEntryPage } from '../pages/budget-entry/budget-entry';
+import { BudgetReportsPage } from '../pages/budget-reports/budget-reports';
+import { RunningBudgetTotalPage } from '../pages/running-budget-total/running-budget-total';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Network } from '@ionic-native/network';
 import { DataChecklistProvider } from '../providers/data-checklist/data-checklist';
@@ -40,7 +42,9 @@ import { DataBudgetProvider } from '../providers/data-budget/data-budget';
     MooringDetailsPage,
     BudgetEntryPage,
     CategoryDetailPage,
-    SettingsPage
+    SettingsPage,
+    BudgetReportsPage,
+    RunningBudgetTotalPage
   ],
   imports: [
     BrowserModule,
@@ -60,7 +64,9 @@ import { DataBudgetProvider } from '../providers/data-budget/data-budget';
     MooringDetailsPage,
     BudgetEntryPage,
     CategoryDetailPage,
-    SettingsPage
+    SettingsPage,
+    BudgetReportsPage,
+    RunningBudgetTotalPage
   ],
   providers: [
     StatusBar,

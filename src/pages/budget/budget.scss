@@ -11,4 +11,8 @@ page-budget {
         color: map-get($colors, warning);
     }
 
+    ion-list-header {
+        text-align: center;
+    }
+
 }
