@@ -11,6 +11,7 @@ import { BudgetPage } from '../pages/budget/budget';
 import { ChecklistPage } from '../pages/checklist/checklist';
 import { ChecklistDetailPage } from '../pages/checklist-detail/checklist-detail';
 import { LocationPage } from '../pages/location/location';
+import { SettingsPage } from '../pages/settings/settings';
 import { BoatDetailsPage } from '../pages/boat-details/boat-details';
 import { CategoryDetailPage } from '../pages/category-detail/category-detail';
 import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
@@ -24,6 +25,7 @@ import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { ConnectivityProvider } from '../providers/connectivity/connectivity';
 import { DataCategoryProvider } from '../providers/data-category/data-category';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { DataBudgetProvider } from '../providers/data-budget/data-budget';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
     BoatDetailsPage,
     MooringDetailsPage,
     BudgetEntryPage,
-    CategoryDetailPage
+    CategoryDetailPage,
+    SettingsPage
   ],
   imports: [
     BrowserModule,
@@ -56,7 +59,8 @@ import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
     BoatDetailsPage,
     MooringDetailsPage,
     BudgetEntryPage,
-    CategoryDetailPage
+    CategoryDetailPage,
+    SettingsPage
   ],
   providers: [
     StatusBar,
@@ -72,7 +76,8 @@ import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
     DataCategoryProvider,
     DecimalPipe,
     CurrencyPipe,
-    DatePipe
+    DatePipe,
+    DataBudgetProvider
   ]
 })
 export class AppModule {}

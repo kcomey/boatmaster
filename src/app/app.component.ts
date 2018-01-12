@@ -1,16 +1,23 @@
-import { Component } from '@angular/core';
-import { Platform, MenuController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, Nav, Platform, MenuController, App } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
 import { HomePage } from '../pages/home/home';
 import { BudgetPage } from '../pages/budget/budget';
+import { SettingsPage } from '../pages/settings/settings';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage:any = HomePage;
+
+  @ViewChild(Nav) nav: Nav;
+
+  settingsPage: any = SettingsPage;
+  budgetPage: any = BudgetPage;
+  // reportsPage: any = ReportsPage;
+  // savingsPage: any = SavingsPage;
 
   constructor(public menu: MenuController, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
@@ -20,5 +27,11 @@ export class MyApp {
       splashScreen.hide();
     });
   }
+
+  openPage(page): void {
+    this.menu.close();
+    this.nav.push(page, { setBudget: true });
+  }
+
 }
 

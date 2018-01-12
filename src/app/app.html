@@ -1,19 +1,25 @@
-<!-- <ion-nav [root]="rootPage"></ion-nav> -->
+ <ion-menu persistent="true" [content]="content">
+        <ion-header>
+    
+                <ion-navbar color="header">
+                  <ion-title>Budget Menu</ion-title>
+                </ion-navbar>
+              
+              </ion-header>
 
-<ion-menu persistent="true" [content]="content">
-        <ion-content>
+        <ion-content padding>
             <ion-list no-lines>
                 <button ion-item (click)="openPage(settingsPage)">
                     <ion-icon name="settings"></ion-icon> Set Monthly Budget
                 </button>
                 <button ion-item (click)="openPage(reportsPage)">
-                    <ion-icon name="document"></ion-icon> Monthly Reports
+                    <ion-icon name="document"></ion-icon> Monthly Budget Reports
                 </button>
                 <button ion-item (click)="openPage(savingsPage)">
-                    <ion-icon name="umbrella"></ion-icon> Rainy Day Savings
+                    <ion-icon name="cash"></ion-icon> Running Monthly Totals
                 </button>
             </ion-list>
         </ion-content>
     </ion-menu>
     
-    <ion-nav id="nav" #content [root]="rootPage"></ion-nav>
+    <ion-nav id="nav" #content swipeBackEnabled="false" [root]="rootPage"></ion-nav>

@@ -22,15 +22,13 @@ export class BudgetPage {
   today: any = Date();
   formData: any;
 
-  constructor(public menu: MenuController, public navParms: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
+  constructor(public menu: MenuController, public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider) {
-    
       this.menu.enable(true);
   }
 
   ionViewDidLoad() {
     //this.storage.clear();
-
     this.platform.ready().then(() => {
       this.dataService.getData().then((categories) => {
         let savedCategories: any = false;
