@@ -4,9 +4,9 @@ export class BudgetModel {
     budget: any;
     currentDate: string = new Date().toISOString().slice(0,16)
 
-    constructor(public date: string, public monthlyBudget: number, public monthlySpent: number,
-        public monthlyAllocated: number, public categories: any[]) {
-    }
+    // constructor(public date: string, public monthlyBudget: number, public monthlySpent: number,
+    //     public monthlyAllocated: number, public categories: any[]) {
+    // }
 
     // setMonthlyBudget(amount): void {
     //     this.monthlyBudget = Number(amount);
