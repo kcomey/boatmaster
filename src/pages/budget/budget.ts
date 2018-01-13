@@ -81,7 +81,8 @@ export class BudgetPage {
       let toast = this.toastCtrl.create({
         message: 'There is no more money in your budget to allocate!',
         duration: 5000,
-        position: 'top'
+        position: 'middle',
+        cssClass: 'toastClass'
       });
       toast.present();
     }
@@ -133,7 +134,8 @@ export class BudgetPage {
                 let toast = this.toastCtrl.create({
                   message: 'Cannot allocate more than monthly total monthly budget, $' + categoryAllocated + ' was applied.',
                   duration: 5000,
-                  position: 'top'
+                  position: 'middle',
+                  cssClass: 'toastClass'
                 });
                 toast.present();
               }
@@ -185,16 +187,32 @@ export class BudgetPage {
           text: 'Save',
           handler: data => {
             let index = this.categories.indexOf(category);
+            this.budget.amtBudgetAllocated -= this.categories[index].amtAllocated;
+            let remainingToAllocate = this.budget.amtBudgetAllocated + Number(data.amtAllocated);
+            let overError: boolean = false;
+            let categoryAllocated = data.amtAllocated;
+
+            if (remainingToAllocate > this.budget.monthlyBudget) {
+              categoryAllocated = this.budget.monthlyBudget - this.budget.amtBudgetAllocated;
+              overError = true;
+            }
 
             if (index > -1) {
               this.categories[index].setTitle(data.title);
-              this.categories[index].setAmount(data.amtAllocated);
+              this.categories[index].setAmount(categoryAllocated);
               this.save();
-              let amtAllocated = this.categories[index].amtAllocated;
-              this.budget.amtBudgetAllocated -= amtAllocated;
-              this.budget.amtBudgetAllocated += data.amtAllocated;
+              this.budget.amtBudgetAllocated += Number(categoryAllocated);
               this.budgetService.save(this.budget);
               slidingItem.close();
+
+              if (overError) {
+                let toast = this.toastCtrl.create({
+                  message: 'Cannot allocate more than monthly total monthly budget, $' + categoryAllocated + ' was applied.',
+                  duration: 5000,
+                  position: 'top'
+                });
+                toast.present();
+              }
             }
           }
         }
@@ -202,7 +220,6 @@ export class BudgetPage {
     });
 
     prompt.present();
-
   }
 
   viewCategoryEntries(category): void {

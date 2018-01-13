@@ -59,6 +59,7 @@ $colors: (
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 $checkbox-md-icon-background-color-on: map-get($colors, proceed);
+$toast-md-background: #8EC640; // Apply for Android
 //$checkbox-md-icon-border-color-off: map-get($colors, warning);
 $checkbox-md-icon-checkmark-color: map-get($colors, exLight);
 $checkbox-md-icon-border-color-on: map-get($colors, proceed);
