@@ -4,6 +4,7 @@ import { Platform, ModalController, ViewController, AlertController } from 'ioni
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { CategoryModel } from '../../models/category-model';
 import { DataCategoryProvider } from '../../providers/data-category/data-category';
+import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
 import { BudgetEntryPage } from '../budget-entry/budget-entry';
 import { Keyboard } from '@ionic-native/keyboard';
 import { ItemSliding } from 'ionic-angular';
@@ -19,7 +20,7 @@ export class CategoryDetailPage {
   index: any;
 
   constructor(public alertCtrl: AlertController, public platform: Platform, public keyboard: Keyboard, public modalCtrl: ModalController, public currency: CurrencyPipe, public date: DatePipe, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams,
-    public dataService: DataCategoryProvider) {
+    public dataService: DataCategoryProvider, public budgetService: DataBudgetProvider) {
     this.category = this.navParams.get('category');
     this.index = this.navParams.get('index');
   }

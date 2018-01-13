@@ -10,6 +10,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 })
 export class SettingsPage {
   budget: any = false;
+  currentDate = new Date();
 
   constructor(public keyboard: Keyboard, public alertCtrl: AlertController, public dataService: DataBudgetProvider, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
   }
@@ -23,9 +24,10 @@ export class SettingsPage {
         }
 
         if (this.budget == null) {
-          this.budget = { monthlyBudget: 0, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []}
+          this.budget = { date: this.currentDate, monthlyBudget: 0, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []}
         }
 
+        
         this.openModal(this.budget.monthlyBudget);
       });
     });

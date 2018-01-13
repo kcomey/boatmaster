@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="header">
-    <ion-title>Budget <span *ngIf="currentBudget">{{ currentBudget | currency:'USD':symbol:'2.2-2' }}</span></ion-title>
+    <ion-title><span>{{ thisMonth | date:'MMM' }}</span> Budget <span *ngIf="currentBudget">{{ currentBudget | currency:'USD':symbol:'2.2-2' }}</span></ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="addCategory()"><ion-icon
       name="add-circle"></ion-icon></button>
@@ -15,7 +15,7 @@
 <ion-content padding class="custom">
   <ion-card>
       <ion-list no-lines>
-          <ion-list-header>
+          <ion-list-header *ngIf="savedBudget">
               {{ savedBudget.monthlyBudget - savedBudget.monthlyBudgetSpent| currency:'USD':symbol:'2.2-2' }}
               of budget remaining
             </ion-list-header>

@@ -11,6 +11,7 @@ import { BudgetEntryPage } from '../budget-entry/budget-entry';
 import { SettingsPage } from '../../pages/settings/settings';
 
 import { Storage } from '@ionic/storage';
+import { collectExternalReferences } from '@angular/compiler/src/output/output_ast';
 //remove above
 
 @IonicPage()
@@ -32,7 +33,6 @@ export class BudgetPage {
 
   ionViewDidLoad() {
     //this.storage.clear();
-
     this.platform.ready().then(() => {
       this.dataService.getData().then((categories) => {
         let savedCategories: any = false;
@@ -174,7 +174,7 @@ export class BudgetPage {
       if (typeof(data) != "undefined") {
         category.addEntry(data);
         category.setAmountSpent(data.amount);
-        this.savedBudget.monthlyBudgetSpent += Number(data.amount);
+        //this.savedBudget.monthlyBudgetSpent += Number(data.amount);
         this.saveBudget();
         this.save();
       }
@@ -188,7 +188,7 @@ export class BudgetPage {
   }
 
   saveBudget(): void {
-    this.budgetService.save(this.savedBudget);
+    //this.budgetService.save(this.savedBudget);
   }
 
 }
