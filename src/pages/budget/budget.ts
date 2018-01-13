@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MenuController, ModalController, ViewController, IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
+import { Events, MenuController, ModalController, ViewController, IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { CategoryDetailPage } from '../category-detail/category-detail';
 import { CategoryModel } from '../../models/category-model';
 import { DataCategoryProvider } from '../../providers/data-category/data-category';
@@ -11,7 +11,6 @@ import { BudgetEntryPage } from '../budget-entry/budget-entry';
 import { SettingsPage } from '../../pages/settings/settings';
 
 import { Storage } from '@ionic/storage';
-import { collectExternalReferences } from '@angular/compiler/src/output/output_ast';
 //remove above
 
 @IonicPage()
@@ -23,12 +22,15 @@ export class BudgetPage {
   categories: CategoryModel[] = [];
   today: any = Date();
   formData: any;
-  savedBudget: any = false;
-  currentBudget: any = false;
+  budget: any = false;
 
-  constructor(public menu: MenuController, public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
+  constructor(public events: Events, public menu: MenuController, public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider, public budgetService: DataBudgetProvider) {
       this.menu.enable(true);
+      events.subscribe('budget', (monthlyBudget)=> {
+        this.budget = { date: this.today, monthlyBudget: 0, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []};
+        this.budget.monthlyBudget = monthlyBudget;
+      });
   }
 
   ionViewDidLoad() {
@@ -56,21 +58,24 @@ export class BudgetPage {
 
       this.budgetService.getData().then((budget) => {
         if (typeof(budget) != "undefined") {
-          this.savedBudget = JSON.parse(budget)
+          this.budget = JSON.parse(budget)
         }
 
         //If there is not a monthly budget yet, send to the settings page
-        if (!this.savedBudget) {
+        if (!this.budget) {
           this.navCtrl.push(SettingsPage);
         } 
-        else {
-          this.currentBudget = this.savedBudget.monthlyBudget;
-        }
       });
+
+      console.log('amt allocated is ' + this.budget.amtBudgetAllocated);
     });
   }
 
   addCategory(): void {
+    if (!this.budget) {
+      this.navCtrl.push(SettingsPage);
+    } 
+    else {
     let prompt = this.alertCtrl.create({
       title: 'New Category',
       message: 'Enter the name and allocation for your new budget category below:',
@@ -99,6 +104,9 @@ export class BudgetPage {
             });
 
             this.save();
+
+            this.budget.amtBudgetAllocated += data.amtAllocated;
+            this.saveBudget;
           }
         }
       ]
@@ -106,11 +114,15 @@ export class BudgetPage {
 
     prompt.present();
   }
+  }
 
   removeCategory(category, slidingItem: ItemSliding): void {
     let index = this.categories.indexOf(category);
 
     if (index > -1) {
+      let amtAllocated = this.categories[index].amtAllocated;
+      this.budget.amtBudgetAllocated -= amtAllocated;
+      this.saveBudget;
       this.categories.splice(index, 1);
       this.save();
       slidingItem.close();
@@ -148,6 +160,10 @@ export class BudgetPage {
               this.categories[index].setTitle(data.title);
               this.categories[index].setAmount(data.amtAllocated);
               this.save();
+              let amtAllocated = this.categories[index].amtAllocated;
+              this.budget.amtBudgetAllocated -= amtAllocated;
+              this.budget.amtBudgetAllocated += data.amtAllocated;
+              this.saveBudget;
               slidingItem.close();
             }
           }
@@ -174,7 +190,7 @@ export class BudgetPage {
       if (typeof(data) != "undefined") {
         category.addEntry(data);
         category.setAmountSpent(data.amount);
-        //this.savedBudget.monthlyBudgetSpent += Number(data.amount);
+        this.budget.monthlyBudgetSpent += Number(data.amount);
         this.saveBudget();
         this.save();
       }
@@ -188,7 +204,7 @@ export class BudgetPage {
   }
 
   saveBudget(): void {
-    //this.budgetService.save(this.savedBudget);
+    this.budgetService.save(this.budget);
   }
 
 }

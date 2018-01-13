@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalController, AlertController, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { Events, ModalController, AlertController, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
 import { Keyboard } from '@ionic-native/keyboard';
 
@@ -12,7 +12,8 @@ export class SettingsPage {
   budget: any = false;
   currentDate = new Date();
 
-  constructor(public keyboard: Keyboard, public alertCtrl: AlertController, public dataService: DataBudgetProvider, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public events: Events, public keyboard: Keyboard, public alertCtrl: AlertController, public dataService: DataBudgetProvider, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
+    
   }
 
   ionViewDidLoad() {
@@ -56,6 +57,7 @@ export class SettingsPage {
               if (data.budget > 0) {
               this.budget.monthlyBudget = data.budget;
               this.saveBudget(this.budget);
+              this.events.publish('budget', data.budget);
               this.navCtrl.pop();
             }
           }
