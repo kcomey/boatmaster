@@ -57,7 +57,7 @@ export class SettingsPage {
               if (data.budget > 0) {
               this.budget.monthlyBudget = data.budget;
               this.saveBudget(this.budget);
-              this.events.publish('budget', data.budget);
+              this.events.publish('monthlyBudget', data.budget);
               this.navCtrl.pop();
             }
           }

@@ -2,7 +2,7 @@
   <ion-navbar color="header">
     <ion-title><span>{{ today | date:'MMM' }}</span> Budget <span *ngIf="budget">{{ budget.monthlyBudget | currency:'USD':symbol:'2.2-2' }}</span></ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="addCategory()"><ion-icon
+      <button class="nochange" icon-only (click)="addCategory()"><ion-icon
       name="add-circle"></ion-icon></button>
       </ion-buttons>
       <button ion-button icon-only menuToggle right>
@@ -15,7 +15,7 @@
 <ion-content padding class="custom">
   <ion-card>
       <ion-list no-lines>
-          <ion-list-header *ngIf="budget">
+          <ion-list-header *ngIf="budget" [ngClass]="(budget.monthlyBudget - budget.monthlyBudgetSpent >= 0) ? 'number' : 'numberNegative'">
               {{ budget.monthlyBudget - budget.monthlyBudgetSpent| currency:'USD':symbol:'2.2-2' }}
               of budget remaining
             </ion-list-header>
@@ -24,7 +24,7 @@
                   <button class="text" text-capitalize item-start ion-button clear (click)="addEntry(category)">{{ category.title }}
                     (items {{category.items.length}})
                   </button>
-                  <button class="number" item-end ion-button clear> {{ category.amtAllocated | currency:'USD':symbol:'2.2-2'}}</button>
+                  <button item-end ion-button clear [ngClass]="(category.amtAllocated >= 0) ? 'number' : 'numberNegative'"> {{ category.amtAllocated | currency:'USD':symbol:'2.2-2'}}</button>
                   <button class="numberNegative" item-end ion-button clear> ({{ category.amtSpent | currency:'USD':symbol:'2.2-2'}})</button>
                   <button class="text" item-end ion-button icon-only clear (click)="viewCategoryEntries(category)"><ion-icon name="arrow-dropright"></ion-icon></button>
                

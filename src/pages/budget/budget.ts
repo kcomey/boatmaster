@@ -29,9 +29,12 @@ export class BudgetPage {
   constructor(public toastCtrl: ToastController, public events: Events, public menu: MenuController, public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider, public budgetService: DataBudgetProvider) {
       this.menu.enable(true);
-      events.subscribe('budget', (monthlyBudget)=> {
+      events.subscribe('monthlyBudget', (monthlyBudget)=> {
         this.budget = { date: this.today, monthlyBudget: 0, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []};
         this.budget.monthlyBudget = monthlyBudget;
+      });
+      events.subscribe('budget', (budget)=> {
+        this.budget = budget;
       });
   }
 
@@ -124,11 +127,8 @@ export class BudgetPage {
 
               this.save();
 
-              console.log('allocated ' + this.budget.amtBudgetAllocated);
               this.budget.amtBudgetAllocated += Number(categoryAllocated);
-              console.log('allocated ' + this.budget.amtBudgetAllocated);
               this.budgetService.save(this.budget);
-
 
               if (overError) {
                 let toast = this.toastCtrl.create({
@@ -153,7 +153,7 @@ export class BudgetPage {
 
     if (index > -1) {
       let amtAllocated = this.categories[index].amtAllocated;
-      this.budget.amtBudgetAllocated -= amtAllocated;
+      this.budget.amtBudgetAllocated -= Number(amtAllocated);
       this.budgetService.save(this.budget);
       this.categories.splice(index, 1);
       this.save();
@@ -187,7 +187,7 @@ export class BudgetPage {
           text: 'Save',
           handler: data => {
             let index = this.categories.indexOf(category);
-            this.budget.amtBudgetAllocated -= this.categories[index].amtAllocated;
+            this.budget.amtBudgetAllocated -= Number(this.categories[index].amtAllocated);
             let remainingToAllocate = this.budget.amtBudgetAllocated + Number(data.amtAllocated);
             let overError: boolean = false;
             let categoryAllocated = data.amtAllocated;
