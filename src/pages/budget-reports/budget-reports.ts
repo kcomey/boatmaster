@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the BudgetReportsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Platform, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
 
 @IonicPage()
 @Component({
@@ -14,12 +8,24 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'budget-reports.html',
 })
 export class BudgetReportsPage {
+  previousMonths: any = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public budgetService: DataBudgetProvider , public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad BudgetReportsPage');
+    this.platform.ready().then(() => {
+      let savedBudget: any;
+      this.budgetService.getData().then((budget) => {
+        if (typeof(budget) != "undefined") {
+          savedBudget = JSON.parse(budget)
+        }
+    
+        if (savedBudget) {
+          this.previousMonths = savedBudget.previousMonths;
+        }
+      });
+    });
   }
 
 }

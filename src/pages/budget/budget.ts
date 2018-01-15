@@ -22,16 +22,18 @@ import { collectExternalReferences } from '@angular/compiler/src/output/output_a
 })
 export class BudgetPage {
   categories: CategoryModel[] = [];
-  today: any = Date();
+  //Need this format to save to storage
+  today: any = new Date('6/1/2017').toISOString().substring(0, 7);
   formData: any;
   budget: any = false;
+  archiveCategories: boolean = false;
 
   constructor(public toastCtrl: ToastController, public events: Events, public menu: MenuController, public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider, public budgetService: DataBudgetProvider) {
       this.menu.enable(true);
       events.subscribe('monthlyBudget', (monthlyBudget)=> {
-        this.budget = { date: this.today, monthlyBudget: 0, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []};
-        this.budget.monthlyBudget = monthlyBudget;
+        this.budget = { date: this.today, monthlyBudget: monthlyBudget, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []};
+        //this.budget.monthlyBudget = monthlyBudget;
       });
       events.subscribe('budget', (budget)=> {
         this.budget = budget;
@@ -40,38 +42,64 @@ export class BudgetPage {
 
   ionViewDidLoad() {
     //this.storage.clear();
+
+    console.log('today is ' + this.today);
     this.platform.ready().then(() => {
-      this.dataService.getData().then((categories) => {
-        let savedCategories: any = false;
-
-        if (typeof(categories) != "undefined") {
-          savedCategories = JSON.parse(categories);
-        }
-
-        if (savedCategories) {
-          savedCategories.forEach(savedCategory => {
-            let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.amtSpent, savedCategory.items);
-
-            this.categories.push(loadCategory);
-
-            loadCategory.categoryUpdates().subscribe(update => {
-              this.save();
-            });
-          });
-        }
-      });
-
       this.budgetService.getData().then((budget) => {
         if (typeof(budget) != "undefined") {
           this.budget = JSON.parse(budget)
         }
-
         //If there is not a monthly budget yet, send to the settings page
         if (!this.budget) {
           this.navCtrl.push(SettingsPage);
-        } 
+        }
+        else {
+          console.log('dates in storage ' + this.budget.date);
+        //If month has changed, archive data
+          if (this.today != this.budget.date) {
+            console.log('dates do not match - go to archive');
+            this.archiveData();
+          }
+        }
+      }).then(() => {
+        this.dataService.getData().then((categories) => {
+          let savedCategories: any = false;
+
+          if (typeof(categories) != "undefined") {
+            savedCategories = JSON.parse(categories);
+          }
+
+          if (savedCategories) {
+            savedCategories.forEach(savedCategory => {
+              let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.amtSpent, savedCategory.items);
+
+              this.categories.push(loadCategory);
+
+              loadCategory.categoryUpdates().subscribe(update => {
+                this.save();
+              });
+            });
+          }
+        });
       });
     });
+  }
+
+  archiveData() {
+    // this.budgetService.archiveBudget(this.today, this.budget).then(function(result) {
+    //   // Do something with the results of the GET request
+    //   console.log('result is ' + result);
+    // });
+
+    Promise.all([this.budgetService.archiveBudget(this.today, this.budget), this.dataService.archiveCategories(this.budget.date)]).then(data => {
+      //do stuff with data[0], data[1]
+      this.ionViewDidLoad();
+    });
+
+    // Promise.all([
+    //   this.budgetService.archiveBudget(this.today, this.budget),
+    //   this.dataService.archiveCategories(this.budget.date)
+    // ]).then(value => this.ionViewDidLoad());
   }
 
   addCategory(): void {

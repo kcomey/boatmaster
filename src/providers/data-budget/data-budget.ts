@@ -22,4 +22,23 @@ export class DataBudgetProvider {
     this.storage.set('currentBudget', newBudget);
   }
 
+  archiveBudget(newDate, budget): Promise<any>{
+    console.log('archive the budget ' + budget.date);
+    console.log('new the budget ' + newDate);
+
+    budget.previousMonths.push(
+      {
+      date: budget.date,
+      monthlyBudget: budget.monthlyBudget,
+      monthlyBudgetSpent: budget.monthlyBudgetSpent
+      }
+    );
+
+    budget.date = newDate;
+    budget.monthlyBudgetSpent = 0;
+
+    this.save(budget);
+    return newDate;
+  }
+
 }
