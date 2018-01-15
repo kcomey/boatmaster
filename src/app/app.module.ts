@@ -14,10 +14,12 @@ import { LocationPage } from '../pages/location/location';
 import { SettingsPage } from '../pages/settings/settings';
 import { BoatDetailsPage } from '../pages/boat-details/boat-details';
 import { CategoryDetailPage } from '../pages/category-detail/category-detail';
+import { ArchiveCategoryDetailPage } from '../pages/archive-category-detail/archive-category-detail';
 import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
 import { LocationHomePage } from '../pages/location-home/location-home';
 import { BudgetEntryPage } from '../pages/budget-entry/budget-entry';
 import { BudgetReportsPage } from '../pages/budget-reports/budget-reports';
+import { ShowArchiveBudgetPage } from '../pages/show-archive-budget/show-archive-budget';
 import { RunningBudgetTotalPage } from '../pages/running-budget-total/running-budget-total';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Network } from '@ionic-native/network';
@@ -45,7 +47,10 @@ import { CustomPipe } from '../pipes/custom/custom';
     CategoryDetailPage,
     SettingsPage,
     BudgetReportsPage,
-    RunningBudgetTotalPage
+    RunningBudgetTotalPage,
+    CustomPipe,
+    ShowArchiveBudgetPage,
+    ArchiveCategoryDetailPage
   ],
   imports: [
     BrowserModule,
@@ -68,6 +73,8 @@ import { CustomPipe } from '../pipes/custom/custom';
     SettingsPage,
     BudgetReportsPage,
     RunningBudgetTotalPage,
+    ShowArchiveBudgetPage,
+    ArchiveCategoryDetailPage
   ],
   providers: [
     StatusBar,
@@ -84,8 +91,7 @@ import { CustomPipe } from '../pipes/custom/custom';
     DecimalPipe,
     CurrencyPipe,
     DatePipe,
-    DataBudgetProvider,
-    CustomPipe
+    DataBudgetProvider
   ]
 })
 export class AppModule {}

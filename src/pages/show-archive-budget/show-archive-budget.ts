@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the ShowArchiveBudgetPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { DataCategoryProvider } from '../../providers/data-category/data-category';
+import { CategoryModel } from '../../models/category-model';
+import { ArchiveCategoryDetailPage } from '../archive-category-detail/archive-category-detail';
 
 @IonicPage()
 @Component({
@@ -14,12 +10,44 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'show-archive-budget.html',
 })
 export class ShowArchiveBudgetPage {
+  categories: CategoryModel[] = [];
+  budget: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public dataService: DataCategoryProvider, public navCtrl: NavController, public navParams: NavParams) {
+    this.budget = this.navParams.get('budget');
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ShowArchiveBudgetPage');
+    this.dataService.getDataForDate(this.budget.date).then((categories) => {
+      let savedCategories: any = false;
+
+      if (typeof(categories) != "undefined") {
+        savedCategories = JSON.parse(categories);
+      }
+
+      if (savedCategories) {
+        savedCategories.forEach(savedCategory => {
+          let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.amtSpent, savedCategory.items);
+
+          this.categories.push(loadCategory);
+        });
+      }
+    });
+  }
+
+  viewCategoryEntries(category): void {
+    let index = this.categories.indexOf(category);
+
+    this.navCtrl.push(ArchiveCategoryDetailPage, {
+      category: category,
+      index: index
+    });
   }
 
 }
+
+
+
+
+
+

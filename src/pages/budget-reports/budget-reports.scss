@@ -2,4 +2,16 @@ page-budget-reports {
     ion-list-header {
         text-align: center;
     }
+
+    .text {
+        color: black;
+    }
+
+    .number {
+        color: map-get($colors, proceed);
+    }
+
+    .numberNegative {
+        color: map-get($colors, warning);
+    }
 }

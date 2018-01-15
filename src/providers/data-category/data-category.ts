@@ -12,6 +12,10 @@ export class DataCategoryProvider {
     return this.storage.get('categories');
   }
 
+  getDataForDate(fileName): Promise<any> {
+    return this.storage.get(fileName);
+  }
+
   save(data): void {
     let saveData = [];
 

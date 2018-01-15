@@ -11,7 +11,7 @@ import { BudgetEntryPage } from '../budget-entry/budget-entry';
 import { SettingsPage } from '../../pages/settings/settings';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
-import { collectExternalReferences } from '@angular/compiler/src/output/output_ast';
+
 //remove storage above
 
 @IonicPage()

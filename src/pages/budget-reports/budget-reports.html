@@ -9,7 +9,7 @@
 
 <ion-content padding class="custom">
   <ion-card>
-      <ion-list class="text">
+      <ion-list>
         <ion-list-header *ngIf="previousMonths">
             Saved Budgets
           </ion-list-header>
@@ -19,11 +19,11 @@
 
           <ion-item *ngFor="let budget of previousMonths">
               <button class="text" text-capitalize item-start ion-button clear>
-                  {{ budget.date }}
-              </button>
-              <button item-end ion-button clear> {{ budget.monthlyBudgetSpent | currency:'USD':symbol:'2.2-2'}}</button>
-              <button class="numberNegative" item-end ion-button clear> ({{ budget.monthlyBudget | currency:'USD':symbol:'2.2-2'}})</button>
-              <button class="text" item-end ion-button icon-only clear (click)="viewCategoryEntries()"><ion-icon name="arrow-dropright"></ion-icon></button>
+                  {{ budget.date | custom  }}
+              </button> 
+              <button item-end ion-button clear [ngClass]="(budget.monthlyBudgetSpent >= 0) ? 'number' : 'numberNegative'"> {{ budget.monthlyBudgetSpent | currency:'USD':symbol:'2.2-2'}}</button>
+              <button class="text" item-end ion-button clear> ({{ budget.monthlyBudget | currency:'USD':symbol:'2.2-2'}})</button>
+              <button class="text" item-end ion-button icon-only clear (click)="viewArchiveBudget(budget)"><ion-icon name="arrow-dropright"></ion-icon></button>
           </ion-item>
       </ion-list>
     </ion-card>

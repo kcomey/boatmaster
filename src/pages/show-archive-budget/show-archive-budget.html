@@ -1,18 +1,32 @@
-<!--
-  Generated template for the ShowArchiveBudgetPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>ShowArchiveBudget</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
-</ion-content>
+    <ion-navbar color="header">
+      <ion-title><span>{{ budget.date | custom }}</span> Budget</ion-title>
+    </ion-navbar>
+  </ion-header>
+  
+  
+  <ion-content padding class="custom">
+    <ion-card>
+        <ion-list no-lines>
+            <ion-list-header *ngIf="budget" [ngClass]="(budget.monthlyBudget - budget.monthlyBudgetSpent >= 0) ? 'number' : 'numberNegative'">
+               Spent {{ budget.monthlyBudgetSpent | currency:'USD':symbol:'2.2-2' }}
+                of {{ budget.monthlyBudget | currency:'USD':symbol:'2.2-2'}}
+              </ion-list-header>
+            <ion-item *ngFor="let category of categories">
+                    <button class="text" text-capitalize item-start ion-button clear>{{ category.title }}
+                      (items {{category.items.length}})
+                    </button>
+                    <button item-end ion-button clear [ngClass]="(category.amtAllocated >= 0) ? 'number' : 'numberNegative'"> {{ category.amtAllocated | currency:'USD':symbol:'2.2-2'}}</button>
+                    <button class="numberNegative" item-end ion-button clear> ({{ category.amtSpent | currency:'USD':symbol:'2.2-2'}})</button>
+                    <button class="text" item-end ion-button icon-only clear (click)="viewCategoryEntries(category)"><ion-icon name="arrow-dropright"></ion-icon></button>
+                 
+                  </ion-item>
+            </ion-list>
+      </ion-card>
+    </ion-content>
+  
+  
+  
+    
+  
+  

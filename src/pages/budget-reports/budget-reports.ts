@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Platform, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ModalController, Platform, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
 import { CustomPipe } from '../../pipes/custom/custom';
+import { ShowArchiveBudgetPage } from '../show-archive-budget/show-archive-budget';
 
 @IonicPage()
 @Component({
@@ -11,7 +12,7 @@ import { CustomPipe } from '../../pipes/custom/custom';
 export class BudgetReportsPage {
   previousMonths: any = [];
 
-  constructor(public custom: CustomPipe, public budgetService: DataBudgetProvider , public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public modalCtrl: ModalController, public budgetService: DataBudgetProvider , public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -29,6 +30,12 @@ export class BudgetReportsPage {
         }
       });
     });
+  }
+
+  viewArchiveBudget(budget) {
+    //let prompt = this.modalCtrl.create(ShowArchiveBudgetPage, { budget: budget });
+    //prompt.present();
+    this.navCtrl.push(ShowArchiveBudgetPage, { budget: budget });
   }
 
 }
