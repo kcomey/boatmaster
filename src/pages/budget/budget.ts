@@ -9,11 +9,10 @@ import { ItemSliding } from 'ionic-angular';
 import { CurrencyPipe } from '@angular/common';
 import { BudgetEntryPage } from '../budget-entry/budget-entry';
 import { SettingsPage } from '../../pages/settings/settings';
-
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
 import { collectExternalReferences } from '@angular/compiler/src/output/output_ast';
-//remove above
+//remove storage above
 
 @IonicPage()
 @Component({
@@ -23,7 +22,7 @@ import { collectExternalReferences } from '@angular/compiler/src/output/output_a
 export class BudgetPage {
   categories: CategoryModel[] = [];
   //Need this format to save to storage
-  today: any = new Date('6/1/2017').toISOString().substring(0, 7);
+  today: any = new Date('1/15/2018').toISOString();
   formData: any;
   budget: any = false;
   archiveCategories: boolean = false;
@@ -32,7 +31,7 @@ export class BudgetPage {
     public keyboard: Keyboard, public dataService: DataCategoryProvider, public budgetService: DataBudgetProvider) {
       this.menu.enable(true);
       events.subscribe('monthlyBudget', (monthlyBudget)=> {
-        this.budget = { date: this.today, monthlyBudget: monthlyBudget, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []};
+        this.budget = { date: this.today.substring(0, 7), monthlyBudget: monthlyBudget, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []};
         //this.budget.monthlyBudget = monthlyBudget;
       });
       events.subscribe('budget', (budget)=> {
@@ -43,7 +42,7 @@ export class BudgetPage {
   ionViewDidLoad() {
     //this.storage.clear();
 
-    console.log('today is ' + this.today);
+    console.log('today is ' + this.today.substring(0, 7));
     this.platform.ready().then(() => {
       this.budgetService.getData().then((budget) => {
         if (typeof(budget) != "undefined") {
@@ -56,12 +55,13 @@ export class BudgetPage {
         else {
           console.log('dates in storage ' + this.budget.date);
         //If month has changed, archive data
-          if (this.today != this.budget.date) {
+          if (this.today.substring(0, 7) != this.budget.date) {
             console.log('dates do not match - go to archive');
-            this.archiveData();
+            this.archiveData(this.budget.date);
           }
         }
       }).then(() => {
+        this.categories = [];
         this.dataService.getData().then((categories) => {
           let savedCategories: any = false;
 
@@ -85,21 +85,18 @@ export class BudgetPage {
     });
   }
 
-  archiveData() {
-    // this.budgetService.archiveBudget(this.today, this.budget).then(function(result) {
-    //   // Do something with the results of the GET request
-    //   console.log('result is ' + result);
-    // });
-
-    Promise.all([this.budgetService.archiveBudget(this.today, this.budget), this.dataService.archiveCategories(this.budget.date)]).then(data => {
-      //do stuff with data[0], data[1]
+  archiveData(saveDate) {
+    this.dataService.getData().then((categories) => {
+      this.dataService.archiveCategories(saveDate, categories);
+      this.categories = [];
+      console.log('step 1 is ' + categories);
+    }).then(() => {
+      this.budgetService.archiveBudget(this.today.substring(0, 7), this.budget)
+      console.log('step 2 is ');
+    }).then(() => {
       this.ionViewDidLoad();
+      console.log('step 3 is ');
     });
-
-    // Promise.all([
-    //   this.budgetService.archiveBudget(this.today, this.budget),
-    //   this.dataService.archiveCategories(this.budget.date)
-    // ]).then(value => this.ionViewDidLoad());
   }
 
   addCategory(): void {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Platform, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
+import { CustomPipe } from '../../pipes/custom/custom';
 
 @IonicPage()
 @Component({
@@ -10,7 +11,7 @@ import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
 export class BudgetReportsPage {
   previousMonths: any = [];
 
-  constructor(public budgetService: DataBudgetProvider , public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public custom: CustomPipe, public budgetService: DataBudgetProvider , public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -23,6 +24,8 @@ export class BudgetReportsPage {
     
         if (savedBudget) {
           this.previousMonths = savedBudget.previousMonths;
+          console.log('type is ' + typeof(this.previousMonths[0].date));
+          console.log('value is ' + this.previousMonths[0].date);
         }
       });
     });

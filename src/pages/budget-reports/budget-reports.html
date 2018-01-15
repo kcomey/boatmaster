@@ -9,37 +9,24 @@
 
 <ion-content padding class="custom">
   <ion-card>
-      <ion-list>
-        Anything here?
-          <ion-item-sliding #slidingItem *ngFor="let budget of previousMonths">
-              <ion-item>
-                <div class="row">
-                <div class="col text">
-                  <button color="exDark" item-start ion-button clear>
-                    {{ budget.date | date:'Mmm, yyyy' }}
-                  </button></div>
+      <ion-list class="text">
+        <ion-list-header *ngIf="previousMonths">
+            Saved Budgets
+          </ion-list-header>
+          <ion-list-header *ngIf="!previousMonths">
+              No Budgets Saved
+          </ion-list-header>
 
-                  <div class="col currency">
-                  <button color="exDark" text-capitalize item-start ion-button clear item-end>
-                      {{ budget.monthlyBudget | currency }} Budget
-                    </button></div>
-
-                    <div class="col currency">
-                      <button color="exDark" text-capitalize item-start ion-button clear item-end>
-                          {{ budget.monthlyBudgetSpent | currency }} Spent
-                        </button></div>
-                  </div>
-                </ion-item>
-  
-            <ion-item-options>
-              <!-- <button ion-button outline icon-only color="proceed"
-              (click)="editEntryItem(entry, slidingItem)"><ion-icon
-              name="clipboard"></ion-icon></button>
-              <button ion-button outline icon-only color="warning"
-              (click)="removeEntryItem(entry, slidingItem)"><ion-icon
-              name="trash"></ion-icon></button> -->
-            </ion-item-options>
-          </ion-item-sliding>
-          </ion-list>
+          <ion-item *ngFor="let budget of previousMonths">
+              <button class="text" text-capitalize item-start ion-button clear>
+                  {{ budget.date }}
+              </button>
+              <button item-end ion-button clear> {{ budget.monthlyBudgetSpent | currency:'USD':symbol:'2.2-2'}}</button>
+              <button class="numberNegative" item-end ion-button clear> ({{ budget.monthlyBudget | currency:'USD':symbol:'2.2-2'}})</button>
+              <button class="text" item-end ion-button icon-only clear (click)="viewCategoryEntries()"><ion-icon name="arrow-dropright"></ion-icon></button>
+          </ion-item>
+      </ion-list>
     </ion-card>
   </ion-content>
+
+

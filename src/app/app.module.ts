@@ -28,6 +28,7 @@ import { ConnectivityProvider } from '../providers/connectivity/connectivity';
 import { DataCategoryProvider } from '../providers/data-category/data-category';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { DataBudgetProvider } from '../providers/data-budget/data-budget';
+import { CustomPipe } from '../pipes/custom/custom';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,7 @@ import { DataBudgetProvider } from '../providers/data-budget/data-budget';
     CategoryDetailPage,
     SettingsPage,
     BudgetReportsPage,
-    RunningBudgetTotalPage
+    RunningBudgetTotalPage,
   ],
   providers: [
     StatusBar,
@@ -83,7 +84,8 @@ import { DataBudgetProvider } from '../providers/data-budget/data-budget';
     DecimalPipe,
     CurrencyPipe,
     DatePipe,
-    DataBudgetProvider
+    DataBudgetProvider,
+    CustomPipe
   ]
 })
 export class AppModule {}

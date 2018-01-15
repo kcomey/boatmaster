@@ -29,9 +29,9 @@ export class DataCategoryProvider {
     this.storage.set('categories', newData);
   }
 
-  archiveCategories(saveDate):  Promise<any>{
+  archiveCategories(saveDate, categories): void {
     console.log('archive the categories ' + saveDate);
-    this.getData().then((categories) => {
+
       //Data is ready to go
       this.storage.set(saveDate, categories);
 
@@ -39,21 +39,22 @@ export class DataCategoryProvider {
       categories = JSON.parse(categories);
       //Remove observables
       if (categories) {
+        let a = 0;
         categories.forEach(category => {
-          console.log('in archive cate loop');
+          console.log('in archive category loop');
           saveData.push({
             title: category.title,
             amtAllocated: category.amtAllocated,
             amtSpent: 0,
             items: []
           });
+          console.log('data is ' + saveData[a].amtAllocated);
+          a++;
         });
       }
     
       let newData = JSON.stringify(saveData);
       this.storage.set('categories', newData);
-    });
-    return saveDate;
   }
 
 }
