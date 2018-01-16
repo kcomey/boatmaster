@@ -22,7 +22,7 @@ import { ToastController } from 'ionic-angular/components/toast/toast-controller
 export class BudgetPage {
   categories: CategoryModel[] = [];
   //Need this format to save to storage
-  today: any = new Date('09/15/2017').toISOString();
+  today: any = new Date('12/15/2017').toISOString();
   formData: any;
   budget: any = false;
   archiveCategories: boolean = false;
@@ -39,7 +39,7 @@ export class BudgetPage {
   }
 
   ionViewDidLoad() {
-    this.storage.clear();
+    //this.storage.clear();
 
     console.log('today is ' + this.today.substring(0, 7));
     this.platform.ready().then(() => {
@@ -87,14 +87,19 @@ export class BudgetPage {
   archiveData(saveDate) {
     this.dataService.getData().then((categories) => {
       this.dataService.archiveCategories(saveDate, categories);
-      this.categories = [];
-      console.log('step 1 is ' + categories);
+        this.categories = [];
+        console.log('step 1 is ' + categories);
+        return this.budgetService.getRunningTotal();
+    }).then((totals) => {
+        let remaining = Number(this.budget.monthlyBudget - this.budget.monthlyBudgetSpent);
+        this.budgetService.updateRunningTotal(remaining, totals);
+        console.log('step 2 is ');
     }).then(() => {
-      this.budgetService.archiveBudget(this.today.substring(0, 7), this.budget)
-      console.log('step 2 is ');
+        this.budgetService.archiveBudget(this.today.substring(0, 7), this.budget);
+        console.log('step 3 is ');
     }).then(() => {
-      this.ionViewDidLoad();
-      console.log('step 3 is ');
+        this.ionViewDidLoad();
+        console.log('step 4 is ');
     });
   }
 

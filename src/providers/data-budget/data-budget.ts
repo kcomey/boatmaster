@@ -44,28 +44,36 @@ export class DataBudgetProvider {
     this.save(budget);
 
     //Also update running total
-    this.updateRunningTotal(budget.monthlyBudget, budget.monthlyBudgetSpent);
+    //this.updateRunningTotal(budget.monthlyBudget, budget.monthlyBudgetSpent);
 
     return newDate;
   }
 
-  async updateRunningTotal(budgetAmount, amtSpent) {
-    let remaining = Number(budgetAmount - amtSpent);
+  updateRunningTotal(remaining, totals) {
+    //let remaining = Number(budgetAmount - amtSpent);
     console.log('remaining is ' + remaining);
-    let totals = { total: remaining, entries: [] };
+    console.log('totals is ' + totals);
+    console.log('type of totals is ' + typeof(totals));
 
-    let savedRemaining = await this.getRunningTotalAsync();
 
-    if (savedRemaining == null) {
-      //Do nothing, new object was created above
+    if (totals == null) {
+      totals = { total: remaining, entries: [] };
+      console.log('not totals defined');
     }
     else {
-      //Update the current object
-      totals.total = Number(savedRemaining.total) + Number(remaining);
-      console.log('total is ' + totals.total);
-      totals.entries = savedRemaining.entries;
+      totals.total += Number(remaining);
     }
+    //let totals = { total: remaining, entries: [] };
 
+    //let savedRemaining = await this.getRunningTotalAsync();
+
+    // if (savedRemaining == null) {
+    //   //Do nothing, new object was created above
+    // }
+    // else {
+      //Update the current object
+      console.log('total is ' + totals.total);
+    //}
     this.saveRunningTotal(totals);
   }
 
@@ -73,9 +81,9 @@ export class DataBudgetProvider {
     return this.storage.get('runningTotal');
   }
 
-  getRunningTotalAsync() {
-    return this.storage.get('runningTotal');
-  }
+  // getRunningTotalAsync() {
+  //   return this.storage.get('runningTotal');
+  // }
 
   saveRunningTotal(totals): void {
     console.log('SAVED RUNNING TOTAL');

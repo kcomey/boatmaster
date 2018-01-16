@@ -3,6 +3,7 @@ import { ModalController, Platform, IonicPage, NavController, NavParams } from '
 import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
 import { CustomPipe } from '../../pipes/custom/custom';
 import { ShowArchiveBudgetPage } from '../show-archive-budget/show-archive-budget';
+import { collectExternalReferences } from '@angular/compiler/src/output/output_ast';
 
 @IonicPage()
 @Component({
@@ -11,7 +12,8 @@ import { ShowArchiveBudgetPage } from '../show-archive-budget/show-archive-budge
 })
 export class BudgetReportsPage {
   previousMonths: any = [];
-  noSaved: boolean = true;
+  areSaved: boolean = false;
+  headerTitle = "No Budgets Saved";
 
   constructor(public modalCtrl: ModalController, public budgetService: DataBudgetProvider , public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
   }
@@ -25,18 +27,16 @@ export class BudgetReportsPage {
         }
     
         if (savedBudget) {
-          this.noSaved = false;
+          if (savedBudget.previousMonths.length > 0) {
+            this.headerTitle = "Saved Budgets";
+          }
           this.previousMonths = savedBudget.previousMonths;
-          console.log('type is ' + typeof(this.previousMonths[0].date));
-          console.log('value is ' + this.previousMonths[0].date);
         }
       });
     });
   }
 
   viewArchiveBudget(budget) {
-    //let prompt = this.modalCtrl.create(ShowArchiveBudgetPage, { budget: budget });
-    //prompt.present();
     this.navCtrl.push(ShowArchiveBudgetPage, { budget: budget });
   }
 
