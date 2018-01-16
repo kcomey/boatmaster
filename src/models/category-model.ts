@@ -61,10 +61,13 @@ export class CategoryModel {
     removeItem(item): void {
         //Remove a budget category
         let index = this.items.indexOf(item);
+        let creditAmount = this.items[index].amount;
 
         if (index > -1) {
             this.items.splice(index, 1);
         }
+
+        this.removeAmountSpent(creditAmount);
 
         this.categoryObserver.next(true);
     }
@@ -87,7 +90,7 @@ export class CategoryModel {
         this.categoryObserver.next(true);
     }
 
-    setAmount(amount): void {
+    setAmountAllocated(amount): void {
         //Budget category amount allocated
         this.amtAllocated = Number(amount);
         this.categoryObserver.next(true);
@@ -97,7 +100,6 @@ export class CategoryModel {
         //Add to budget amount spent
         //Updated on each budget entry item
         this.amtSpent += Number(amount);
-        this.amtAllocated -= Number(amount);
         this.categoryObserver.next(true);
     }
 
@@ -105,7 +107,6 @@ export class CategoryModel {
         //Subtract from budget amount spent
         //Updated on each budget entry item removed
         this.amtSpent -= Number(amount);
-        this.amtAllocated += Number(amount);
         this.categoryObserver.next(true);
     }
 

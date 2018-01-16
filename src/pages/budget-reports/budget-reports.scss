@@ -14,4 +14,12 @@ page-budget-reports {
     .numberNegative {
         color: map-get($colors, warning);
     }
+
+    .bold{
+        font-weight: bolder;
+        content: "Joe's Task:";
+    }
+    .normal{
+        font-weight: normal;
+    }
 }

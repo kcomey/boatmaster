@@ -11,6 +11,7 @@ import { ShowArchiveBudgetPage } from '../show-archive-budget/show-archive-budge
 })
 export class BudgetReportsPage {
   previousMonths: any = [];
+  noSaved: boolean = true;
 
   constructor(public modalCtrl: ModalController, public budgetService: DataBudgetProvider , public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
   }
@@ -24,6 +25,7 @@ export class BudgetReportsPage {
         }
     
         if (savedBudget) {
+          this.noSaved = false;
           this.previousMonths = savedBudget.previousMonths;
           console.log('type is ' + typeof(this.previousMonths[0].date));
           console.log('value is ' + this.previousMonths[0].date);

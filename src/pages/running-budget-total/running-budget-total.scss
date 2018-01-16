@@ -1,3 +1,11 @@
 page-running-budget-total {
+    .item-inner {
+        text-align: center;
+    }
+
+    .button {
+        color: white;
+        background-color: map-get($colors, proceed);
+    }
 
 }

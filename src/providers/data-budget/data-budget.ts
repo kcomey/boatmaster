@@ -6,6 +6,10 @@ import { Injectable } from '@angular/core';
 //Previous months looks like { date:'', monthlyBudget, monthlyBudgetSpent } -- Date will be file name 
 //Archive will just be save categories to a different file
 
+//Running totals will only be able to be used for entry when positive. 
+//Entry will have [date, amount, detail]
+//runningTotal will have { total: 0, entries: [] }
+
 @Injectable()
 export class DataBudgetProvider {
 
@@ -38,7 +42,45 @@ export class DataBudgetProvider {
     budget.monthlyBudgetSpent = 0;
 
     this.save(budget);
+
+    //Also update running total
+    this.updateRunningTotal(budget.monthlyBudget, budget.monthlyBudgetSpent);
+
     return newDate;
+  }
+
+  async updateRunningTotal(budgetAmount, amtSpent) {
+    let remaining = Number(budgetAmount - amtSpent);
+    console.log('remaining is ' + remaining);
+    let totals = { total: remaining, entries: [] };
+
+    let savedRemaining = await this.getRunningTotalAsync();
+
+    if (savedRemaining == null) {
+      //Do nothing, new object was created above
+    }
+    else {
+      //Update the current object
+      totals.total = Number(savedRemaining.total) + Number(remaining);
+      console.log('total is ' + totals.total);
+      totals.entries = savedRemaining.entries;
+    }
+
+    this.saveRunningTotal(totals);
+  }
+
+  getRunningTotal(): Promise<any> {
+    return this.storage.get('runningTotal');
+  }
+
+  getRunningTotalAsync() {
+    return this.storage.get('runningTotal');
+  }
+
+  saveRunningTotal(totals): void {
+    console.log('SAVED RUNNING TOTAL');
+    let newRunningTotal = JSON.stringify(totals);
+    this.storage.set('runningTotal', totals);
   }
 
 }

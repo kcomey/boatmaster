@@ -10,7 +10,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 })
 export class SettingsPage {
   budget: any = false;
-  today: any = new Date('1/15/2018').toISOString().substring(0, 7);
+  today: any = new Date('09/15/2017').toISOString().substring(0, 7);
 
   constructor(public events: Events, public keyboard: Keyboard, public alertCtrl: AlertController, public dataService: DataBudgetProvider, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
     

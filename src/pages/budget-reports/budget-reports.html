@@ -10,10 +10,10 @@
 <ion-content padding class="custom">
   <ion-card>
       <ion-list>
-        <ion-list-header *ngIf="previousMonths">
-            Saved Budgets
-          </ion-list-header>
-          <ion-list-header *ngIf="!previousMonths">
+          <ion-list-header *ngIf="!noSaved">
+              Saved Budgets
+              </ion-list-header>
+              <ion-list-header *ngIf="noSaved">
               No Budgets Saved
           </ion-list-header>
 

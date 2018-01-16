@@ -22,7 +22,7 @@ import { ToastController } from 'ionic-angular/components/toast/toast-controller
 export class BudgetPage {
   categories: CategoryModel[] = [];
   //Need this format to save to storage
-  today: any = new Date('1/15/2018').toISOString();
+  today: any = new Date('09/15/2017').toISOString();
   formData: any;
   budget: any = false;
   archiveCategories: boolean = false;
@@ -32,7 +32,6 @@ export class BudgetPage {
       this.menu.enable(true);
       events.subscribe('monthlyBudget', (monthlyBudget)=> {
         this.budget = { date: this.today.substring(0, 7), monthlyBudget: monthlyBudget, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []};
-        //this.budget.monthlyBudget = monthlyBudget;
       });
       events.subscribe('budget', (budget)=> {
         this.budget = budget;
@@ -40,7 +39,7 @@ export class BudgetPage {
   }
 
   ionViewDidLoad() {
-    //this.storage.clear();
+    this.storage.clear();
 
     console.log('today is ' + this.today.substring(0, 7));
     this.platform.ready().then(() => {
@@ -224,7 +223,7 @@ export class BudgetPage {
 
             if (index > -1) {
               this.categories[index].setTitle(data.title);
-              this.categories[index].setAmount(categoryAllocated);
+              this.categories[index].setAmountAllocated(categoryAllocated);
               this.save();
               this.budget.amtBudgetAllocated += Number(categoryAllocated);
               this.budgetService.save(this.budget);

@@ -1,18 +1,23 @@
-<!--
-  Generated template for the RunningBudgetTotalPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>RunningBudgetTotal</ion-title>
+  <ion-navbar color="header">
+
+    <ion-title>Running Budget Total</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="showEntries()">
+            <ion-icon name="archive"></ion-icon></button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding class="custom">
+  <ion-card>
+    <ion-item>
+    <h2>{{ runningTotal | currency }}</h2>
+      <button ion-button [disabled]="isDisabled" (click)="makeEntry()">Make Entry</button>
+    </ion-item>
+  </ion-card>
 
 </ion-content>
