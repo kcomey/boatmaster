@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Events, ViewController, ModalController, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
-import { collectExternalReferences } from '@angular/compiler/src/output/output_ast';
+import { BudgetEntryPage } from '../budget-entry/budget-entry';
+import { RunningBudgetDetailPage } from '../running-budget-detail/running-budget-detail';
+
 
 @IonicPage()
 @Component({
@@ -11,8 +13,13 @@ import { collectExternalReferences } from '@angular/compiler/src/output/output_a
 export class RunningBudgetTotalPage {
   isDisabled: boolean = false;
   runningTotal: number = 0;
+  savedTotals: any;
 
-  constructor(public budgetService: DataBudgetProvider, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public events: Events, public viewCtrl: ViewController, public modalCtrl: ModalController, public budgetService: DataBudgetProvider, public navCtrl: NavController, public navParams: NavParams) {
+    events.subscribe('totals', (totals)=> {
+      this.savedTotals = totals;
+      this.runningTotal = totals.total;
+    });
   }
 
   ionViewDidLoad() {
@@ -20,25 +27,40 @@ export class RunningBudgetTotalPage {
       let nullObject = totals;
       if (nullObject != null) {
         //Returns an object so it will be defined even if empty
-        console.log('totals ARE defined');
         this.runningTotal = totals.total;
-        console.log('totals ' + totals.total);
+        this.savedTotals = totals;
       }
       else {
         this.isDisabled = true;
-        console.log('totals ARE NOT defined');
       }
     });
   }
 
-  makeEntry() {
-    console.log('make an entry');
-
+  makeEntry(): void {
+    let category = { title: "Surplus Budget Entry"};
+    let prompt = this.modalCtrl.create(BudgetEntryPage, { category: category });
+    prompt.onDidDismiss(data => {
+      if (typeof(data) != "undefined") {
+        this.savedTotals.total -= Number(data.amount);
+        this.runningTotal -= Number(data.amount);
+        this.savedTotals.entries.push(
+          {
+            date: data.date,
+            amount: data.amount,
+            details: data.details
+          }
+        )
+        this.budgetService.saveRunningTotal(this.savedTotals);
+      }
+    });
+    prompt.present();
   }
 
-  showEntries() {
-    console.log('show entries');
-    
+  showEntries(): void {
+    let category = { title: "Surplus Budget Entry", items: this.savedTotals.entries};
+    this.navCtrl.push(RunningBudgetDetailPage);
   }
 
 }
+
+

@@ -27,9 +27,6 @@ export class DataBudgetProvider {
   }
 
   archiveBudget(newDate, budget): Promise<any>{
-    console.log('archive the budget ' + budget.date);
-    console.log('new the budget ' + newDate);
-
     budget.previousMonths.push(
       {
       date: budget.date,
@@ -50,30 +47,13 @@ export class DataBudgetProvider {
   }
 
   updateRunningTotal(remaining, totals) {
-    //let remaining = Number(budgetAmount - amtSpent);
-    console.log('remaining is ' + remaining);
-    console.log('totals is ' + totals);
-    console.log('type of totals is ' + typeof(totals));
-
-
     if (totals == null) {
       totals = { total: remaining, entries: [] };
-      console.log('not totals defined');
     }
     else {
       totals.total += Number(remaining);
     }
-    //let totals = { total: remaining, entries: [] };
 
-    //let savedRemaining = await this.getRunningTotalAsync();
-
-    // if (savedRemaining == null) {
-    //   //Do nothing, new object was created above
-    // }
-    // else {
-      //Update the current object
-      console.log('total is ' + totals.total);
-    //}
     this.saveRunningTotal(totals);
   }
 
@@ -81,12 +61,7 @@ export class DataBudgetProvider {
     return this.storage.get('runningTotal');
   }
 
-  // getRunningTotalAsync() {
-  //   return this.storage.get('runningTotal');
-  // }
-
   saveRunningTotal(totals): void {
-    console.log('SAVED RUNNING TOTAL');
     let newRunningTotal = JSON.stringify(totals);
     this.storage.set('runningTotal', totals);
   }

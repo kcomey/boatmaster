@@ -40,8 +40,9 @@ export class BudgetPage {
 
   ionViewDidLoad() {
     //this.storage.clear();
+    //let totals = { total: 750, entries: [] };
+    //this.budgetService.saveRunningTotal(totals)
 
-    console.log('today is ' + this.today.substring(0, 7));
     this.platform.ready().then(() => {
       this.budgetService.getData().then((budget) => {
         if (typeof(budget) != "undefined") {
@@ -52,10 +53,8 @@ export class BudgetPage {
           this.navCtrl.push(SettingsPage);
         }
         else {
-          console.log('dates in storage ' + this.budget.date);
         //If month has changed, archive data
           if (this.today.substring(0, 7) != this.budget.date) {
-            console.log('dates do not match - go to archive');
             this.archiveData(this.budget.date);
           }
         }
@@ -88,28 +87,22 @@ export class BudgetPage {
     this.dataService.getData().then((categories) => {
       this.dataService.archiveCategories(saveDate, categories);
         this.categories = [];
-        console.log('step 1 is ' + categories);
         return this.budgetService.getRunningTotal();
     }).then((totals) => {
         let remaining = Number(this.budget.monthlyBudget - this.budget.monthlyBudgetSpent);
         this.budgetService.updateRunningTotal(remaining, totals);
-        console.log('step 2 is ');
     }).then(() => {
         this.budgetService.archiveBudget(this.today.substring(0, 7), this.budget);
-        console.log('step 3 is ');
     }).then(() => {
         this.ionViewDidLoad();
-        console.log('step 4 is ');
     });
   }
 
   addCategory(): void {
-    console.log('start allocated ' + this.budget.amtBudgetAllocated);
     if (!this.budget) {
       this.navCtrl.push(SettingsPage);
     } 
     else if (this.budget.monthlyBudget <= this.budget.amtBudgetAllocated) {
-      console.log(this.budget.monthlyBudget + ' and ' + this.budget.amtBudgetAllocated);
       let toast = this.toastCtrl.create({
         message: 'There is no more money in your budget to allocate!',
         duration: 5000,
@@ -129,7 +122,8 @@ export class BudgetPage {
           },
           {
             name: 'amtAllocated',
-            placeholder: 'Monthly Amount'
+            placeholder: 'Monthly Amount',
+            type: 'number'
           }
         ],
         buttons: [
