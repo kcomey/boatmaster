@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { AlertController, Events, ViewController, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, ModalController, Events, ViewController, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
 import { ItemSliding } from 'ionic-angular';
-import { BudgetEntryPage } from '../budget-entry/budget-entry';
+import { RunningBudgetEntryPage } from '../running-budget-entry/running-budget-entry';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 
@@ -16,7 +16,7 @@ export class RunningBudgetDetailPage {
   entries: any;
   noEntries: boolean = false;
 
-  constructor(public alertCtrl: AlertController, public formBuilder: FormBuilder, public events: Events, public budgetService: DataBudgetProvider, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public formBuilder: FormBuilder, public modalCtrl: ModalController, public events: Events, public budgetService: DataBudgetProvider, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
 
   }
 
@@ -35,53 +35,25 @@ export class RunningBudgetDetailPage {
   }
 
   editEntryItem(entry, slidingItem: ItemSliding): void {
-    let index = this.savedTotals.entries.indexOf(entry);
-    let entryToEdit = this.savedTotals.entries[index];
+    let prompt = this.modalCtrl.create(RunningBudgetEntryPage, { entry: entry });
+    prompt.onDidDismiss(data => {
+      if (typeof(data) != "undefined") {
+        let index = this.savedTotals.entries.indexOf(entry);
 
-    console.log('tye is ' + typeof(entryToEdit.amount));
+        let creditAmount = this.savedTotals.entries[index].amount;
+        //Put back in original amount
+        this.savedTotals.total += Number(creditAmount);
+        //Take out new amount
+        this.savedTotals.total -= Number(data.amount);
+        //Update entry
+        this.savedTotals.entries[index].date = data.date;
+        this.savedTotals.entries[index].amount = data.amount;
+        this.savedTotals.entries[index].details = data.details;
 
-    let prompt = this.alertCtrl.create({
-      title: 'Edit Budget Surplus Entry',
-      inputs: [
-        {
-          name: 'amount',
-          type: 'number',
-          value: entryToEdit.amount
-        },
-        {
-          name: 'details',
-          type: 'text',
-          value: entryToEdit.details
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            this.navCtrl.pop();
-          }
-        },
-        {
-          text: 'Save',
-          handler: data => {  
-            if (typeof(data) != "undefined") {
-              let index = this.savedTotals.entries.indexOf(entry);
-
-              let creditAmount = this.savedTotals.entries[index].amount;
-              //Put back in original amount
-              this.savedTotals.total += Number(creditAmount);
-              //Take out new amount
-              this.savedTotals.total -= Number(data.amount);
-              //Update entry
-              this.savedTotals.entries[index].amount = data.amount;
-              this.savedTotals.entries[index].details = data.details;
-
-              this.budgetService.saveRunningTotal(this.savedTotals);
-              this.events.publish('totals', this.savedTotals);
-            }
-          }
-        }
-      ]
+        this.budgetService.saveRunningTotal(this.savedTotals);
+        this.events.publish('totals', this.savedTotals);
+      }
+      slidingItem.close();
     });
     prompt.present();
   }

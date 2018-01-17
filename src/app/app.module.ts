@@ -22,6 +22,7 @@ import { BudgetReportsPage } from '../pages/budget-reports/budget-reports';
 import { ShowArchiveBudgetPage } from '../pages/show-archive-budget/show-archive-budget';
 import { RunningBudgetTotalPage } from '../pages/running-budget-total/running-budget-total';
 import { RunningBudgetDetailPage } from '../pages/running-budget-detail/running-budget-detail';
+import { RunningBudgetEntryPage } from '../pages/running-budget-entry/running-budget-entry';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Network } from '@ionic-native/network';
 import { DataChecklistProvider } from '../providers/data-checklist/data-checklist';
@@ -52,7 +53,8 @@ import { CustomPipe } from '../pipes/custom/custom';
     CustomPipe,
     ShowArchiveBudgetPage,
     ArchiveCategoryDetailPage,
-    RunningBudgetDetailPage
+    RunningBudgetDetailPage,
+    RunningBudgetEntryPage
   ],
   imports: [
     BrowserModule,
@@ -77,7 +79,8 @@ import { CustomPipe } from '../pipes/custom/custom';
     RunningBudgetTotalPage,
     ShowArchiveBudgetPage,
     ArchiveCategoryDetailPage,
-    RunningBudgetDetailPage
+    RunningBudgetDetailPage,
+    RunningBudgetEntryPage
   ],
   providers: [
     StatusBar,

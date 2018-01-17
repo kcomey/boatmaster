@@ -1,0 +1,38 @@
+page-running-budget-entry {
+        .modal {
+            position: absolute;
+            top: 60px;
+            left: 40px;
+            display: block;
+            width: 80%;
+            height: 70%;
+        }
+        
+        .list-header {
+            border-top: 0px;
+            font-weight: bold;
+            font-size: 24px;
+            text-transform: capitalize;
+        }
+        
+        .button:nth-child(4) {
+            color: map-get($colors, exLight);
+            background-color: map-get($colors, proceed);
+            padding: 3px 10px;
+            color: white;
+            border-radius: 5px;
+            position: block;
+            float: right;
+        }
+        
+        .button:nth-child(5) {
+            color: map-get($colors, warning);
+            text-transform: lowercase;
+            background-color: map-get($colors, exLight);
+            position: block;
+            float: right;
+        }
+        
+}
+        
+        

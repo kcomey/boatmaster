@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Events, ViewController, ModalController, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DataBudgetProvider } from '../../providers/data-budget/data-budget';
-import { BudgetEntryPage } from '../budget-entry/budget-entry';
+import { RunningBudgetEntryPage } from '../running-budget-entry/running-budget-entry';
 import { RunningBudgetDetailPage } from '../running-budget-detail/running-budget-detail';
 
 
@@ -37,8 +37,7 @@ export class RunningBudgetTotalPage {
   }
 
   makeEntry(): void {
-    let category = { title: "Surplus Budget Entry"};
-    let prompt = this.modalCtrl.create(BudgetEntryPage, { category: category });
+    let prompt = this.modalCtrl.create(RunningBudgetEntryPage);
     prompt.onDidDismiss(data => {
       if (typeof(data) != "undefined") {
         this.savedTotals.total -= Number(data.amount);
