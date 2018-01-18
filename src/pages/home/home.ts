@@ -4,6 +4,8 @@ import { MenuController, NavController } from 'ionic-angular';
 import { BudgetPage } from '../budget/budget';
 import { ChecklistPage } from '../checklist/checklist';
 import { LocationHomePage } from '../location-home/location-home';
+import { BoatDetailsPage } from '../boat-details/boat-details';
+import { BoatMathPage } from '../boat-math/boat-math';
 
 @Component({
   selector: 'page-home',
@@ -26,6 +28,14 @@ export class HomePage {
 
   showLocationHomePage() {
     this.navCtrl.push(LocationHomePage);
+  }
+
+  showBoatPage() {
+    this.navCtrl.push(BoatDetailsPage);
+  }
+
+  showCalculationsPage() {
+    this.navCtrl.push(BoatMathPage);
   }
 
 }

@@ -1,0 +1,72 @@
+<ion-header>
+    
+    <ion-navbar color="header">
+      <ion-title>Calculations</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
+
+
+  <ion-content padding class="custom">
+      <ion-card>
+          <ion-list no-lines>
+
+            <ion-item *ngIf="tripHeader">
+                <button color="exDark" text-capitalize item-start ion-button clear>
+                    Trip Cost
+                </button>
+                <button color="exDark" item-end ion-button icon-only clear (click)="viewTripCost()">
+                  <ion-icon name="arrow-dropdown"></ion-icon></button>
+              </ion-item>
+
+              <div *ngIf="tripCost">
+                  <ion-item>
+                  <ion-label stacked>Miles to Travel</ion-label>
+                  <ion-input [(ngModel)]="miles" type="number"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                  <ion-label stacked>GPH</ion-label>
+                  <ion-input [(ngModel)]="gph" type="number"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                  <ion-label stacked>Speed (MPH)</ion-label>
+                  <ion-input [(ngModel)]="speed" type="number"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                  <ion-label stacked>Cost of Diesel</ion-label>
+                  <ion-input [(ngModel)]="cost" type="number"></ion-input>
+                  </ion-item>
+                  <ion-item class="result" *ngIf="tripCostResult > 0">Trip Cost is {{ tripCostResult | currency }} </ion-item>
+                  <button class="buttonGreen" ion-button clear type="cancel" (click)="calcTrip()">Calculate</button>
+                 
+            </div>
+
+              <ion-item *ngIf="rangeHeader">
+                  <button color="exDark" text-capitalize item-start ion-button clear>
+                      Boat Range
+                  </button>
+                  <button color="exDark" item-end ion-button icon-only clear (click)="viewBoatRange()">
+                    <ion-icon name="arrow-dropdown"></ion-icon></button>
+                </ion-item>
+  
+                <div *ngIf="boatRange">
+                    <ion-item>
+                        <ion-label stacked>Size of Tank</ion-label>
+                        <ion-input [(ngModel)]="tank" type="number"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                        <ion-label stacked>GPH</ion-label>
+                        <ion-input [(ngModel)]="gph2" type="number"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                        <ion-label stacked>Speed</ion-label>
+                        <ion-input [(ngModel)]="speed2" type="number"></ion-input>
+                        </ion-item>
+                        <ion-item class="result" *ngIf="boatRangeResult > 0">Boat Range is {{ boatRangeResult }}  miles</ion-item>
+                        <button class="buttonGreen" ion-button clear type="cancel" (click)="calcRange()">Calculate</button>
+                          
+                      </div>
+      
+              </ion-list>
+        </ion-card>
+      </ion-content>

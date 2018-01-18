@@ -13,6 +13,7 @@ import { ChecklistDetailPage } from '../pages/checklist-detail/checklist-detail'
 import { LocationPage } from '../pages/location/location';
 import { SettingsPage } from '../pages/settings/settings';
 import { BoatDetailsPage } from '../pages/boat-details/boat-details';
+import { BoatMathPage } from '../pages/boat-math/boat-math';
 import { CategoryDetailPage } from '../pages/category-detail/category-detail';
 import { ArchiveCategoryDetailPage } from '../pages/archive-category-detail/archive-category-detail';
 import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
@@ -54,7 +55,8 @@ import { CustomPipe } from '../pipes/custom/custom';
     ShowArchiveBudgetPage,
     ArchiveCategoryDetailPage,
     RunningBudgetDetailPage,
-    RunningBudgetEntryPage
+    RunningBudgetEntryPage,
+    BoatMathPage
   ],
   imports: [
     BrowserModule,
@@ -80,7 +82,8 @@ import { CustomPipe } from '../pipes/custom/custom';
     ShowArchiveBudgetPage,
     ArchiveCategoryDetailPage,
     RunningBudgetDetailPage,
-    RunningBudgetEntryPage
+    RunningBudgetEntryPage,
+    BoatMathPage
   ],
   providers: [
     StatusBar,

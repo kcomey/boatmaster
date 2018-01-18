@@ -1,22 +1,19 @@
 <ion-header>
     
       <ion-navbar color="header">
-        <ion-title>Travel Log - Boat Details</ion-title>
+        <ion-title>Boat Details</ion-title>
       </ion-navbar>
     
     </ion-header>
 
 
-<ion-content padding>
+<ion-content padding class="custom">
   <ion-card>
-    <ion-card-header>Boat Details</ion-card-header>
-    <ion-card-content>
-      Update this form with the details of your boat so you have an easy reference for later.
-    </ion-card-content>
-
-  </ion-card>
-
   <ion-list no-lines>
+    <ion-list-header>
+        Add details for easy reference
+        <br>Entries are auto-saved
+    </ion-list-header>
       <form [formGroup]="boatDetailsForm" (change)="saveForm()">
     <ion-item>
       <ion-label stacked>Name</ion-label>
@@ -57,7 +54,7 @@
                   <ion-label stacked>Holding Tank</ion-label>
                   <ion-input formControlName="waste" type="text"></ion-input>
                 </ion-item>
-
       </form>
   </ion-list>
+  </ion-card>
 </ion-content>
