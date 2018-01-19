@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { ViewController, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataLocationProvider } from '../../providers/data-location/data-location';
 
@@ -11,55 +11,41 @@ import { DataLocationProvider } from '../../providers/data-location/data-locatio
 })
 export class MooringDetailsPage {
   mooringDetailsForm: FormGroup;
+  today: any = new Date().toISOString().slice(0,16);
+  data: any;
+  mooring: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, 
+  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, 
     public dataService: DataLocationProvider, public platform: Platform) {
+      this.data = navParams.get('data');
+
       this.mooringDetailsForm = formBuilder.group({
         name: [''],
-        lat: [''],
-        lng: [''],
+        lat: [this.data.latitude],
+        lng: [this.data.longitude],
         type: [''],
         cost: [''],
         depth: [''],
-        arrive: [''],
+        arrive: [this.today],
         depart: [''],
         hours: [''],
         cameFrom: [''],
-        notes: ['']
+        notes: [''],
+        today: [this.today],
+        typeDive: ['']
       });
   }
 
   ionViewDidLoad() {
-    this.platform.ready().then(() => {
-      this.dataService.getMooringDetails().then((details) => {
-        let savedDetails: any = false;
-
-        if(details && typeof(details) != "undefined") {
-          savedDetails = JSON.parse(details);
-        }
-
-        let formControls: any = this.mooringDetailsForm.controls;
-
-        if(savedDetails) {
-          formControls.name.setValue(savedDetails.name);
-          formControls.lat.setValue(savedDetails.lat);
-          formControls.lng.setValue(savedDetails.lng);
-          formControls.type.setValue(savedDetails.type);
-          formControls.cost.setValue(savedDetails.cost);
-          formControls.depth.setValue(savedDetails.depth);
-          formControls.arrive.setValue(savedDetails.arrive);
-          formControls.depart.setValue(savedDetails.depart);
-          formControls.hours.setValue(savedDetails.hours);
-          formControls.cameFrom.setValue(savedDetails.cameFrom);
-          formControls.notes.setValue(savedDetails.notes);
-        }
-      });
-    });
+    if(this.data.category == "mooring") {
+      this.mooring = true;
+    }
   }
 
-  saveForm(): void {
+  closeModal() {
     let data = this.mooringDetailsForm.value;
-    this.dataService.setMooringDetails(data);
+    this.viewCtrl.dismiss(data); 
   }
+
 
 }

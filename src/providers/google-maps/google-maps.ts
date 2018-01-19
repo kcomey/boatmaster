@@ -122,13 +122,14 @@ export class GoogleMapsProvider {
     });
   }
 
-  changeMarker(lat: number, lng: number): void {
+  changeMarker(lat: number, lng: number, image): void {
     let latLng = new google.maps.LatLng(lat, lng);
 
     let marker = new google.maps.Marker({
       map: this.map,
       animation: 'DROP',
-      position: latLng
+      position: latLng,
+      icon: image
     });
 
     if (this.currentMarker) {

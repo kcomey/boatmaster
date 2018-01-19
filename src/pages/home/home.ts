@@ -3,9 +3,10 @@ import { MenuController, NavController } from 'ionic-angular';
 
 import { BudgetPage } from '../budget/budget';
 import { ChecklistPage } from '../checklist/checklist';
-import { LocationHomePage } from '../location-home/location-home';
+import { LocationPage } from '../location/location';
 import { BoatDetailsPage } from '../boat-details/boat-details';
 import { BoatMathPage } from '../boat-math/boat-math';
+import { TravelLogPage } from '../travel-log/travel-log';
 
 @Component({
   selector: 'page-home',
@@ -26,8 +27,8 @@ export class HomePage {
     this.navCtrl.push(ChecklistPage);
   }
 
-  showLocationHomePage() {
-    this.navCtrl.push(LocationHomePage);
+  showLocationPage() {
+    this.navCtrl.push(LocationPage);
   }
 
   showBoatPage() {
@@ -36,6 +37,10 @@ export class HomePage {
 
   showCalculationsPage() {
     this.navCtrl.push(BoatMathPage);
+  }
+
+  showTravelLogPage() {
+    this.navCtrl.push(TravelLogPage);
   }
 
 }

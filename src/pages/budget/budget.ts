@@ -40,8 +40,7 @@ export class BudgetPage {
 
   ionViewDidLoad() {
     //this.storage.clear();
-    //let totals = { total: 750, entries: [] };
-    //this.budgetService.saveRunningTotal(totals)
+
 
     this.platform.ready().then(() => {
       this.budgetService.getData().then((budget) => {

@@ -17,7 +17,7 @@ import { BoatMathPage } from '../pages/boat-math/boat-math';
 import { CategoryDetailPage } from '../pages/category-detail/category-detail';
 import { ArchiveCategoryDetailPage } from '../pages/archive-category-detail/archive-category-detail';
 import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
-import { LocationHomePage } from '../pages/location-home/location-home';
+import { TravelLogPage } from '../pages/travel-log/travel-log';
 import { BudgetEntryPage } from '../pages/budget-entry/budget-entry';
 import { BudgetReportsPage } from '../pages/budget-reports/budget-reports';
 import { ShowArchiveBudgetPage } from '../pages/show-archive-budget/show-archive-budget';
@@ -43,7 +43,7 @@ import { CustomPipe } from '../pipes/custom/custom';
     ChecklistPage,
     ChecklistDetailPage,
     LocationPage,
-    LocationHomePage,
+    TravelLogPage,
     BoatDetailsPage,
     MooringDetailsPage,
     BudgetEntryPage,
@@ -71,7 +71,7 @@ import { CustomPipe } from '../pipes/custom/custom';
     ChecklistPage,
     ChecklistDetailPage,
     LocationPage,
-    LocationHomePage,
+    TravelLogPage,
     BoatDetailsPage,
     MooringDetailsPage,
     BudgetEntryPage,

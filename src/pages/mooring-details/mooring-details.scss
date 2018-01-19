@@ -1,3 +1,28 @@
 page-mooring-details {
+    .modal {
+        position: absolute;
+        top: 10px;
+        left: 40px;
+        display: block;
+        width: 80%;
+        height: 100%;
+    }
 
+    .save {
+        color: map-get($colors, exLight);
+        background-color: map-get($colors, proceed);
+        padding: 3px 10px;
+        color: white;
+        border-radius: 5px;
+        position: block;
+        float: right;
+    }
+    
+    .cancel {
+        color: map-get($colors, warning);
+        text-transform: lowercase;
+        background-color: map-get($colors, exLight);
+        position: block;
+        float: right;
+    }
 }

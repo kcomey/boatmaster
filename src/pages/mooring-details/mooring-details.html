@@ -1,23 +1,15 @@
 <ion-header>
     
       <ion-navbar color="header">
-        <ion-title>Travel Log - Mooring Details</ion-title>
+        <ion-title>Save Mooring Details</ion-title>
       </ion-navbar>
     
     </ion-header>
 
 
-<ion-content padding>
-  <ion-card>
-    <ion-card-header>Mooring Details</ion-card-header>
-    <ion-card-content>
-      Update this form with the details of your boat so you have an easy reference for later.
-    </ion-card-content>
-
-  </ion-card>
-
+<ion-content padding class="modal">
   <ion-list no-lines>
-    <form [formGroup]="mooringDetailsForm" (change)="saveForm()">
+    <form [formGroup]="mooringDetailsForm">
     <ion-item>
       <ion-label stacked>Name</ion-label>
       <ion-input formControlName="name" type="text"></ion-input>
@@ -28,13 +20,12 @@
         <ion-input formControlName="lat" type="number"></ion-input>
       </ion-item>
 
-
       <ion-item>
           <ion-label stacked>Longitude</ion-label>
           <ion-input formControlName="lng" type="number"></ion-input>
         </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="mooring">
         <ion-label stacked>Type of Mooring</ion-label>
         <ion-select formControlName="type">
         <ion-option value="On the Hook" selected="true">On the Hook</ion-option>
@@ -45,32 +36,47 @@
       </ion-select>
       </ion-item>
 
-        <ion-item>
+      <ion-item *ngIf="!mooring">
+          <ion-label stacked>Type of Site</ion-label>
+          <ion-select formControlName="typeDive">
+          <ion-option value="Boat Dive" selected="true">Boat Dive</ion-option>
+          <ion-option value="Beach Dive">Beach Dive</ion-option>
+          <ion-option value="Drift Dive">Drift Dive</ion-option>
+          <ion-option value="Other">Other</ion-option>
+        </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="mooring">
             <ion-label stacked>Cost</ion-label>
             <ion-input formControlName="cost" type="number"></ion-input>
           </ion-item>
+
+          <ion-item *ngIf="!mooring">
+              <ion-label stacked>Date</ion-label>
+              <ion-datetime formControlName="today" displayFormat="MM/DD/YYYY"></ion-datetime>
+            </ion-item>
 
           <ion-item>
               <ion-label stacked>Depth</ion-label>
               <ion-input formControlName="depth" type="number"></ion-input>
             </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="mooring">
         <ion-label stacked>Arrival Date</ion-label>
         <ion-datetime formControlName="arrive" displayFormat="MM/DD/YYYY"></ion-datetime>
       </ion-item>
     
-    <ion-item>
+    <ion-item *ngIf="mooring">
         <ion-label stacked>Departure Date</ion-label>
         <ion-datetime formControlName="depart" displayFormat="MM/DD/YYYY"></ion-datetime>
       </ion-item>
 
-      <ion-item>
+      <ion-item *ngIf="mooring">
           <ion-label stacked>Hours Traveled</ion-label>
           <ion-input formControlName="hours" type="number"></ion-input>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="mooring">
             <ion-label stacked>Traveled From</ion-label>
             <ion-input formControlName="cameFrom" type="text"></ion-input>
           </ion-item>
@@ -80,6 +86,10 @@
         <ion-textarea formControlName="notes" type="text"></ion-textarea>
       </ion-item>
 
+      <button class="save" ion-button type="submit" (click)="closeModal()">Save</button>
+      <button class="cancel" ion-button clear type="cancel" (click)="cancelForm()">Cancel</button> 
+    
     </form>
   </ion-list>
+
 </ion-content>
