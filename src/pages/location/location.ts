@@ -5,7 +5,9 @@ import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { DataLocationProvider } from '../../providers/data-location/data-location';
 import { HomePage } from '../home/home';
 import { MooringDetailsPage } from '../mooring-details/mooring-details';
+import { detachEmbeddedView } from '@angular/core/src/view/view_attach';
 
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -21,32 +23,27 @@ export class LocationPage {
   latitude: number;
   longitude: number;
   image: string;
+  recentLocation: any;
 
-  constructor(public modalCtrl: ModalController, public app: App, public navCtrl: NavController, public maps: GoogleMapsProvider, public platform: Platform, 
+  constructor(public storage: Storage, public modalCtrl: ModalController, public app: App, public navCtrl: NavController, public maps: GoogleMapsProvider, public platform: Platform, 
     public dataService: DataLocationProvider, public alertCtrl: AlertController, public geolocation: Geolocation, public navParams: NavParams) {
   }
 
   ionViewDidLoad(): void {
     this.platform.ready().then(() => {
-      this.dataService.getLocationStopDetails().then((location) => {
-        let savedLocation: any;
-
-        console.log('saved ' + typeof(location));
-        if (typeof(location) != "undefined") {
-          savedLocation = JSON.parse(location);
-          console.log('saved 2 ' + typeof(savedLocation));
+      this.dataService.getLocationStopDetails().then((locations) => {
+        if (locations != null) {
+          let index = locations.details.length - 1;
+          console.log('index is ' + index);
+          this.recentLocation = locations.details[index];
+          console.log(this.recentLocation);
         }
 
         let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
-          if (savedLocation) {
-            console.log('saved ' + typeof(savedLocation));
-            console.log(savedLocation);
-            let index = savedLocation.length - 1;
-
-            this.latitude = savedLocation[index].latitude;
-            this.longitude = savedLocation[index].longitude;
-            this.image = savedLocation[index].image;
-            console.log('are we going to change?');
+          if (this.recentLocation) {
+            this.latitude = this.recentLocation.lat;
+            this.longitude = this.recentLocation.lng;
+            this.image = this.recentLocation.image;
             this.maps.changeMarker(this.latitude, this.longitude, this.image);
           }
         });
@@ -69,14 +66,25 @@ export class LocationPage {
         category: 'mooring'
       };
 
-      //this.dataService.setLocation(data);
-
       let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
       prompt.onDidDismiss(data => {
         data.image = this.image;
         data.category = 'mooring';
 
-        this.dataService.setLocationStopDetails(data);
+        console.log('name is ' + data.name);
+
+        this.dataService.getLocationStopDetails().then((locations) => {
+          if (locations != null) {
+            locations.details.push(data);
+            console.log('pushed data');
+            this.dataService.setLocationStopDetails(locations);
+          }
+          else {
+            let saveData = { details: [data] };
+            console.log('create the object');
+            this.dataService.setLocationStopDetails(saveData);
+          }
+        });
       });
       prompt.present();
     });
@@ -98,16 +106,28 @@ export class LocationPage {
         category: 'diving'
       };
 
-      //this.dataService.setLocation(data);
-
       let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
       prompt.onDidDismiss(data => {
         data.image = this.image;
-        data.category = 'mooring';
+        data.category = 'diving';
 
-        this.dataService.setLocationStopDetails(data);
+        console.log('name is ' + data.name);
+
+        this.dataService.getLocationStopDetails().then((locations) => {
+          if (locations != null) {
+            locations.details.push(data);
+            console.log('pushed data');
+            this.dataService.setLocationStopDetails(locations);
+          }
+          else {
+            let saveData = { details: [data] };
+            console.log('create the object');
+            this.dataService.setLocationStopDetails(saveData);
+          }
+        });
       });
-      prompt.present();
-    });
-  }
+    prompt.present();
+  });
+}
+
 }

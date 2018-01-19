@@ -13,19 +13,9 @@ export class DataLocationProvider {
     return this.storage.get('locationDetails');
   }
 
-  setLocationStopDetails(data: Object): void {
-    this.getLocationStopDetails().then((details) => {
-      let saveData = [];
-
-      if (typeof(details) != "undefined") {
-        saveData = JSON.parse(details);
-      }
-      
-      saveData.push(data);
-
-      let newData = JSON.stringify(saveData);
-      this.storage.set('locationDetails', newData);
-    });
+  setLocationStopDetails(data): void {
+      //let newData = JSON.stringify(data);
+      this.storage.set('locationDetails', data);
   }
 
   //Location is for the most recently added stop
