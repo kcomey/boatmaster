@@ -15,6 +15,7 @@ export class DataLocationProvider {
 
   setLocationStopDetails(data): void {
       //let newData = JSON.stringify(data);
+      console.log('step 3 ' + data.details[0].lat);
       this.storage.set('locationDetails', data);
   }
 

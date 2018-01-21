@@ -14,25 +14,29 @@ export class MooringDetailsPage {
   today: any = new Date().toISOString().slice(0,16);
   data: any;
   mooring: boolean = false;
+  index: number;
 
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, 
     public dataService: DataLocationProvider, public platform: Platform) {
       this.data = navParams.get('data');
 
       this.mooringDetailsForm = formBuilder.group({
-        name: [''],
-        lat: [this.data.latitude],
-        lng: [this.data.longitude],
-        type: [''],
-        cost: [''],
-        depth: [''],
-        arrive: [this.today],
-        depart: [''],
-        hours: [''],
-        cameFrom: [''],
-        notes: [''],
-        today: [this.today],
-        typeDive: ['']
+        name: [this.data.name],
+        lat: [this.data.lat],
+        lng: [this.data.lng],
+        type: [this.data.type],
+        cost: [this.data.cost],
+        depth: [this.data.depth],
+        arrive: [this.data.arrive || this.today],
+        depart: [this.data.depart],
+        hours: [this.data.hours],
+        cameFrom: [this.data.cameFrom],
+        notes: [this.data.notes],
+        today: [this.data.today || this.today],
+        typeDive: [this.data.typeDive],
+        image: [this.data.image],
+        category: [this.data.category],
+        index: [this.data.index]
       });
   }
 
@@ -42,7 +46,11 @@ export class MooringDetailsPage {
     }
   }
 
-  closeModal() {
+  cancelModal() {
+    this.viewCtrl.dismiss(); 
+  }
+
+  saveModal() {
     let data = this.mooringDetailsForm.value;
     this.viewCtrl.dismiss(data); 
   }

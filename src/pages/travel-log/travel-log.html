@@ -1,18 +1,58 @@
-<!--
-  Generated template for the TravelLogPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>TravelLog</ion-title>
-  </ion-navbar>
+    <ion-navbar color="header">
+      <ion-title>Travel Log</ion-title>
+      <!-- <ion-buttons end>
+        <button color="exLight" ion-button icon-only (click)="closeModal()"><ion-icon
+        name="close"></ion-icon></button>
+        </ion-buttons> -->
+    </ion-navbar>
+  
+  </ion-header>
+  
+  
+  <ion-content padding class="custom">
+    <ion-card>
+        <ion-list>
+            <ion-item-sliding #slidingItem *ngFor="let entry of locations">
+                <ion-item>
+                  <div class="row">
+                      <div *ngIf="entry.category == 'diving'" class="col currency">
+                          <button ion-button icon-only clear (click)="showLocation(entry)">
+                          <img src='assets/imgs/scubadivingIcon.png'></button></div>
+                     
+  
+                      <div *ngIf="entry.category == 'mooring'" class="col currency">
+                          <button ion-button icon-only clear (click)="showLocation(entry)">
+                          <img src='assets/imgs/harborIcon.png'></button></div>
 
-</ion-header>
+                  <div *ngIf="entry.category == 'mooring'" class="col text">
+                    <button color="exDark" item-start ion-button clear>
+                      {{ entry.arrive | date:'M/d/yy'}}
+                    </button></div>
 
+                    <div *ngIf="entry.category == 'diving'" class="col text">
+                        <button color="exDark" item-start ion-button clear>
+                          {{ entry.today | date:'M/d/yy'}}
+                        </button></div>
+  
+                    <div class="col detail">
+                        <button color="exDark" class="text" text-capitalize item-end ion-button clear> {{ entry.name }}</button>
+                      </div>
+  
+                    </div>
 
-<ion-content padding>
-
-</ion-content>
+                  </ion-item>
+    
+              <ion-item-options>
+                <button ion-button outline icon-only color="proceed"
+                (click)="editEntryItem(entry, slidingItem)"><ion-icon
+                name="clipboard"></ion-icon></button>
+                <button ion-button outline icon-only color="warning"
+                (click)="removeEntryItem(entry, slidingItem)"><ion-icon
+                name="trash"></ion-icon></button>
+              </ion-item-options>
+            </ion-item-sliding>
+            </ion-list>
+      </ion-card>
+    </ion-content>

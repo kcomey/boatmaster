@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { ModalController, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { DataLocationProvider } from '../../providers/data-location/data-location';
+import { MooringDetailsPage } from '../mooring-details/mooring-details';
+import { JsonPipe } from '@angular/common/src/pipes/json_pipe';
+import { HashLocationStrategy } from '@angular/common';
 
 @IonicPage()
 @Component({
@@ -8,40 +11,47 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'travel-log.html',
 })
 export class TravelLogPage {
+  locations: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public modalCtrl: ModalController, public platform: Platform, public dataService: DataLocationProvider, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TravelLogPage');
+    this.platform.ready().then(() => {
+      this.dataService.getLocationStopDetails().then((locations) => {
+        if (locations != null) {
+          this.locations = locations.details;
+        }
+      });
+    });
   }
 
-  showMooringDetail(whichmooring) {
-    // this.platform.ready().then(() => {
-    //   this.dataService.getMooringDetails().then((details) => {
-    //     let savedDetails: any = false;
-
-    //     if(details && typeof(details) != "undefined") {
-    //       savedDetails = JSON.parse(details);
-    //     }
-
-    //     let formControls: any = this.mooringDetailsForm.controls;
-
-    //     if(savedDetails) {
-    //       formControls.name.setValue(savedDetails.name);
-    //       formControls.lat.setValue(savedDetails.lat);
-    //       formControls.lng.setValue(savedDetails.lng);
-    //       formControls.type.setValue(savedDetails.type);
-    //       formControls.cost.setValue(savedDetails.cost);
-    //       formControls.depth.setValue(savedDetails.depth);
-    //       formControls.arrive.setValue(savedDetails.arrive);
-    //       formControls.depart.setValue(savedDetails.depart);
-    //       formControls.hours.setValue(savedDetails.hours);
-    //       formControls.cameFrom.setValue(savedDetails.cameFrom);
-    //       formControls.notes.setValue(savedDetails.notes);
-    //     }
-    //   });
-    // });
+  showLocation(data) {
+    data.index = this.locations.indexOf(data);
+    let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
+    prompt.onDidDismiss(data => {
+      if (data) {
+        this.dataService.getLocationStopDetails().then((locations) => {
+          return locations;
+        }).then((locations) => {
+          if (locations != null) {
+            if (locations.details)
+              if (data.index > -1) {
+                //Replace with new data
+                locations.details[data.index] = data;
+                return this.dataService.setLocationStopDetails(locations);
+              }
+          }
+        }).then(() => {
+          this.ionViewDidLoad();
+        }); 
+      }
+      else {
+        console.log('data is cancelled');
+      }
+      
+    });
+    prompt.present();
   }
-
+   
 }

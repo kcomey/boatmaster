@@ -86,9 +86,12 @@
         <ion-textarea formControlName="notes" type="text"></ion-textarea>
       </ion-item>
 
-      <button class="save" ion-button type="submit" (click)="closeModal()">Save</button>
-      <button class="cancel" ion-button clear type="cancel" (click)="cancelForm()">Cancel</button> 
+      <button class="save" ion-button type="submit" (click)="saveModal()">Save</button>
+      <button class="cancel" ion-button clear type="cancel" (click)="cancelModal()">Cancel</button> 
     
+      <ion-input formControlName="image" type="hidden"></ion-input>
+      <ion-input formControlName="category" type="hidden"></ion-input>
+      <ion-input formControlName="index" type="hidden"></ion-input>
     </form>
   </ion-list>
 

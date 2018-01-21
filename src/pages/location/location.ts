@@ -23,7 +23,7 @@ export class LocationPage {
   latitude: number;
   longitude: number;
   image: string;
-  recentLocation: any;
+  index: number;
 
   constructor(public storage: Storage, public modalCtrl: ModalController, public app: App, public navCtrl: NavController, public maps: GoogleMapsProvider, public platform: Platform, 
     public dataService: DataLocationProvider, public alertCtrl: AlertController, public geolocation: Geolocation, public navParams: NavParams) {
@@ -33,17 +33,16 @@ export class LocationPage {
     this.platform.ready().then(() => {
       this.dataService.getLocationStopDetails().then((locations) => {
         if (locations != null) {
-          let index = locations.details.length - 1;
-          console.log('index is ' + index);
-          this.recentLocation = locations.details[index];
-          console.log(this.recentLocation);
+          this.index = locations.details.length - 1;
+          return locations.details[this.index];
         }
-
+      }).then((recent) => {
+        console.log('recent is ' + recent.lat);
         let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
-          if (this.recentLocation) {
-            this.latitude = this.recentLocation.lat;
-            this.longitude = this.recentLocation.lng;
-            this.image = this.recentLocation.image;
+          if (recent) {
+            this.latitude = recent.lat;
+            this.longitude = recent.lng;
+            this.image = recent.image;
             this.maps.changeMarker(this.latitude, this.longitude, this.image);
           }
         });
@@ -68,30 +67,29 @@ export class LocationPage {
 
       let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
       prompt.onDidDismiss(data => {
-        data.image = this.image;
-        data.category = 'mooring';
-
-        console.log('name is ' + data.name);
-
-        this.dataService.getLocationStopDetails().then((locations) => {
-          if (locations != null) {
-            locations.details.push(data);
-            console.log('pushed data');
-            this.dataService.setLocationStopDetails(locations);
-          }
-          else {
-            let saveData = { details: [data] };
-            console.log('create the object');
-            this.dataService.setLocationStopDetails(saveData);
-          }
-        });
+        if (data) {
+          data.image = this.image;
+          data.category = 'mooring';
+          this.dataService.getLocationStopDetails().then((locations) => {
+            if (locations != null) {
+              locations.details.push(data);
+              this.dataService.setLocationStopDetails(locations);
+            }
+            else {
+              let saveData = { details: [data] };
+              this.dataService.setLocationStopDetails(saveData);
+            }
+          });
+        }
+        else {
+          console.log('data is cancelled');
+        }  
       });
       prompt.present();
     });
   }
 
   setDivingLocation(): void {
-    console.log('set for diving');
     this.geolocation.getCurrentPosition().then((position) => {
       this.latitude = position.coords.latitude;
       this.longitude = position.coords.longitude;
@@ -111,17 +109,13 @@ export class LocationPage {
         data.image = this.image;
         data.category = 'diving';
 
-        console.log('name is ' + data.name);
-
         this.dataService.getLocationStopDetails().then((locations) => {
           if (locations != null) {
             locations.details.push(data);
-            console.log('pushed data');
             this.dataService.setLocationStopDetails(locations);
           }
           else {
             let saveData = { details: [data] };
-            console.log('create the object');
             this.dataService.setLocationStopDetails(saveData);
           }
         });
