@@ -22,7 +22,7 @@ import { ToastController } from 'ionic-angular/components/toast/toast-controller
 export class BudgetPage {
   categories: CategoryModel[] = [];
   //Need this format to save to storage
-  today: any = new Date('12/15/2017').toISOString();
+  today: any = new Date().toISOString();
   formData: any;
   budget: any = false;
   archiveCategories: boolean = false;

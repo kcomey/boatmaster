@@ -2,10 +2,6 @@
 
     <ion-navbar color="header">
       <ion-title>Travel Log</ion-title>
-      <!-- <ion-buttons end>
-        <button color="exLight" ion-button icon-only (click)="closeModal()"><ion-icon
-        name="close"></ion-icon></button>
-        </ion-buttons> -->
     </ion-navbar>
   
   </ion-header>
@@ -45,11 +41,8 @@
                   </ion-item>
     
               <ion-item-options>
-                <button ion-button outline icon-only color="proceed"
-                (click)="editEntryItem(entry, slidingItem)"><ion-icon
-                name="clipboard"></ion-icon></button>
                 <button ion-button outline icon-only color="warning"
-                (click)="removeEntryItem(entry, slidingItem)"><ion-icon
+                (click)="removeLocation(entry, slidingItem)"><ion-icon
                 name="trash"></ion-icon></button>
               </ion-item-options>
             </ion-item-sliding>

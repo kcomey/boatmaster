@@ -12,6 +12,8 @@ import { ChecklistPage } from '../pages/checklist/checklist';
 import { ChecklistDetailPage } from '../pages/checklist-detail/checklist-detail';
 import { LocationPage } from '../pages/location/location';
 import { SettingsPage } from '../pages/settings/settings';
+import { RemindersPage } from '../pages/reminders/reminders';
+import { AddReminderPage } from '../pages/add-reminder/add-reminder';
 import { BoatDetailsPage } from '../pages/boat-details/boat-details';
 import { BoatMathPage } from '../pages/boat-math/boat-math';
 import { CategoryDetailPage } from '../pages/category-detail/category-detail';
@@ -34,6 +36,7 @@ import { DataCategoryProvider } from '../providers/data-category/data-category';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { DataBudgetProvider } from '../providers/data-budget/data-budget';
 import { CustomPipe } from '../pipes/custom/custom';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,9 @@ import { CustomPipe } from '../pipes/custom/custom';
     ArchiveCategoryDetailPage,
     RunningBudgetDetailPage,
     RunningBudgetEntryPage,
-    BoatMathPage
+    BoatMathPage,
+    RemindersPage,
+    AddReminderPage
   ],
   imports: [
     BrowserModule,
@@ -83,7 +88,9 @@ import { CustomPipe } from '../pipes/custom/custom';
     ArchiveCategoryDetailPage,
     RunningBudgetDetailPage,
     RunningBudgetEntryPage,
-    BoatMathPage
+    BoatMathPage,
+    RemindersPage,
+    AddReminderPage
   ],
   providers: [
     StatusBar,
@@ -100,7 +107,8 @@ import { CustomPipe } from '../pipes/custom/custom';
     DecimalPipe,
     CurrencyPipe,
     DatePipe,
-    DataBudgetProvider
+    DataBudgetProvider,
+    LocalNotifications
   ]
 })
 export class AppModule {}

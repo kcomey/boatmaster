@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MenuController, NavController } from 'ionic-angular';
 
 import { BudgetPage } from '../budget/budget';
+import { RemindersPage } from '../reminders/reminders';
 import { ChecklistPage } from '../checklist/checklist';
 import { LocationPage } from '../location/location';
 import { BoatDetailsPage } from '../boat-details/boat-details';
@@ -41,6 +42,10 @@ export class HomePage {
 
   showTravelLogPage() {
     this.navCtrl.push(TravelLogPage);
+  }
+
+  showRemindersPage() {
+    this.navCtrl.push(RemindersPage);
   }
 
 }

@@ -1,0 +1,23 @@
+<ion-header>
+    
+  <ion-navbar color="header">
+    <ion-title>Reminders</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+ <ion-card>
+   Show all of the reminders that have been added and have a button to delete
+   individually or all.
+   <P>      <button (click)="cancelAll()" ion-button color="danger" full>Leave me alone!</button>
+   </P>
+
+   <button ion-button (click)="addDaily()">Add Daily Reminder</button>
+   <button ion-button>Add Weekly Reminder</button>
+   <button ion-button>Add Monthly Reminder</button>
+   <button ion-button>Add Yearly Reminder</button>
+   <button ion-button>Add Custom Reminder</button>
+ </ion-card>
+</ion-content>

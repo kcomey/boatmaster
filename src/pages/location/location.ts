@@ -33,11 +33,12 @@ export class LocationPage {
     this.platform.ready().then(() => {
       this.dataService.getLocationStopDetails().then((locations) => {
         if (locations != null) {
-          this.index = locations.details.length - 1;
-          return locations.details[this.index];
+          console.log(locations);
+          this.index = locations.length - 1;
+          console.log(this.index);
+          return locations[this.index];
         }
       }).then((recent) => {
-        console.log('recent is ' + recent.lat);
         let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
           if (recent) {
             this.latitude = recent.lat;
@@ -59,8 +60,8 @@ export class LocationPage {
       this.maps.changeMarker(position.coords.latitude, position.coords.longitude, this.image);
 
       let data = {
-        latitude: this.latitude,
-        longitude: this.longitude,
+        lat: this.latitude,
+        lng: this.longitude,
         image: this.image,
         category: 'mooring'
       };
@@ -72,11 +73,11 @@ export class LocationPage {
           data.category = 'mooring';
           this.dataService.getLocationStopDetails().then((locations) => {
             if (locations != null) {
-              locations.details.push(data);
+              locations.push(data);
               this.dataService.setLocationStopDetails(locations);
             }
             else {
-              let saveData = { details: [data] };
+              let saveData = [ data ];
               this.dataService.setLocationStopDetails(saveData);
             }
           });
@@ -111,11 +112,11 @@ export class LocationPage {
 
         this.dataService.getLocationStopDetails().then((locations) => {
           if (locations != null) {
-            locations.details.push(data);
+            locations.push(data);
             this.dataService.setLocationStopDetails(locations);
           }
           else {
-            let saveData = { details: [data] };
+            let saveData = [ data ];
             this.dataService.setLocationStopDetails(saveData);
           }
         });

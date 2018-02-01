@@ -4,6 +4,7 @@ import { DataLocationProvider } from '../../providers/data-location/data-locatio
 import { MooringDetailsPage } from '../mooring-details/mooring-details';
 import { JsonPipe } from '@angular/common/src/pipes/json_pipe';
 import { HashLocationStrategy } from '@angular/common';
+import { ItemSliding } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -20,13 +21,25 @@ export class TravelLogPage {
     this.platform.ready().then(() => {
       this.dataService.getLocationStopDetails().then((locations) => {
         if (locations != null) {
-          this.locations = locations.details;
+          this.locations = locations;
         }
       });
     });
   }
 
+  removeLocation(data, slidingItem: ItemSliding) {
+    let index = this.locations.indexOf(data);
+    if (index > -1) {
+      this.locations.splice(index, 1);
+      console.log(this.locations);
+      this.dataService.setLocationStopDetails(this.locations);
+      this.ionViewDidLoad();
+    }
+    slidingItem.close();
+  }
+
   showLocation(data) {
+    //Also allows for editing
     data.index = this.locations.indexOf(data);
     let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
     prompt.onDidDismiss(data => {
@@ -35,10 +48,10 @@ export class TravelLogPage {
           return locations;
         }).then((locations) => {
           if (locations != null) {
-            if (locations.details)
+     
               if (data.index > -1) {
                 //Replace with new data
-                locations.details[data.index] = data;
+                locations[data.index] = data;
                 return this.dataService.setLocationStopDetails(locations);
               }
           }
@@ -49,7 +62,6 @@ export class TravelLogPage {
       else {
         console.log('data is cancelled');
       }
-      
     });
     prompt.present();
   }
