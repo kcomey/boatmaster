@@ -11,6 +11,8 @@ import * as moment from 'moment';
 })
 export class AddReminderPage {
   typeReminder: string;
+  typeDaily: boolean = false;
+  typeCustom: boolean = false;
   notifyTime: any;
   notifications: any[] = [];
   days: any[];
@@ -39,6 +41,12 @@ export class AddReminderPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddReminderPage');
+    if (this.typeReminder == "Daily") {
+      this.typeDaily = true;
+    }
+    else if (this.typeReminder == "Custom") {
+      this.typeCustom = true;
+    }
   }
 
   timeChange(time) {
@@ -61,8 +69,10 @@ export class AddReminderPage {
       text: "Delayed Notification",
       at: new Date(new Date().getTime() + 5 * 1000),
       sound: null,
-      icon: "file://assets/imgs/sm_logo.png"
+      icon: 'res://icon.png',
     });
+    // icon needs to be transparent
+
     // console.log('should have been done');
  
     // for(let day of this.days){

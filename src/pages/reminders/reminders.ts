@@ -22,6 +22,10 @@ export class RemindersPage {
     this.navCtrl.push(AddReminderPage, { type: "Daily" });
   }
 
+  addCustom() {
+    this.navCtrl.push(AddReminderPage, { type: "Custom" });
+  }
+
   cancelAll(){
      this.localNotifications.cancelAll();
   
