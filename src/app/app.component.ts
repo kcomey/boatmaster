@@ -7,6 +7,7 @@ import { BudgetPage } from '../pages/budget/budget';
 import { SettingsPage } from '../pages/settings/settings';
 import { BudgetReportsPage } from '../pages/budget-reports/budget-reports';
 import { RunningBudgetTotalPage } from '../pages/running-budget-total/running-budget-total';
+import { SetCategoriesPage } from '../pages/set-categories/set-categories';
 
 @Component({
   templateUrl: 'app.html'
@@ -20,6 +21,7 @@ export class MyApp {
   budgetPage: any = BudgetPage;
   reportsPage: any = BudgetReportsPage;
   savingsPage: any = RunningBudgetTotalPage;
+  setCategoriesPage: any = SetCategoriesPage;
 
   constructor(public menu: MenuController, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {

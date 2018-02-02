@@ -36,10 +36,14 @@ export class BudgetPage {
       events.subscribe('budget', (budget)=> {
         this.budget = budget;
       });
+      events.subscribe('newCategories', (newCategories)=> {
+        this.categories = newCategories;
+      });
   }
 
   ionViewDidLoad() {
     //this.storage.clear();
+    //this.dataService.addDefaultCategories();
 
 
     this.platform.ready().then(() => {
@@ -49,6 +53,7 @@ export class BudgetPage {
         }
         //If there is not a monthly budget yet, send to the settings page
         if (!this.budget) {
+          this.dataService.addDefaultCategories();
           this.navCtrl.push(SettingsPage);
         }
         else {
@@ -68,7 +73,7 @@ export class BudgetPage {
 
           if (savedCategories) {
             savedCategories.forEach(savedCategory => {
-              let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.amtSpent, savedCategory.items);
+              let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.amtSpent, savedCategory.items, savedCategory.checked);
 
               this.categories.push(loadCategory);
 
@@ -140,7 +145,7 @@ export class BudgetPage {
                 categoryAllocated = this.budget.monthlyBudget - this.budget.amtBudgetAllocated;
                 overError = true;
               }
-              let newCategory = new CategoryModel(data.title, categoryAllocated, 0, []);
+              let newCategory = new CategoryModel(data.title, categoryAllocated, 0, [], true);
               this.categories.push(newCategory);
 
               newCategory.categoryUpdates().subscribe(update => {

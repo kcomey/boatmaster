@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar color="header">
+    <ion-title>Select Categories</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding class="custom">
+  <ion-card>
+<ion-list>
+    <ion-list-header text-wrap text-center> 
+        Check categories you would like added to your budget page
+    </ion-list-header>
+    <ion-item *ngFor="let category of selectCategories">
+        <ion-label>{{ category.title }}</ion-label>
+      <ion-toggle color="proceed" [checked]="category.checked" (ionChange)="selectCategory(category)">
+        </ion-toggle>
+    </ion-item>
+</ion-list>
+
+  </ion-card>
+</ion-content>
+
+
+
+
+

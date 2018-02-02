@@ -5,13 +5,18 @@ export class CategoryModel {
     categoryObserver: any;
     date: string = Date();
 
-    constructor(public title: string, public amtAllocated: number, public amtSpent: number, public items: any[] ) {
+    constructor(public title: string, public amtAllocated: number, public amtSpent: number, public items: any[], public checked: boolean) {
         this.items = items;
         
         this.category = Observable.create(observer => {
             this.categoryObserver = observer;
         });
     }
+
+    toggleCategory(checked): void {
+        this.checked = checked;
+        this.categoryObserver.next(true);   
+    } 
 
     addEntry(item): void {
         //Add a budget entry

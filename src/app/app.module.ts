@@ -20,6 +20,7 @@ import { CategoryDetailPage } from '../pages/category-detail/category-detail';
 import { ArchiveCategoryDetailPage } from '../pages/archive-category-detail/archive-category-detail';
 import { MooringDetailsPage } from '../pages/mooring-details/mooring-details';
 import { TravelLogPage } from '../pages/travel-log/travel-log';
+import { SetCategoriesPage } from '../pages/set-categories/set-categories';
 import { BudgetEntryPage } from '../pages/budget-entry/budget-entry';
 import { BudgetReportsPage } from '../pages/budget-reports/budget-reports';
 import { ShowArchiveBudgetPage } from '../pages/show-archive-budget/show-archive-budget';
@@ -61,7 +62,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     RunningBudgetEntryPage,
     BoatMathPage,
     RemindersPage,
-    AddReminderPage
+    AddReminderPage,
+    SetCategoriesPage
   ],
   imports: [
     BrowserModule,
@@ -90,7 +92,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     RunningBudgetEntryPage,
     BoatMathPage,
     RemindersPage,
-    AddReminderPage
+    AddReminderPage,
+    SetCategoriesPage
   ],
   providers: [
     StatusBar,
