@@ -27,7 +27,7 @@ export class ShowArchiveBudgetPage {
 
       if (savedCategories) {
         savedCategories.forEach(savedCategory => {
-          let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.amtSpent, savedCategory.items);
+          let loadCategory = new CategoryModel(savedCategory.title, savedCategory.amtAllocated, savedCategory.amtSpent, savedCategory.items, savedCategory.checked);
 
           this.categories.push(loadCategory);
         });

@@ -9,6 +9,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
   templateUrl: 'reminders.html',
 })
 export class RemindersPage {
+  frequency: string = "Daily";
 
   constructor(public alertCtrl: AlertController,public localNotifications: LocalNotifications, public navCtrl: NavController, public platform: Platform) {
   }
@@ -18,12 +19,9 @@ export class RemindersPage {
     console.log('ionViewDidLoad RemindersPage');
   }
 
-  addDaily() {
-    this.navCtrl.push(AddReminderPage, { type: "Daily" });
-  }
-
-  addCustom() {
-    this.navCtrl.push(AddReminderPage, { type: "Custom" });
+  addReminder() {
+    console.log('time is ' + this.frequency);
+    this.navCtrl.push(AddReminderPage, { type: this.frequency });
   }
 
   cancelAll(){

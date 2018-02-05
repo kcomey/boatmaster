@@ -42,24 +42,26 @@ export class BudgetPage {
   }
 
   ionViewDidLoad() {
+    //Below is for development
     //this.storage.clear();
     //this.dataService.addDefaultCategories();
 
 
     this.platform.ready().then(() => {
       this.budgetService.getData().then((budget) => {
-        if (typeof(budget) != "undefined") {
-          this.budget = JSON.parse(budget)
-        }
-        //If there is not a monthly budget yet, send to the settings page
-        if (!this.budget) {
+        if (budget == null) {
+          //If there is not a monthly budget yet, send to the settings page
           this.dataService.addDefaultCategories();
           this.navCtrl.push(SettingsPage);
         }
         else {
-        //If month has changed, archive data
-          if (this.today.substring(0, 7) != this.budget.date) {
-            this.archiveData(this.budget.date);
+          if (typeof(budget) != "undefined") {
+            this.budget = JSON.parse(budget);
+
+            if (this.today.substring(0, 7) != this.budget.date) {
+              //If month has changed, archive data
+              this.archiveData(this.budget.date);
+            }
           }
         }
       }).then(() => {
@@ -190,8 +192,8 @@ export class BudgetPage {
 
   renameCategory(category, slidingItem: ItemSliding): void {
     let prompt = this.alertCtrl.create({
-      title: 'Rename Category',
-      message: 'Enter the new name of this budget category below:',
+      title: 'Edit Category',
+      message: 'Edit the name/budget of this category below:',
       inputs: [
         {
           name: 'title',

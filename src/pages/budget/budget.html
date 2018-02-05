@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="header">
-    <ion-title><span>{{ today | date:'MMM' }}</span> Budget <span *ngIf="budget">{{ budget.monthlyBudget | currency:'USD':symbol:'2.2-2' }}</span></ion-title>
+    <ion-title><span>{{ today | date:'MMM' }}</span> <span *ngIf="budget">{{ budget.monthlyBudget | currency:'USD':symbol:'2.2-2' }}</span></ion-title>
     <ion-buttons end>
       <button class="nochange" icon-only (click)="addCategory()"><ion-icon
       name="add-circle"></ion-icon></button>
@@ -10,7 +10,6 @@
         </button>
   </ion-navbar>
 </ion-header>
-
 
 <ion-content padding class="custom">
   <ion-card>
@@ -23,7 +22,7 @@
           <ion-item-sliding #slidingItem *ngFor="let category of categories">
               <ion-item *ngIf="category.checked">
                   <button class="text" text-capitalize item-start ion-button clear (click)="addEntry(category)">{{ category.title }}
-                    (items {{category.items.length}})
+                    ({{category.items.length}})
                   </button>
                   <button item-end ion-button clear [ngClass]="(category.amtAllocated >= 0) ? 'number' : 'numberNegative'"> {{ category.amtAllocated - category.amtSpent | currency:'USD':symbol:'2.2-2'}}</button>
                   <button class="numberNegative" item-end ion-button clear> ({{ category.amtSpent | currency:'USD':symbol:'2.2-2'}})</button>
