@@ -9,7 +9,7 @@
 
 <ion-content padding class="custom">
  <ion-card>
-  <div *ngIf="typeDaily">
+  <div>
       <ion-list no-lines>
         <ion-item>
             <ion-label>Remind me to: </ion-label>
@@ -17,26 +17,60 @@
           </ion-item>
 
         <ion-item>
-          <ion-label>Remind me everyday at: </ion-label>
+          <ion-label>Send reminder <span *ngIf="typeDaily">everyday</span> at: </ion-label>
           <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="notifyTime" (ionChange)="timeChange($event)"></ion-datetime>
         </ion-item>
 
+        <div *ngIf="typeOnce">
+            <ion-item>
+              <ion-label>Send reminder on:</ion-label>
+              <ion-datetime min="{{notifyDate}}" max="2020-12-31" [(ngModel)]="notifyDate" displayFormat="MM/DD/YYYY"></ion-datetime>
+            </ion-item>
+        </div>
+
+        <div *ngIf="typeWeekly || typeMonthly || typeCustom">
+            <ion-item>
+                <ion-label>on the following <span *ngIf="typeCustom">days of the week</span><span *ngIf="typeWeekly">day of the week</span><span *ngIf="typeMonthly">day of the month</span>:</ion-label>
+            </ion-item>
+    
+            <div *ngIf="typeCustom">
+            <ion-item *ngFor="let day of days">
+                <ion-label>{{day.title}}</ion-label>
+                <ion-checkbox [(ngModel)]="day.checked" color="primary"></ion-checkbox>
+            </ion-item>
+          </div>
+
+          <div *ngIf="typeWeekly">
+            <ion-list radio-group [(ngModel)]="daySelected">
+                <ion-item *ngFor="let day of days">
+                  <ion-label>{{day.title}}</ion-label>
+                  <ion-radio name="day.title"></ion-radio>
+                </ion-item>
+            </ion-list>
+          </div>
+
+                <!-- <ion-label stacked>Select Frequency</ion-label>
+                <ion-select [(ngModel)]="day.checked">
+                <ion-option value="One Time">One Time Only</ion-option>
+                <ion-option value="Daily">Daily</ion-option>
+                <ion-option value="Weekly">Weekly</ion-option>
+                <ion-option value="Monthly">Monthly</ion-option>
+                <ion-option value="Yearly">Yearly</ion-option>
+                <ion-option value="Custom">Custom</ion-option>
+                </ion-select> -->
+    
+        </div>
+
       </ion-list>
 
-      <button (click)="addDailyNotification()" ion-button color="proceed" full>Schedule</button>
+      <div text-center align-items-center>
+      <button [disabled]="!notifyEvent" (click)="addNotification(typeReminder)" ion-button color="proceed">Schedule</button>
+      </div>
     </div>
 
-    <div *ngIf="typeCustom">
+    <!-- <div *ngIf="typeCustom">
         <ion-list no-lines>
-          <ion-item>
-              <ion-label>Remind me to: </ion-label>
-              <ion-input [(ngModel)]="notifyEvent"></ion-input>
-            </ion-item>
-  
-          <ion-item>
-            <ion-label>Send reminder at: </ion-label>
-            <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="notifyTime" (ionChange)="timeChange($event)"></ion-datetime>
-          </ion-item>
+
   
           <ion-item>
               <ion-label>on the following days:</ion-label>
@@ -61,8 +95,8 @@
   
       </ion-list>
   
-        <button (click)="addDailyNotification()" ion-button color="primary" full>Schedule</button>
-      </div>
+        <button (click)="addDailyNotification()" ion-button color="primary">Schedule</button>
+      </div> -->
  </ion-card>
 
 </ion-content>

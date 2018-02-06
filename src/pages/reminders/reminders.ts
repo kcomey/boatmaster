@@ -9,7 +9,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
   templateUrl: 'reminders.html',
 })
 export class RemindersPage {
-  frequency: string = "Daily";
+  frequency: string = "One Time";
 
   constructor(public alertCtrl: AlertController,public localNotifications: LocalNotifications, public navCtrl: NavController, public platform: Platform) {
   }

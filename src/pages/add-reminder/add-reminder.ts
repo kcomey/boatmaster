@@ -11,17 +11,42 @@ import * as moment from 'moment';
 })
 export class AddReminderPage {
   typeReminder: string;
+  typeOnce: boolean = false;
   typeDaily: boolean = false;
+  typeWeekly: boolean = false;
+  typeMonthly: boolean = false;
+  typeYearly: boolean = false;
   typeCustom: boolean = false;
+  notifyEvent: any;
   notifyTime: any;
+  notifyDate: any = new Date().toISOString().slice(0,16);
   notifications: any[] = [];
   days: any[];
   chosenHours: number;
   chosenMinutes: number;
+  daySelected: any;
+  isDisabled: boolean = true;
 
-  
   constructor(public alertCtrl: AlertController, public localNotifications: LocalNotifications, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
     this.typeReminder = navParams.get('type');
+    if (this.typeReminder == "One Time") {
+      this.typeOnce = true;
+    }
+    else if (this.typeReminder == "Daily") {
+      this.typeDaily = true;
+    }
+    else if (this.typeReminder == "Weekly") {
+      this.typeWeekly = true;
+    }
+    else if (this.typeReminder == "Monthly") {
+      this.typeMonthly = true;
+    }
+    else if (this.typeReminder == "Yearly") {
+      this.typeYearly = true;
+    }
+    else {
+      this.typeCustom = true;
+    }
 
     this.notifyTime = moment(new Date()).format();
  
@@ -41,25 +66,72 @@ export class AddReminderPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddReminderPage');
-    if (this.typeReminder == "Daily") {
-      this.typeDaily = true;
+    console.log(this.notifyEvent);
+    if (this.notifyEvent != undefined) {
+      this.isDisabled = false;
     }
-    else if (this.typeReminder == "Custom") {
-      this.typeCustom = true;
-    }
+ 
   }
 
   timeChange(time) {
-    this.chosenHours = time.hour.value;
-    this.chosenMinutes = time.minute.value;
+    //console.log('hour is ' + time.hours.value);
+    //console.log('time is ' + time.minutes.value);
+    // this.chosenHours = time.hour.value;
+    // this.chosenMinutes = time.minute.value;
+
+    // console.log('from form ' + this.chosenHours);
   }
 
-  addDailyNotification() {
+  addOneTimeNotification() {
+    console.log('one time and ' + this.notifyEvent);
+    let date = new Date();
+    let notificationId = moment.utc(date); 
+    let useId = Number(notificationId);
+    //Get month, day and year
+    let notifyDate = moment(this.notifyDate).toObject();
+    let notifyMonth = notifyDate.months + 1;
+    // console.log('month ' + nd.months);
+    // console.log('day ' + nd.date);
+    // console.log('year ' + nd.years);
+    
+    //Get hour and minutes
+    let notifyTime = moment(this.notifyTime).toObject();
+    // console.log('hour is ' + nt.hours);
+    // console.log('min is  ' + nt.minutes);// {
+
+    let newDate = notifyMonth +'/'+ notifyDate.date +'/'+ notifyDate.years+' '+ notifyTime.hours +':'+ notifyTime.minutes +':' + notifyTime.seconds;
+  
+    // let notificationDate = moment().toString();
+    console.log('date to notify '  + newDate);
+ 
+    this.localNotifications.schedule({
+      id: useId,
+      title: "Boat Boss",
+      text: "Delayed Notification",
+      at: newDate,
+      sound: null,
+      icon: 'res://icon.png',
+    });
+  }
+
+  addNotification(type) {
     let currentDate = new Date();
     let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
 
+    if (type == "One Time") {
+      this.addOneTimeNotification();
+    }
+    else {
+      console.log('type is ' + type);
+      console.log('event is ' + this.notifyEvent);
+      console.log('time is ' + this.notifyTime);
+      console.log('date is ' + this.notifyDate);
+    }
+
+
+
     //this.localNotifications.cancelAll();
-      console.log('cancelled');
+      //console.log('cancelled');
     
     //return false;
 
