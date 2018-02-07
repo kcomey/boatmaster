@@ -80,7 +80,7 @@ export class DataCategoryProvider {
         checked: false
       },
       {
-        title: 'Customs/Licensing',
+        title: 'Customs',
         amtAllocated: 100,
         amtSpent: 0,
         items: [],

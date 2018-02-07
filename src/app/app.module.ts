@@ -38,6 +38,7 @@ import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { DataBudgetProvider } from '../providers/data-budget/data-budget';
 import { CustomPipe } from '../pipes/custom/custom';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { DataReminderProvider } from '../providers/data-reminder/data-reminder';
 
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     CurrencyPipe,
     DatePipe,
     DataBudgetProvider,
-    LocalNotifications
+    LocalNotifications,
+    DataReminderProvider
   ]
 })
 export class AppModule {}

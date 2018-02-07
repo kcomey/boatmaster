@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Platform, IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
-
+import { DataReminderProvider } from '../../providers/data-reminder/data-reminder';
 
 @IonicPage()
 @Component({
@@ -26,8 +26,9 @@ export class AddReminderPage {
   chosenMinutes: number;
   daySelected: any;
   isDisabled: boolean = true;
+  reminders: any = [];
 
-  constructor(public alertCtrl: AlertController, public localNotifications: LocalNotifications, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public dataService: DataReminderProvider, public alertCtrl: AlertController, public localNotifications: LocalNotifications, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
     this.typeReminder = navParams.get('type');
     if (this.typeReminder == "One Time") {
       this.typeOnce = true;
@@ -65,61 +66,90 @@ export class AddReminderPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AddReminderPage');
-    console.log(this.notifyEvent);
-    if (this.notifyEvent != undefined) {
-      this.isDisabled = false;
-    }
- 
+    this.platform.ready().then(() => {
+      this.dataService.getData().then((reminders) => {
+        if (reminders != null) {
+          this.reminders = reminders;
+        }
+      });
+
+      if (this.notifyEvent != undefined) {
+        this.isDisabled = false;
+      }
+    });
   }
 
-  timeChange(time) {
-    //console.log('hour is ' + time.hours.value);
-    //console.log('time is ' + time.minutes.value);
-    // this.chosenHours = time.hour.value;
-    // this.chosenMinutes = time.minute.value;
 
-    // console.log('from form ' + this.chosenHours);
-  }
+
+  // let data = {
+  //   lat: this.latitude,
+  //   lng: this.longitude,
+  //   image: this.image,
+  //   category: 'mooring'
+  // };
+
+  // let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
+  // prompt.onDidDismiss(data => {
+  //   if (data) {
+  //     data.image = this.image;
+  //     data.category = 'mooring';
+  //     this.dataService.getLocationStopDetails().then((locations) => {
+  //       if (locations != null) {
+  //         locations.push(data);
+  //         this.dataService.setLocationStopDetails(locations);
+  //       }
+  //       else {
+  //         let saveData = [ data ];
+  //         this.dataService.setLocationStopDetails(saveData);
+  //       }
+  //     });
 
   addOneTimeNotification() {
-    console.log('one time and ' + this.notifyEvent);
     let date = new Date();
     let notificationId = moment.utc(date); 
     let useId = Number(notificationId);
     //Get month, day and year
     let notifyDate = moment(this.notifyDate).toObject();
-    let notifyMonth = notifyDate.months + 1;
-    // console.log('month ' + nd.months);
-    // console.log('day ' + nd.date);
-    // console.log('year ' + nd.years);
-    
+    let notifyMonth = notifyDate.months + 1;    
     //Get hour and minutes
     let notifyTime = moment(this.notifyTime).toObject();
-    // console.log('hour is ' + nt.hours);
-    // console.log('min is  ' + nt.minutes);// {
-
-    let newDate = notifyMonth +'/'+ notifyDate.date +'/'+ notifyDate.years+' '+ notifyTime.hours +':'+ notifyTime.minutes +':' + notifyTime.seconds;
-  
-    // let notificationDate = moment().toString();
-    console.log('date to notify '  + newDate);
+    let newDateTime = notifyMonth +'/'+ notifyDate.date +'/'+ notifyDate.years+' '+ notifyTime.hours +':'+ notifyTime.minutes +':' + notifyTime.seconds;
+    let formattedTime = new Date(new Date(newDateTime).getTime());
  
     this.localNotifications.schedule({
       id: useId,
-      title: "Boat Boss",
-      text: "Delayed Notification",
-      at: newDate,
+      title: "Boat Boss Reminder!",
+      text: this.notifyEvent,
+      //at: newDate,
+      at: formattedTime,
       sound: null,
       icon: 'res://icon.png',
     });
+
+    let data = {
+      id: useId,
+      event: this.notifyEvent,
+      scheduleFrequency: "One Time",
+      scheduleTime: formattedTime
+    };
+    //Save to storage for future deletions
+    this.reminders.push(data);
+    this.dataService.save(this.reminders);
+
+    this.navCtrl.pop();
   }
 
   addNotification(type) {
+    //Will need to create local storage to keep the id's and event titles for deletion later
+    //if not a one time only
     let currentDate = new Date();
     let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
 
     if (type == "One Time") {
       this.addOneTimeNotification();
+    }
+    else if (type == "Daily") {
+      this.addDailyNotification();
     }
     else {
       console.log('type is ' + type);
@@ -135,14 +165,14 @@ export class AddReminderPage {
     
     //return false;
 
-    this.localNotifications.schedule({
-      id: 1,
-      title: "Boat Boss",
-      text: "Delayed Notification",
-      at: new Date(new Date().getTime() + 5 * 1000),
-      sound: null,
-      icon: 'res://icon.png',
-    });
+    // this.localNotifications.schedule({
+    //   id: 1,
+    //   title: "Boat Boss",
+    //   text: "Delayed Notification",
+    //   at: new Date(new Date().getTime() + 5 * 1000),
+    //   sound: null,
+    //   icon: 'res://icon.png',
+    // });
     // icon needs to be transparent
 
     // console.log('should have been done');
@@ -207,6 +237,10 @@ export class AddReminderPage {
  
     //}
  
+  }
+
+  addDailyNotification() {
+
   }
 
   addWeeklyNotification() {

@@ -9,12 +9,11 @@
 
 <ion-content padding class="custom">
  <ion-card>
+   <ion-card-header text-wrap text-center>
    Add a reminder to be notified of important dates. Never forgot to change the oil again! 
-   Show all of the reminders that have been added and have a button to delete
-   individually or all.
-   <P>      <button (click)="cancelAll()" ion-button color="danger" full>Leave me alone!</button>
-   </P>
+  </ion-card-header>
 
+  <div align="center">
    <ion-item>
       <ion-label stacked>Select Frequency</ion-label>
       <ion-select [(ngModel)]="frequency">
@@ -28,6 +27,22 @@
       </ion-item>
 
    <button color="proceed" ion-button (click)="addReminder()">Add Reminder</button>
+  </div>
+
+  <div text-center *ngIf="showReminders">
+  <ion-card-header text-wrap text-center>
+      Delete reminders you no longer want to receive below:
+     </ion-card-header>
+     <button color="warning" ion-button (click)="deleteAllReminders()">Delete All</button>
+
+   <ion-list no-lines>
+    <ion-item *ngFor="let reminder of reminders">
+      <button ion-button icon-only clear
+      (click)="deleteReminder(reminder.id)"><ion-icon color="warning"
+      name="trash"></ion-icon>{{ reminder.event }} {{ reminder.scheduleFrequency}}</button>
+      </ion-item>
+   </ion-list>
+  </div>
  </ion-card>
 </ion-content>
 
