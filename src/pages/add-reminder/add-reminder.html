@@ -18,13 +18,13 @@
 
         <ion-item>
           <ion-label>Send reminder <span *ngIf="typeDaily">everyday</span> at: </ion-label>
-          <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="notifyTime"></ion-datetime>
+          <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="notifyTime" (ionChange)="timeChange()"></ion-datetime>
         </ion-item>
 
-        <div *ngIf="typeOnce">
+        <div *ngIf="typeOnce || typeYearly">
             <ion-item>
               <ion-label>Send reminder on:</ion-label>
-              <ion-datetime min="{{notifyDate}}" max="2020-12-31" [(ngModel)]="notifyDate" displayFormat="MM/DD/YYYY"></ion-datetime>
+              <ion-datetime [(ngModel)]="notifyDate" displayFormat="MM/DD/YYYY"></ion-datetime>
             </ion-item>
         </div>
 

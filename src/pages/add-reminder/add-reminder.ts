@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { Events, Platform, IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { DataReminderProvider } from '../../providers/data-reminder/data-reminder';
@@ -27,8 +27,9 @@ export class AddReminderPage {
   daySelected: any;
   isDisabled: boolean = true;
   reminders: any = [];
+  todayTime = new Date(new Date().getTime());
 
-  constructor(public dataService: DataReminderProvider, public alertCtrl: AlertController, public localNotifications: LocalNotifications, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public events: Events, public dataService: DataReminderProvider, public alertCtrl: AlertController, public localNotifications: LocalNotifications, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
     this.typeReminder = navParams.get('type');
     if (this.typeReminder == "One Time") {
       this.typeOnce = true;
@@ -50,7 +51,6 @@ export class AddReminderPage {
     }
 
     this.notifyTime = moment(new Date()).format();
- 
     this.chosenHours = new Date().getHours();
     this.chosenMinutes = new Date().getMinutes();
 
@@ -69,93 +69,111 @@ export class AddReminderPage {
     this.platform.ready().then(() => {
       this.dataService.getData().then((reminders) => {
         if (reminders != null) {
-          this.reminders = reminders;
+          reminders.forEach(item => {
+            if (item.scheduleTime < this.todayTime && item.scheduleFrequency == "One Time") {
+              console.log('do not add to the array, it must be expired');
+            }
+            else {
+              this.reminders.push(item);
+            }
+          });
         }
       });
-
       if (this.notifyEvent != undefined) {
         this.isDisabled = false;
       }
     });
   }
 
+  timeChange(){
+    this.chosenHours = moment(this.notifyTime).hour();
+    this.chosenMinutes = moment(this.notifyTime).minute();
+  }
 
-
-  // let data = {
-  //   lat: this.latitude,
-  //   lng: this.longitude,
-  //   image: this.image,
-  //   category: 'mooring'
-  // };
-
-  // let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
-  // prompt.onDidDismiss(data => {
-  //   if (data) {
-  //     data.image = this.image;
-  //     data.category = 'mooring';
-  //     this.dataService.getLocationStopDetails().then((locations) => {
-  //       if (locations != null) {
-  //         locations.push(data);
-  //         this.dataService.setLocationStopDetails(locations);
-  //       }
-  //       else {
-  //         let saveData = [ data ];
-  //         this.dataService.setLocationStopDetails(saveData);
-  //       }
-  //     });
-
-  addOneTimeNotification() {
+  addOneTimeOrYearlyNotification(type) {
     let date = new Date();
     let notificationId = moment.utc(date); 
     let useId = Number(notificationId);
-    //Get month, day and year
-    let notifyDate = moment(this.notifyDate).toObject();
-    let notifyMonth = notifyDate.months + 1;    
-    //Get hour and minutes
-    let notifyTime = moment(this.notifyTime).toObject();
-    let newDateTime = notifyMonth +'/'+ notifyDate.date +'/'+ notifyDate.years+' '+ notifyTime.hours +':'+ notifyTime.minutes +':' + notifyTime.seconds;
-    let formattedTime = new Date(new Date(newDateTime).getTime());
- 
-    this.localNotifications.schedule({
-      id: useId,
-      title: "Boat Boss Reminder!",
-      text: this.notifyEvent,
-      //at: newDate,
-      at: formattedTime,
-      sound: null,
-      icon: 'res://icon.png',
-    });
 
-    let data = {
-      id: useId,
-      event: this.notifyEvent,
-      scheduleFrequency: "One Time",
-      scheduleTime: formattedTime
-    };
-    //Save to storage for future deletions
-    this.reminders.push(data);
-    this.dataService.save(this.reminders);
+    let firstNotificationTime = new Date(this.notifyDate);
+    firstNotificationTime.setHours(this.chosenHours);
+    firstNotificationTime.setMinutes(this.chosenMinutes);
 
-    this.navCtrl.pop();
+    //If user sets notification for past date, give error
+    if (moment.utc(firstNotificationTime) < notificationId) {
+      let alert = this.alertCtrl.create({
+        title: 'Notification date cannot be in the past!',
+        buttons: ['ok']
+      });
+
+      alert.present();
+    }
+    else {
+        this.localNotifications.schedule({ 
+          id: useId,
+          title: "Boat Boss Reminder",
+          text: this.notifyEvent,
+          at: firstNotificationTime,
+          every: type,
+          sound: null,
+          icon: 'res://icon.png',
+        });
+
+        if (type == 'year') {
+          type = "Yearly";
+        }
+        else {
+          type = "One Time";
+        }
+    
+        let data = {
+          id: useId,
+          event: this.notifyEvent,
+          scheduleFrequency: type,
+          scheduleTime: firstNotificationTime
+        };
+    
+        //Save to storage for future deletions
+        //Can use built in functions I think
+        this.reminders.push(data);
+        this.dataService.save(this.reminders);
+    
+        this.events.publish('reminders', this.reminders);
+
+        let alert = this.alertCtrl.create({
+          title: 'Notification Set',
+          buttons: ['ok']
+        });
+
+        alert.present();
+        this.navCtrl.pop();
+      }
   }
 
   addNotification(type) {
-    //Will need to create local storage to keep the id's and event titles for deletion later
-    //if not a one time only
     let currentDate = new Date();
     let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
 
     if (type == "One Time") {
-      this.addOneTimeNotification();
+      this.addOneTimeOrYearlyNotification(0);
     }
     else if (type == "Daily") {
       this.addDailyNotification();
     }
+    else if (type == "Weekly") {
+      //not done
+      this.addWeeklyNotification();
+    }
+    else if (type == "Monthly") {
+      //not done
+      this.addMonthlyNotification();
+    }
+    else if (type == "Yearly") {
+      this.addOneTimeOrYearlyNotification('year');
+    }
     else {
-      console.log('type is ' + type);
-      console.log('event is ' + this.notifyEvent);
-      console.log('time is ' + this.notifyTime);
-      console.log('date is ' + this.notifyDate);
+      //not done
+      this.addCustomNotification();
     }
 
 
@@ -240,7 +258,55 @@ export class AddReminderPage {
   }
 
   addDailyNotification() {
+    let date = new Date();
+    let notificationId = moment.utc(date); 
+    let useId = Number(notificationId);
 
+    //If time is earlier than current time, start notifications tomorrow
+    let compareHour = moment(date).hour();
+    let compareMinute = moment(date).minute();
+
+    console.log('now hour ' + compareHour + ' and chosen hour ' + this.chosenHours);
+
+    if (this.chosenHours < compareHour) {
+      console.log('hours is less, go to next day');
+    }
+    if (this.chosenHours == compareHour) {
+        if (this.chosenMinutes <= compareMinute) {
+          console.log('also go to next day');
+        }
+    }
+
+    //Get month, day and year
+    let notifyDate = moment(this.notifyDate).toObject();
+    let notifyMonth = notifyDate.months + 1;    
+    //Get hour and minutes
+    let notifyTime = moment(this.notifyTime).toObject();
+    let newDateTime = notifyMonth +'/'+ notifyDate.date +'/'+ notifyDate.years+' '+ notifyTime.hours +':'+ notifyTime.minutes +':' + notifyTime.seconds;
+    let formattedTime = new Date(new Date(newDateTime).getTime());
+ 
+    this.localNotifications.schedule({
+      id: useId,
+      title: "Boat Boss Reminder!",
+      text: this.notifyEvent,
+      at: formattedTime,
+      every: 'day',
+      sound: null,
+      icon: 'res://icon.png',
+    });
+
+    let data = {
+      id: useId,
+      event: this.notifyEvent,
+      scheduleFrequency: "One Time",
+      scheduleTime: formattedTime
+    };
+    //Save to storage for future deletions
+    this.reminders.push(data);
+    this.dataService.save(this.reminders);
+
+    this.events.publish('reminders', this.reminders);
+    this.navCtrl.pop();
   }
 
   addWeeklyNotification() {
@@ -248,10 +314,6 @@ export class AddReminderPage {
   }
 
   addMonthlyNotification() {
-
-  }
-
-  addYearlyNotification() {
 
   }
 

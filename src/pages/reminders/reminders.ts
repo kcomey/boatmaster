@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, NavController, Platform } from 'ionic-angular';
+import { Events, AlertController, IonicPage, NavController, Platform } from 'ionic-angular';
 import { AddReminderPage } from '../add-reminder/add-reminder';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { DataReminderProvider } from '../../providers/data-reminder/data-reminder';
@@ -10,20 +10,32 @@ import { DataReminderProvider } from '../../providers/data-reminder/data-reminde
   templateUrl: 'reminders.html',
 })
 export class RemindersPage {
-  frequency: string = "One Time";
+  frequency: string = "Daily";
   reminders: any = [];
   showReminders: boolean = false;
+  todayTime = new Date(new Date().getTime());
 
-  constructor(public dataService: DataReminderProvider, public alertCtrl: AlertController,public localNotifications: LocalNotifications, public navCtrl: NavController, public platform: Platform) {
+  constructor(public events: Events, public dataService: DataReminderProvider, public alertCtrl: AlertController,public localNotifications: LocalNotifications, public navCtrl: NavController, public platform: Platform) {
+    events.subscribe('reminders', (reminders)=> {
+      console.log('subscribe');
+      this.reminders = reminders;
+    });
   }
-  
 
   ionViewDidLoad() {
     this.platform.ready().then(() => {
+      console.log('ion view did load');
       this.dataService.getData().then((reminders) => {
         if (reminders != null) {
-          this.reminders = reminders;
-          this.showReminders = true;
+          reminders.forEach(item => {
+            if (item.scheduleTime < this.todayTime && item.scheduleFrequency == "One Time") {
+              console.log('do not add to the array, it must be expired');
+            }
+            else {
+              this.reminders.push(item);
+              this.showReminders = true;
+            }
+          });
         }
       });
     });
@@ -36,10 +48,13 @@ export class RemindersPage {
 
   deleteAllReminders(){
      this.localNotifications.cancelAll();
+     this.reminders= [];
+     this.dataService.save(this.reminders);
+     this.showReminders = false;
   
      let alert = this.alertCtrl.create({
          title: 'All notifications cancelled',
-         buttons: ['Ok']
+         buttons: ['OK']
      });
   
      alert.present();
