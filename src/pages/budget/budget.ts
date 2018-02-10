@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Toast, Events, MenuController, ModalController, ViewController, IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
+import { Nav, Toast, Events, MenuController, ModalController, ViewController, IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { CategoryDetailPage } from '../category-detail/category-detail';
 import { CategoryModel } from '../../models/category-model';
 import { DataCategoryProvider } from '../../providers/data-category/data-category';
@@ -20,6 +20,8 @@ import { ToastController } from 'ionic-angular/components/toast/toast-controller
   templateUrl: 'budget.html'
 })
 export class BudgetPage {
+  @ViewChild(Nav) nav: Nav;
+
   categories: CategoryModel[] = [];
   //Need this format to save to storage
   today: any = new Date().toISOString();
@@ -280,3 +282,5 @@ export class BudgetPage {
   }
 
 }
+
+

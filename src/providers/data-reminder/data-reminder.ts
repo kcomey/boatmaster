@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class DataReminderProvider {
 
   constructor(public storage: Storage) {
-    console.log('Hello ReminderProvider Provider');
+
   }
 
   getData(): Promise<any> {

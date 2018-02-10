@@ -298,7 +298,7 @@ export class AddReminderPage {
     let data = {
       id: useId,
       event: this.notifyEvent,
-      scheduleFrequency: "One Time",
+      scheduleFrequency: "Daily",
       scheduleTime: formattedTime
     };
     //Save to storage for future deletions
