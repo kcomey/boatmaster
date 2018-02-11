@@ -25,12 +25,12 @@ export class AddReminderPage {
   chosenHours: number;
   chosenMinutes: number;
   daySelected: any;
-  isDisabled: boolean = true;
   reminders: any = [];
   todayTime = new Date(new Date().getTime());
 
   constructor(public events: Events, public dataService: DataReminderProvider, public alertCtrl: AlertController, public localNotifications: LocalNotifications, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
     this.typeReminder = navParams.get('type');
+
     if (this.typeReminder == "One Time") {
       this.typeOnce = true;
     }
@@ -79,9 +79,6 @@ export class AddReminderPage {
           });
         }
       });
-      if (this.notifyEvent != undefined) {
-        this.isDisabled = false;
-      }
     });
   }
 
@@ -139,6 +136,7 @@ export class AddReminderPage {
         this.dataService.save(this.reminders);
     
         this.events.publish('reminders', this.reminders);
+        this.events.publish('showReminders', true);
 
         let alert = this.alertCtrl.create({
           title: 'Notification Set',
@@ -306,10 +304,11 @@ export class AddReminderPage {
     this.dataService.save(this.reminders);
 
     this.events.publish('reminders', this.reminders);
+    this.events.publish('showReminders', true);
     this.navCtrl.pop();
   }
 
-  addWeeklyNotification() {
+  addCustomNotification() {
 
   }
 
@@ -317,79 +316,47 @@ export class AddReminderPage {
 
   }
 
-  addCustomNotification() {
-    let currentDate = new Date();
-    let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
+  addWeeklyNotification() {
+    let date = new Date();
+    let notificationId = moment.utc(date); 
+    let useId = Number(notificationId);
+
+    let currentDay = date.getDay(); // Sunday = 0, Monday = 1, etc.
+    let firstNotificationTime = new Date();
+    let dayDifference = this.daySelected - currentDay;
+
+    if(dayDifference < 0){
+        dayDifference = dayDifference + 7; // for cases where the day is in the following week
+    }
+ 
+    firstNotificationTime.setHours(firstNotificationTime.getHours() + (24 * (dayDifference)));
+    firstNotificationTime.setHours(this.chosenHours);
+    firstNotificationTime.setMinutes(this.chosenMinutes);
 
     this.localNotifications.schedule({
-      id: 1,
-      title: "Test Title",
-      text: "Delayed Notification",
-      at: new Date(new Date().getTime() + 5 * 1000),
-      sound: null
+      id: useId,
+      title: "Boat Boss Reminder!",
+      text: this.notifyEvent,
+      at: firstNotificationTime,
+      every: 'week',
+      sound: null,
+      icon: 'res://icon.png',
     });
-    console.log('should have been done');
- 
-    for(let day of this.days){
- 
-        if(day.checked){
- 
-            let firstNotificationTime = new Date();
-            let dayDifference = day.dayCode - currentDay;
- 
-            if(dayDifference < 0){
-                dayDifference = dayDifference + 7; // for cases where the day is in the following week
-            }
- 
-            firstNotificationTime.setHours(firstNotificationTime.getHours() + (24 * (dayDifference)));
-            firstNotificationTime.setHours(this.chosenHours);
-            firstNotificationTime.setMinutes(this.chosenMinutes);
- 
-            let notification = {
-                id: day.dayCode,
-                title: 'Hey!',
-                text: 'You just got notified :)',
-                at: firstNotificationTime,
-                every: 'week'
-            };
 
-            this.localNotifications.schedule({
-              id: 1,
-              title: "Test Title",
-              text: "Delayed Notification",
-              at: new Date(new Date().getTime() + 5 * 1000),
-              sound: null
-            });
- 
-            this.notifications.push(notification);
- 
-        }
- 
-    }
- 
-    console.log("Notifications to be scheduled: ", this.notifications);
- 
-    if(this.platform.is('cordova')){
- 
-        // Cancel any existing notifications
-       // this.localNotifications.cancelAll().then(() => {
- 
-            // Schedule the new notifications
-            // this.localNotifications.schedule(this.notifications);
- 
-            // this.notifications = [];
- 
-            // let alert = this.alertCtrl.create({
-            //     title: 'Notifications set',
-            //     buttons: ['Ok']
-            // });
- 
-            // alert.present();
- 
-       // });
- 
-    }
- 
+    let data = {
+      id: useId,
+      event: this.notifyEvent,
+      scheduleFrequency: "Weekly",
+      scheduleTime: firstNotificationTime
+    };
+    //Save to storage for future deletions
+    this.reminders.push(data);
+    this.dataService.save(this.reminders);
+
+    this.events.publish('reminders', this.reminders);
+    this.events.publish('showReminders', true);
+    this.navCtrl.pop();
+
   }
 
 

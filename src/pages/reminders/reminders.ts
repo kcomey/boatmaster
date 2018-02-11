@@ -17,8 +17,10 @@ export class RemindersPage {
 
   constructor(public events: Events, public dataService: DataReminderProvider, public alertCtrl: AlertController,public localNotifications: LocalNotifications, public navCtrl: NavController, public platform: Platform) {
     events.subscribe('reminders', (reminders)=> {
-      console.log('subscribe');
       this.reminders = reminders;
+    });
+    events.subscribe('showReminders', (show)=> {
+      this.showReminders = show;
     });
   }
 

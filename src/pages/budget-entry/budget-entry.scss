@@ -15,7 +15,7 @@ page-budget-entry {
         text-transform: capitalize;
     }
     
-    .button:nth-child(4) {
+    .button:nth-child(1) {
         color: map-get($colors, exLight);
         background-color: map-get($colors, proceed);
         padding: 3px 10px;
@@ -25,7 +25,7 @@ page-budget-entry {
         float: right;
     }
     
-    .button:nth-child(5) {
+    .button:nth-child(2) {
         color: map-get($colors, warning);
         text-transform: lowercase;
         background-color: map-get($colors, exLight);
@@ -34,6 +34,6 @@ page-budget-entry {
     }
     
     
-    }
+}
     
     

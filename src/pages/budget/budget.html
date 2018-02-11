@@ -20,7 +20,7 @@
               <div>({{ budget.monthlyBudget - budget.amtBudgetAllocated | currency:'USD':symbol:'2.2-2' }} not allocated)</div>
             </ion-list-header>
           <ion-item-sliding #slidingItem *ngFor="let category of categories">
-              <ion-item *ngIf="category.checked">
+              <ion-item >
                   <button class="text" text-capitalize item-start ion-button clear (click)="addEntry(category)">{{ category.title }}
                     ({{category.items.length}})
                   </button>

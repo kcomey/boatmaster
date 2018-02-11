@@ -44,7 +44,7 @@
             <ion-list radio-group [(ngModel)]="daySelected">
                 <ion-item *ngFor="let day of days">
                   <ion-label>{{day.title}}</ion-label>
-                  <ion-radio name="day.title"></ion-radio>
+                  <ion-radio value="{{ day.dayCode }}"></ion-radio>
                 </ion-item>
             </ion-list>
           </div>
