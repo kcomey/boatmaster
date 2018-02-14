@@ -63,17 +63,29 @@ export class RemindersPage {
    }
 
    deleteReminder(id){
-    // cancel(notificationId)
-     this.localNotifications.cancel(id);
-  
-     let alert = this.alertCtrl.create({
-         title: 'Notification cancelled',
-         buttons: ['Ok']
-     });
+    this.localNotifications.cancel( {notificationId: id} );
+
+    let savedReminders = [];
+
+    this.reminders.forEach(reminder => {
+      if (reminder.id != id) {
+        savedReminders.push(reminder);
+      }
+    });
+
+    this.reminders = savedReminders;
+
+    this.dataService.save(this.reminders);
+    if (this.reminders.length < 1) {
+      this.showReminders = false;
+    }
+
+    let alert = this.alertCtrl.create({
+        title: 'Notification cancelled',
+        buttons: ['Ok']
+    });
   
      alert.present();
    }
   
-  
-
 }
