@@ -20,7 +20,7 @@ export class CategoryModel {
 
     addEntry(item): void {
         //Add a budget entry
-        this.items.push({
+        this.items.unshift({
             date: item.date,
             amount: item.amount,
             details: item.details

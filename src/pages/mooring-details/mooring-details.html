@@ -77,6 +77,11 @@
         </ion-item>
 
         <ion-item *ngIf="mooring">
+            <ion-label stacked>Miles Traveled</ion-label>
+            <ion-input formControlName="miles" type="number"></ion-input>
+          </ion-item>
+
+        <ion-item *ngIf="mooring">
             <ion-label stacked>Traveled From</ion-label>
             <ion-input formControlName="cameFrom" type="text"></ion-input>
           </ion-item>

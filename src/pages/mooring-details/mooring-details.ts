@@ -30,6 +30,7 @@ export class MooringDetailsPage {
         arrive: [this.data.arrive || this.today],
         depart: [this.data.depart],
         hours: [this.data.hours],
+        miles: [this.data.miles],
         cameFrom: [this.data.cameFrom],
         notes: [this.data.notes],
         today: [this.data.today || this.today],

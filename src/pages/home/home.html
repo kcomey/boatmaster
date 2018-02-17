@@ -13,6 +13,10 @@
           <ion-icon name="pricetag" item-left></ion-icon>
           Budget
         </button>
+        <button ion-item (click)="showFuelPage()">
+            <ion-icon name="speedometer" item-left></ion-icon>
+            Fuel
+          </button>
         <button ion-item (click)="showChecklistPage()">
           <ion-icon name="checkbox-outline" item-left></ion-icon>
           Checklists
@@ -37,6 +41,16 @@
               <ion-icon name="calculator" item-left></ion-icon>
               Calculations
             </button>
+
+            <button ion-item (click)="resetWater()">
+                <ion-icon name="water" item-left></ion-icon>
+                Water filled <div *ngIf="waterDays>=0"> {{ waterDays }} days ago</div>
+              </button>
+
+              <button ion-item (click)="resetWaste()">
+                  <ion-icon name="beaker" item-left></ion-icon>
+                  Waste dumped <div *ngIf="wasteDays>=0"> {{ wasteDays }} days ago</div>
+                </button>
       </ion-list>
     </ion-card>
 </ion-content>
