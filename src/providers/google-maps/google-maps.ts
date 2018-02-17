@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { ConnectivityProvider } from '../connectivity/connectivity';
 import { Geolocation } from '@ionic-native/geolocation';
+import { DataLocationProvider } from '../../providers/data-location/data-location';
 
 declare var google: any;
 
@@ -16,7 +17,7 @@ export class GoogleMapsProvider {
   currentMarker: any;
   apiKey: string = "AIzaSyAAI4mkeLGp_r70UQIuYK_9o4s4tMg8BS8";
 
-  constructor(public connectivityService: ConnectivityProvider, public geolocation: Geolocation) {
+  constructor(public dataService: DataLocationProvider, public connectivityService: ConnectivityProvider, public geolocation: Geolocation) {
     
   }
 
@@ -68,21 +69,49 @@ export class GoogleMapsProvider {
 
   initMap(): Promise<any> {
     this.mapInitialised = true;
-    
-        return new Promise((resolve) => {
+
+      return new Promise((resolve) => {
+        this.dataService.getLocationStopDetails().then((locations) => {
+          if (locations != null) {
+            let index = locations.length - 1;
+            return locations[index];
+          }
+        }).then((currentMarker) => {
+          console.log('current marker is ' + currentMarker)
           this.geolocation.getCurrentPosition().then((position) => {
             let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    
+            
+            if (currentMarker) {
+              latLng = new google.maps.LatLng(currentMarker.lat, currentMarker.lng);
+            }
+
             let mapOptions = {
               center: latLng,
               zoom: 15,
               mapTypeId: google.maps.MapTypeId.TERRAIN
             }
-    
+
             this.map = new google.maps.Map(this.mapElement, mapOptions);
+        
+            if (currentMarker) {
+              let marker = new google.maps.Marker({
+                map: this.map,
+                animation: 'DROP',
+                position: latLng,
+                icon: currentMarker.image,
+                draggable:true
+              });
+
+              google.maps.event.addListener(marker, 'dragend', (e) => {
+                let position = marker.getPosition();
+                this.updateMarker(position);
+              });
+            }
+            
             resolve(true);
           });
         });
+      });
   }
 
   disableMap(): void {
@@ -124,6 +153,7 @@ export class GoogleMapsProvider {
 
   changeMarker(lat: number, lng: number, image): void {
     let latLng = new google.maps.LatLng(lat, lng);
+    console.log('getting to change marker?')
 
     let marker = new google.maps.Marker({
       map: this.map,
@@ -133,11 +163,23 @@ export class GoogleMapsProvider {
     });
 
     if (this.currentMarker) {
-      this.currentMarker.setMap(null);
+     this.currentMarker.setMap(null);
     }
 
     this.currentMarker = marker;
   }
 
+  updateMarker(position) {
+    this.dataService.getLocationStopDetails().then((locations) => {
+      if (locations != null) {
+        let index = locations.length - 1;
+        locations[index].lat = position.lat();
+        locations[index].lng = position.lng();
+        this.dataService.setLocationStopDetails(locations);
+      }
+    })
+  }
+
 }
+
 

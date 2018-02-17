@@ -31,23 +31,7 @@ export class LocationPage {
 
   ionViewDidLoad(): void {
     this.platform.ready().then(() => {
-      this.dataService.getLocationStopDetails().then((locations) => {
-        if (locations != null) {
-          console.log(locations);
-          this.index = locations.length - 1;
-          console.log(this.index);
-          return locations[this.index];
-        }
-      }).then((recent) => {
-        let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
-          if (recent) {
-            this.latitude = recent.lat;
-            this.longitude = recent.lng;
-            this.image = recent.image;
-            this.maps.changeMarker(this.latitude, this.longitude, this.image);
-          }
-        });
-      });
+      this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement)
     });
   }
 
@@ -83,7 +67,7 @@ export class LocationPage {
           });
         }
         else {
-          console.log('data is cancelled');
+          console.log('data is cancelled 2');
         }  
       });
       prompt.present();
