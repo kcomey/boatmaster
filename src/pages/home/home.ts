@@ -21,7 +21,8 @@ export class HomePage {
   todayDate: any = Date();
 
   constructor(public platform: Platform, public storage: Storage, public alertCtrl: AlertController, public navCtrl: NavController, public menu: MenuController) {
-    this.menu.enable(false);
+    this.menu.enable(false, 'budget');
+    this.menu.enable(false, 'location');
   }
 
   ionViewDidLoad() {
@@ -46,7 +47,7 @@ export class HomePage {
   }
 
   showBudgetPage() {
-    this.menu.enable(true);
+    this.menu.enable(true, 'budget');
     this.navCtrl.push(BudgetPage);
   }
 
@@ -55,6 +56,7 @@ export class HomePage {
   }
 
   showLocationPage() {
+    this.menu.enable(true, 'location');
     this.navCtrl.push(LocationPage);
   }
 

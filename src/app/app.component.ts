@@ -37,5 +37,25 @@ export class MyApp {
     this.nav.push(page);
   }
 
+  clearMoorings(): void {
+    console.log('show alert for clear moorings');
+    //this.menu.close();
+  }
+
+  clearDives(): void {
+    console.log('show alert for clear dives');
+    //this.menu.close();
+  }
+
+  clearAll(): void {
+    console.log('show alert for clear ALL');
+    //this.menu.close();
+  }
+
+  addMarker(type): void {
+    console.log('add marker for ' + type);
+    //this.menu.close();
+  }
+
 }
 

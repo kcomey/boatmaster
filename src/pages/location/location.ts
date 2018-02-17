@@ -41,8 +41,6 @@ export class LocationPage {
       this.longitude = position.coords.longitude;
       this.image = 'assets/imgs/harbor.png';
 
-      this.maps.changeMarker(position.coords.latitude, position.coords.longitude, this.image);
-
       let data = {
         lat: this.latitude,
         lng: this.longitude,
@@ -55,15 +53,24 @@ export class LocationPage {
         if (data) {
           data.image = this.image;
           data.category = 'mooring';
+          //this.maps.changeMarker(data.lat, data.lng, data.image);
+
           this.dataService.getLocationStopDetails().then((locations) => {
+            var remove;
             if (locations != null) {
-              locations.push(data);
+              //Need to grab the one to remove from map
+              remove = locations.pop();
+              //then put it back in array
+              locations.unshift(remove);
+              locations.unshift(data);
               this.dataService.setLocationStopDetails(locations);
             }
             else {
               let saveData = [ data ];
               this.dataService.setLocationStopDetails(saveData);
             }
+
+            this.maps.changeMarker(data.lat, data.lng, data.image);
           });
         }
         else {
@@ -80,7 +87,7 @@ export class LocationPage {
       this.longitude = position.coords.longitude;
       this.image = 'assets/imgs/scubadiving.png';
 
-      this.maps.changeMarker(position.coords.latitude, position.coords.longitude, this.image);
+      //this.maps.changeMarker(position.coords.latitude, position.coords.longitude, this.image);
 
       let data = {
         latitude: this.latitude,
@@ -95,14 +102,21 @@ export class LocationPage {
         data.category = 'diving';
 
         this.dataService.getLocationStopDetails().then((locations) => {
+          var remove;
           if (locations != null) {
-            locations.push(data);
+            //Need to grab the one to remove from map
+            remove = locations.pop();
+            //then put it back in array
+            locations.unshift(remove);
+            locations.unshift(data);
             this.dataService.setLocationStopDetails(locations);
           }
           else {
             let saveData = [ data ];
             this.dataService.setLocationStopDetails(saveData);
           }
+
+          this.maps.changeMarker(data.lat, data.lng, data.image);
         });
       });
     prompt.present();

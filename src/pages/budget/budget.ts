@@ -31,7 +31,8 @@ export class BudgetPage {
 
   constructor(public toastCtrl: ToastController, public events: Events, public menu: MenuController, public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider, public budgetService: DataBudgetProvider) {
-      this.menu.enable(true);
+      this.menu.enable(true, 'budget');
+      this.menu.enable(false, 'location');
       events.subscribe('monthlyBudget', (monthlyBudget)=> {
         this.budget = { date: this.today.substring(0, 7), monthlyBudget: monthlyBudget, monthlyBudgetSpent: 0, amtBudgetAllocated: 0, previousMonths: []};
       });

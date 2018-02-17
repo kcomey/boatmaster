@@ -153,7 +153,6 @@ export class GoogleMapsProvider {
 
   changeMarker(lat: number, lng: number, image): void {
     let latLng = new google.maps.LatLng(lat, lng);
-    console.log('getting to change marker?')
 
     let marker = new google.maps.Marker({
       map: this.map,
@@ -162,11 +161,9 @@ export class GoogleMapsProvider {
       icon: image
     });
 
-    if (this.currentMarker) {
-     this.currentMarker.setMap(null);
-    }
-
     this.currentMarker = marker;
+    this.map.setCenter(marker.getPosition());
+    marker.setMap(this.map);
   }
 
   updateMarker(position) {

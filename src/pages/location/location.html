@@ -1,20 +1,19 @@
 <ion-header>
-
     <ion-navbar color="header">
-
       <ion-title>Location Map</ion-title>
       <ion-buttons end>
-        <button ion-button icon-only (click)="setMooringLocation()">
+        <button class="icon" icon-only (click)="setMooringLocation()">
           <img src='assets/imgs/harbor.png'/></button>
-          <button ion-button icon-only (click)="setDivingLocation()">
+          <button class="icon" icon-only (click)="setDivingLocation()">
               <img src='assets/imgs/scubadiving.png'/></button>
       </ion-buttons>
+      <button ion-button icon-only menuToggle right>
+          <ion-icon name="menu"></ion-icon>
+        </button>
     </ion-navbar>
   
   </ion-header>
-
-
-
+ 
 <ion-content >
  <div #pleaseConnect id="please-connect">
    <p>Please connect to the Internet...</p>

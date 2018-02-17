@@ -1,4 +1,4 @@
- <ion-menu persistent="true" [content]="content">
+ <ion-menu id="budget" persistent="true" [content]="content">
         <ion-header>
     
                 <ion-navbar color="header">
@@ -24,5 +24,35 @@
             </ion-list>
         </ion-content>
     </ion-menu>
+
+    <ion-menu id="location" persistent="true" [content]="content">
+            <ion-header>
+        
+                    <ion-navbar color="header">
+                      <ion-title>Location Menu</ion-title>
+                    </ion-navbar>
+                  
+                  </ion-header>
     
+            <ion-content padding>
+                <ion-list no-lines>
+                   <button  ion-item (click)="clearMoorings()">
+                        <ion-icon name="warning"></ion-icon> Clear all mooring markers
+                    </button>
+                    <button ion-item (click)="clearDives()">
+                            <ion-icon name="warning"></ion-icon> Clear all dive markers
+                    </button>
+                    <button ion-item (click)="clearAll()">
+                        <ion-icon name="warning"></ion-icon><ion-icon name="warning"></ion-icon> Clear ALL markers
+                    </button>
+                    <button ion-item (click)="addMarker('mooring')">
+                        <img class="align" src='assets/imgs/harbor.png'/> Add  mooring
+                    </button>
+                    <button ion-item (click)="addMarker('dive')">
+                        <img class="align" src='assets/imgs/scubadiving.png'/> Add dive site
+                    </button>
+                </ion-list>
+            </ion-content>
+        </ion-menu>
+        
     <ion-nav id="nav" #content swipeBackEnabled="false" [root]="rootPage"></ion-nav>
