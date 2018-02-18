@@ -68,50 +68,79 @@ export class GoogleMapsProvider {
   }
 
   initMap(): Promise<any> {
+    let mapOptions = {
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.TERRAIN
+    }
+
     this.mapInitialised = true;
+    this.map = new google.maps.Map(this.mapElement, mapOptions);
 
-      return new Promise((resolve) => {
-        this.dataService.getLocationStopDetails().then((locations) => {
-          if (locations != null) {
-            let index = locations.length - 1;
-            return locations[index];
-          }
-        }).then((currentMarker) => {
-          console.log('current marker is ' + currentMarker)
-          this.geolocation.getCurrentPosition().then((position) => {
-            let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            
-            if (currentMarker) {
-              latLng = new google.maps.LatLng(currentMarker.lat, currentMarker.lng);
-            }
-
-            let mapOptions = {
-              center: latLng,
-              zoom: 15,
-              mapTypeId: google.maps.MapTypeId.TERRAIN
-            }
-
-            this.map = new google.maps.Map(this.mapElement, mapOptions);
-        
-            if (currentMarker) {
-              let marker = new google.maps.Marker({
-                map: this.map,
-                animation: 'DROP',
-                position: latLng,
-                icon: currentMarker.image,
-                draggable:true
-              });
-
-              google.maps.event.addListener(marker, 'dragend', (e) => {
-                let position = marker.getPosition();
-                this.updateMarker(position);
-              });
-            }
-            
-            resolve(true);
+    return new Promise((resolve) => {
+      this.dataService.getLocationStopDetails().then((locations) => {
+        if (locations != null) {
+          locations.forEach(marker => {
+            this.addMarker(marker);
           });
+          //let index = locations.length - 1;
+          return locations[0];
+        }
+      }).then((currentMarker) => {
+        this.geolocation.getCurrentPosition().then((position) => {
+          let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+          if (currentMarker) {
+            latLng = new google.maps.LatLng(currentMarker.lat, currentMarker.lng);
+          }
+
+          this.map.setCenter(latLng);
+          resolve(true);
         });
       });
+    });
+  }
+
+  addInfoWindow(marker, content){
+    let infoWindow = new google.maps.InfoWindow({
+      content: content
+    });
+   
+    google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.open(this.map, marker);
+    });
+  }
+
+  addMarker(marker){
+    let latLng = new google.maps.LatLng(marker.lat, marker.lng);
+
+    let addMarker = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      draggable:true,
+      position: latLng,
+      image: marker.image,
+      category: marker.category
+    });
+
+    addMarker.addListener('dragend', this.addDragUpdate(addMarker));
+    // google.maps.event.addListener(marker, 'dragend', (e) => {
+    //   let position = marker.getPosition();
+    //   this.updateMarker(position);
+    // });
+   
+    //let content = "<h4>" + marker.title + "</h4>";         
+   
+    //this.addInfoWindow(marker, content);
+    //this.addDragUpdate(marker);
+  }
+
+  addDragUpdate(marker) {
+    console.log('adding listener')
+    //google.maps.event.addListener(marker, 'dragend', (e) => {
+      console.log('drag end');
+      let position = marker.getPosition();
+      this.updateMarker(position);
+    //});
   }
 
   disableMap(): void {
@@ -151,22 +180,40 @@ export class GoogleMapsProvider {
     });
   }
 
-  changeMarker(lat: number, lng: number, image): void {
-    let latLng = new google.maps.LatLng(lat, lng);
+  // // Removes the markers from the map, but keeps them in the array.
+  // function clearMarkers() {
+  //   setMapOnAll(null);
+  // }
 
-    let marker = new google.maps.Marker({
-      map: this.map,
-      animation: 'DROP',
-      position: latLng,
-      icon: image
-    });
+  // // Shows any markers currently in the array.
+  // function showMarkers() {
+  //   setMapOnAll(map);
+  // }
 
-    this.currentMarker = marker;
-    this.map.setCenter(marker.getPosition());
-    marker.setMap(this.map);
-  }
+  // // Deletes all markers in the array by removing references to them.
+  // function deleteMarkers() {
+  //   clearMarkers();
+  //   markers = [];
+  // }
+
+
+  // changeMarker(lat: number, lng: number, image): void {
+  //   let latLng = new google.maps.LatLng(lat, lng);
+
+  //   let marker = new google.maps.Marker({
+  //     map: this.map,
+  //     animation: 'DROP',
+  //     position: latLng,
+  //     icon: image
+  //   });
+
+  //   this.currentMarker = marker;
+  //   this.map.setCenter(marker.getPosition());
+  //   marker.setMap(this.map);
+  // }
 
   updateMarker(position) {
+    console.log('getting to update ' + position);
     this.dataService.getLocationStopDetails().then((locations) => {
       if (locations != null) {
         let index = locations.length - 1;

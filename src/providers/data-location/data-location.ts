@@ -18,16 +18,6 @@ export class DataLocationProvider {
       this.storage.set('locationDetails', data);
   }
 
-  //Location is for the most recently added stop
-  // getLocation(): Promise<any> {
-  //   return this.storage.get('location');
-  // }
-
-  // setLocation(data: Object): void {
-  //   let newData = JSON.stringify(data);
-  //   this.storage.set('location', newData);
-  // }
-
   getBoatDetails(): Promise<any> {
     return this.storage.get('boatdetails');
   }

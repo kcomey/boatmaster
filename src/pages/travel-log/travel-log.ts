@@ -38,6 +38,10 @@ export class TravelLogPage {
     slidingItem.close();
   }
 
+  showOnMap(data) {
+    console.log('show the map page with this marker');
+  }
+
   showLocation(data) {
     //Also allows for editing
     data.index = this.locations.indexOf(data);

@@ -35,6 +35,66 @@ export class LocationPage {
     });
   }
 
+  //marker.setMap(null);
+
+  // var mapOptions = {
+  //   center: latLng,
+  //   zoom: 15,
+  //   mapTypeId: google.maps.MapTypeId.ROADMAP
+  // };
+
+  // map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+  // //Wait until the map is loaded
+  // google.maps.event.addListenerOnce(map, 'idle', function(){
+
+  //   //Load the markers
+  //   loadMarkers();
+
+  // function loadMarkers(){
+ 
+  //   //Get all of the markers from our Markers factory
+  //   Markers.getMarkers().then(function(markers){
+
+  //     console.log("Markers: ", markers);
+
+  //     var records = markers.data.result;
+
+  //     for (var i = 0; i < records.length; i++) {
+
+  //       var record = records[i];  
+  //       var markerPos = new google.maps.LatLng(record.lat, record.lng);
+
+  //       // Add the markerto the map
+  //       var marker = new google.maps.Marker({
+  //           map: map,
+  //           animation: google.maps.Animation.DROP,
+  //           position: markerPos
+  //       });
+
+  //       var infoWindowContent = "<h4>" + record.name + "</h4>";         
+
+  //       addInfoWindow(marker, infoWindowContent, record);
+
+  //     }
+
+
+       
+
+       
+
+//   // addInfoWindow(marker, content){
+ 
+//   //   let infoWindow = new google.maps.InfoWindow({
+//   //     content: content
+//   //   });
+   
+//   //   google.maps.event.addListener(marker, 'click', () => {
+//   //     infoWindow.open(this.map, marker);
+//   //   });
+   
+//   // }
+
   setMooringLocation(): void {
     this.geolocation.getCurrentPosition().then((position) => {
       this.latitude = position.coords.latitude;
@@ -45,32 +105,28 @@ export class LocationPage {
         lat: this.latitude,
         lng: this.longitude,
         image: this.image,
-        category: 'mooring'
+        category: 'mooring',
       };
 
       let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
       prompt.onDidDismiss(data => {
         if (data) {
-          data.image = this.image;
-          data.category = 'mooring';
-          //this.maps.changeMarker(data.lat, data.lng, data.image);
+          //data.image = this.image;
+          //data.category = 'mooring';
 
           this.dataService.getLocationStopDetails().then((locations) => {
-            var remove;
             if (locations != null) {
-              //Need to grab the one to remove from map
-              remove = locations.pop();
-              //then put it back in array
-              locations.unshift(remove);
+              data.id = locations.length + 1;
               locations.unshift(data);
               this.dataService.setLocationStopDetails(locations);
             }
             else {
+              data.id = 1;
               let saveData = [ data ];
               this.dataService.setLocationStopDetails(saveData);
             }
 
-            this.maps.changeMarker(data.lat, data.lng, data.image);
+            this.maps.addMarker(data);
           });
         }
         else {
@@ -93,13 +149,15 @@ export class LocationPage {
         latitude: this.latitude,
         longitude: this.longitude,
         image: this.image,
-        category: 'diving'
+        category: 'diving',
+        animation: 'DROP',
+        draggable:true
       };
 
       let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
       prompt.onDidDismiss(data => {
-        data.image = this.image;
-        data.category = 'diving';
+        //data.image = this.image;
+        //data.category = 'diving';
 
         this.dataService.getLocationStopDetails().then((locations) => {
           var remove;
