@@ -14,11 +14,10 @@ export class GoogleMapsProvider {
   mapInitialised: boolean = false;
   mapLoaded: any;
   mapLoadedObserver: any;
-  currentMarker: any;
   apiKey: string = "AIzaSyAAI4mkeLGp_r70UQIuYK_9o4s4tMg8BS8";
 
   constructor(public dataService: DataLocationProvider, public connectivityService: ConnectivityProvider, public geolocation: Geolocation) {
-    
+ 
   }
 
   init(mapElement: any, pleaseConnect: any): Promise<any> {
@@ -62,7 +61,6 @@ export class GoogleMapsProvider {
           this.disableMap();
         }
     }
-
       this.addConnectivityListeners();
     });
   }
@@ -86,8 +84,7 @@ export class GoogleMapsProvider {
           this.dataService.getLocationStopDetails().then((locations) => {
               if (locations != null) {
                 locations.forEach(marker => {
-                  console.log('image is ' + marker.image)
-                  this.addMarker(marker);
+                  this.addStoredMarker(marker);
                 });
               }
             })
@@ -95,65 +92,89 @@ export class GoogleMapsProvider {
       });
   }
 
-  addInfoWindow(marker, content){
-    let infoWindow = new google.maps.InfoWindow({
-      content: content
-    });
+  // Potentially use this code to show the details page
+  // addInfoWindow(marker, content){
+  //   let infoWindow = new google.maps.InfoWindow({
+  //     content: content
+  //   });
    
-    google.maps.event.addListener(marker, 'click', () => {
-      infoWindow.open(this.map, marker);
-    });
+  //   google.maps.event.addListener(marker, 'click', () => {
+  //     infoWindow.open(this.map, marker);
+  //   });
+  // }
+
+  addStoredMarker(marker) {
+    //Need to add this function
+    //no need to get id or anything, just put on map
+    console.log('Need to write this function - AddStoredMarker()')
   }
 
   addMarker(data){
+    var markerToAdd;
     let latLng = new google.maps.LatLng(data.lat, data.lng);
 
-    let marker = new google.maps.Marker({
-      map: this.map,
-      animation: google.maps.Animation.DROP,
-      draggable: true,
-      position: latLng,
-      icon: data.image,
-      category: data.category,
-      id: data.id
-    });
+    this.dataService.getLocationID().then((id) => {
+      if (id == null) {
+        id = 1;
+      }
 
-    // google.maps.event.addListener(marker, 'click', () => {
+      if (data.id == undefined) {
+        data.id = id;
+        id++;
+        console.log('id is ' + id);
+        this.dataService.setLocationID(id);
+      }
+
+      let marker = new google.maps.Marker({
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        draggable: true,
+        position: latLng,
+        icon: data.image,
+        category: data.category,
+        id: data.id
+      });
+
+      google.maps.event.addListener(marker, 'dragend', (e) => {
+        let position = marker.getPosition();
+        this.updateMarker(position, marker);
+      });
+
+      //Cannot have position, need to put in lat, lng seperate
+      markerToAdd = {
+        icon: data.image,
+        category: data.category,
+        id: data.id
+      };
+
+      return this.dataService.getLocationStopDetails();
+      
+    //Might use this
+    //       google.maps.event.addListener(marker, 'click', () => {
     //   infoWindow.open(this.map, marker);
     // });
 
-    google.maps.event.addListener(marker, 'dragend', (e) => {
-      let position = marker.getPosition();
-      this.updateMarker(position, marker);
+    }).then(function (locations) {
+        if (locations != null) {
+          locations.unshift(markerToAdd);
+        }
+        else {
+          locations = [ markerToAdd ];
+        }
+
+        return locations;
+    }).then((locations) => {
+      console.log('locations2 is' + locations.length);
+      console.log('get the locations here2' + markerToAdd.icon);
+      this.saveLocation(locations);
+      //Need to return a promise?
     });
-   
-    //let content = "<h4>" + marker.title + "</h4>";         
-   
-    //this.addInfoWindow(marker, content);
-    //this.addDragUpdate(marker);
-      //marker.setMap(null);
-
-  //       var infoWindowContent = "<h4>" + record.name + "</h4>";         
-
-  //       addInfoWindow(marker, infoWindowContent, record);
-
-  //     }
-
-
-//   // addInfoWindow(marker, content){
- 
-//   //   let infoWindow = new google.maps.InfoWindow({
-//   //     content: content
-//   //   });
-   
-//   //   google.maps.event.addListener(marker, 'click', () => {
-//   //     infoWindow.open(this.map, marker);
-//   //   });
-   
-//   // }
   }
 
-
+  saveLocation(locations) {
+    console.log('locations is' + locations.length);
+    this.dataService.setLocationStopDetails(locations);
+  }
 
   updateMarker(position, marker) {
     console.log('getting to update ' + position);

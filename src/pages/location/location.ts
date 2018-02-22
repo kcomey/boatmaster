@@ -53,23 +53,8 @@ export class LocationPage {
         if (data) {
           data.image = this.image;
           data.category = 'mooring';
-
-          this.dataService.getLocationStopDetails().then((locations) => {
-            if (locations != null) {
-              this.dataService.getLocationID().then((id) => {
-                data.id = id;
-                locations.unshift(data);
-                this.dataService.setLocationStopDetails(locations);
-              });
-            }
-            else {
-              data.id = 1;
-              let saveData = [ data ];
-              this.dataService.setLocationStopDetails(saveData);
-            }
-
-            this.maps.addMarker(data);
-          });
+          
+          this.maps.addMarker(data);
         }
         else {
           console.log('data is cancelled 2');
@@ -97,22 +82,7 @@ export class LocationPage {
         data.image = this.image;
         data.category = 'diving';
 
-        this.dataService.getLocationStopDetails().then((locations) => {
-          if (locations != null) {
-            this.dataService.getLocationID().then((id) => {
-              data.id = id;
-              locations.unshift(data);
-              this.dataService.setLocationStopDetails(locations);
-            });
-          }
-          else {
-            data.id = 1;
-            let saveData = [ data ];
-            this.dataService.setLocationStopDetails(saveData);
-          }
-
-          this.maps.addMarker(data);
-        });
+        this.maps.addMarker(data);
       });
     prompt.present();
   });

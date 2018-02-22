@@ -46,7 +46,7 @@ export class BudgetPage {
 
   ionViewDidLoad() {
     //Below is for development
-    //this.storage.clear();
+    this.storage.clear();
     //this.dataService.addDefaultCategories();
 
 
