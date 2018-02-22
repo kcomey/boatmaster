@@ -68,36 +68,31 @@ export class GoogleMapsProvider {
   }
 
   initMap(): Promise<any> {
-    let mapOptions = {
-      zoom: 15,
-      mapTypeId: google.maps.MapTypeId.TERRAIN
-    }
-
-    this.mapInitialised = true;
-    this.map = new google.maps.Map(this.mapElement, mapOptions);
-
     return new Promise((resolve) => {
-      this.dataService.getLocationStopDetails().then((locations) => {
-        if (locations != null) {
-          locations.forEach(marker => {
-            this.addMarker(marker);
-          });
-          //let index = locations.length - 1;
-          return locations[0];
+      this.geolocation.getCurrentPosition().then((position) => {
+        let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        let mapOptions = {
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.TERRAIN,
+          center: latLng
         }
-      }).then((currentMarker) => {
-        this.geolocation.getCurrentPosition().then((position) => {
-          let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-          if (currentMarker) {
-            latLng = new google.maps.LatLng(currentMarker.lat, currentMarker.lng);
-          }
+        this.map = new google.maps.Map(this.mapElement, mapOptions);
 
-          this.map.setCenter(latLng);
-          resolve(true);
+        this.mapInitialised = true;
+        resolve(true);
+      }).then(() => {
+          this.dataService.getLocationStopDetails().then((locations) => {
+              if (locations != null) {
+                locations.forEach(marker => {
+                  console.log('image is ' + marker.image)
+                  this.addMarker(marker);
+                });
+              }
+            })
         });
       });
-    });
   }
 
   addInfoWindow(marker, content){
@@ -110,37 +105,70 @@ export class GoogleMapsProvider {
     });
   }
 
-  addMarker(marker){
-    let latLng = new google.maps.LatLng(marker.lat, marker.lng);
+  addMarker(data){
+    let latLng = new google.maps.LatLng(data.lat, data.lng);
 
-    let addMarker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
-      draggable:true,
+      draggable: true,
       position: latLng,
-      image: marker.image,
-      category: marker.category
+      icon: data.image,
+      category: data.category,
+      id: data.id
     });
 
-    addMarker.addListener('dragend', this.addDragUpdate(addMarker));
-    // google.maps.event.addListener(marker, 'dragend', (e) => {
-    //   let position = marker.getPosition();
-    //   this.updateMarker(position);
+    // google.maps.event.addListener(marker, 'click', () => {
+    //   infoWindow.open(this.map, marker);
     // });
+
+    google.maps.event.addListener(marker, 'dragend', (e) => {
+      let position = marker.getPosition();
+      this.updateMarker(position, marker);
+    });
    
     //let content = "<h4>" + marker.title + "</h4>";         
    
     //this.addInfoWindow(marker, content);
     //this.addDragUpdate(marker);
+      //marker.setMap(null);
+
+  //       var infoWindowContent = "<h4>" + record.name + "</h4>";         
+
+  //       addInfoWindow(marker, infoWindowContent, record);
+
+  //     }
+
+
+//   // addInfoWindow(marker, content){
+ 
+//   //   let infoWindow = new google.maps.InfoWindow({
+//   //     content: content
+//   //   });
+   
+//   //   google.maps.event.addListener(marker, 'click', () => {
+//   //     infoWindow.open(this.map, marker);
+//   //   });
+   
+//   // }
   }
 
-  addDragUpdate(marker) {
-    console.log('adding listener')
-    //google.maps.event.addListener(marker, 'dragend', (e) => {
-      console.log('drag end');
-      let position = marker.getPosition();
-      this.updateMarker(position);
-    //});
+
+
+  updateMarker(position, marker) {
+    console.log('getting to update ' + position);
+    console.log('marker id is ' + marker.id);
+    //This needs to work off something other than last array item
+    //since using on multiple markers now
+    
+    // this.dataService.getLocationStopDetails().then((locations) => {
+    //   if (locations != null) {
+    //     let index = locations.length - 1;
+    //     locations[index].lat = position.lat();
+    //     locations[index].lng = position.lng();
+    //     this.dataService.setLocationStopDetails(locations);
+    //   }
+    // })
   }
 
   disableMap(): void {
@@ -212,17 +240,7 @@ export class GoogleMapsProvider {
   //   marker.setMap(this.map);
   // }
 
-  updateMarker(position) {
-    console.log('getting to update ' + position);
-    this.dataService.getLocationStopDetails().then((locations) => {
-      if (locations != null) {
-        let index = locations.length - 1;
-        locations[index].lat = position.lat();
-        locations[index].lng = position.lng();
-        this.dataService.setLocationStopDetails(locations);
-      }
-    })
-  }
+
 
 }
 

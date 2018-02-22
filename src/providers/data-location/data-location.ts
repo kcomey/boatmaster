@@ -27,4 +27,13 @@ export class DataLocationProvider {
     this.storage.set('boatdetails', newData);
   }
 
+  getLocationID(): Promise<any> {
+    return this.storage.get('locationID');
+  }
+
+  setLocationID(id): void {
+    console.log('getting to set?' + id)
+      this.storage.set('locationID', id);
+  }
+
 }
