@@ -83,9 +83,7 @@ export class GoogleMapsProvider {
       }).then(() => {
           this.dataService.getLocationStopDetails().then((locations) => {
               if (locations != null) {
-                locations.forEach(marker => {
-                  this.addStoredMarker(marker);
-                });
+                this.addStoredMarkers(locations);
               }
             })
         });
@@ -103,13 +101,83 @@ export class GoogleMapsProvider {
   //   });
   // }
 
-  addStoredMarker(marker) {
+  addStoredMarkers(markers) {
     //Need to add this function
     //no need to get id or anything, just put on map
-    console.log('Need to write this function - AddStoredMarker()')
+    markers.forEach(marker => {
+      console.log('adding marker ' + marker.id + ' and ' + marker.icon);
+      if (marker.lat && marker.lng) {
+        let latLng = new google.maps.LatLng(marker.lat, marker.lng);
+
+        let markerToAdd = new google.maps.Marker({
+          map: this.map,
+          animation: google.maps.Animation.DROP,
+          draggable: true,
+          position: latLng,
+          icon: marker.icon,
+          category: marker.category,
+          id: marker.id
+        });
+  
+        google.maps.event.addListener(markerToAdd, 'dragend', (e) => {
+          let position = markerToAdd.getPosition();
+          this.updateMarker(position, markerToAdd);
+        });
+      }
+    });
+
   }
 
-  addMarker(data){
+  addMarkerManually(data) {
+    var markerToAdd;
+
+    this.dataService.getLocationID().then((id) => {
+      if (id == null) {
+        id = 1;
+      }
+
+      if (data.id == undefined) {
+        data.id = id;
+        id++;
+        this.dataService.setLocationID(id);
+      }
+
+      markerToAdd = {
+        name: data.name,
+        lat: data.lat,
+        lng: data.lng,
+        type: data.type,
+        cost: data.cost,
+        depth: data.depth,
+        arrive: data.arrive,
+        depart: data.depart,
+        hours: data.hours,
+        miles: data.miles,
+        cameFrom: data.cameFrom,
+        notes: data.notes,
+        today: data.today,
+        typeDive: data.typeDive,
+        icon: data.image,
+        category: data.category,
+        id: data.id,
+      };
+
+      return this.dataService.getLocationStopDetails();
+    }).then(function (locations) {
+        if (locations != null) {
+          locations.unshift(markerToAdd);
+        }
+        else {
+          locations = [ markerToAdd ];
+        }
+
+        return locations;
+    }).then((locations) => {
+      this.saveLocation(locations);
+    });
+  }
+
+  addMarker(data) {
     var markerToAdd;
     let latLng = new google.maps.LatLng(data.lat, data.lng);
 
@@ -121,7 +189,6 @@ export class GoogleMapsProvider {
       if (data.id == undefined) {
         data.id = id;
         id++;
-        console.log('id is ' + id);
         this.dataService.setLocationID(id);
       }
 
@@ -142,9 +209,23 @@ export class GoogleMapsProvider {
 
       //Cannot have position, need to put in lat, lng seperate
       markerToAdd = {
+        name: data.name,
+        lat: data.lat,
+        lng: data.lng,
+        type: data.type,
+        cost: data.cost,
+        depth: data.depth,
+        arrive: data.arrive,
+        depart: data.depart,
+        hours: data.hours,
+        miles: data.miles,
+        cameFrom: data.cameFrom,
+        notes: data.notes,
+        today: data.today,
+        typeDive: data.typeDive,
         icon: data.image,
         category: data.category,
-        id: data.id
+        id: data.id,
       };
 
       return this.dataService.getLocationStopDetails();
@@ -164,32 +245,65 @@ export class GoogleMapsProvider {
 
         return locations;
     }).then((locations) => {
-      console.log('locations2 is' + locations.length);
-      console.log('get the locations here2' + markerToAdd.icon);
       this.saveLocation(locations);
-      //Need to return a promise?
     });
   }
 
   saveLocation(locations) {
-    console.log('locations is' + locations.length);
     this.dataService.setLocationStopDetails(locations);
   }
 
-  updateMarker(position, marker) {
-    console.log('getting to update ' + position);
-    console.log('marker id is ' + marker.id);
-    //This needs to work off something other than last array item
-    //since using on multiple markers now
-    
-    // this.dataService.getLocationStopDetails().then((locations) => {
-    //   if (locations != null) {
-    //     let index = locations.length - 1;
-    //     locations[index].lat = position.lat();
-    //     locations[index].lng = position.lng();
-    //     this.dataService.setLocationStopDetails(locations);
+  saveUpdatedMarker(locations, index, position) {
+    console.log('array, position, id ' + locations + ' ' +  position + '  ' + index);
+
+    let positionArray = position.split(',');
+    console.log('lat is ' + positionArray[0]);
+    console.log('lng is ' + positionArray[1]);
+  }
+
+  updateMarker(position, marker) { 
+    // Promise.resolve(this.dataService.getLocationStopDetails()).then(function () {
+    //   return Promise.resolve('bar');
+    // }).then(function (result) {
+    //   console.log(result);
+    // });
+
+    return new Promise((resolve) => {   
+      this.dataService.getLocationStopDetails().then((locations) => {
+        for (var i = 0; i < locations.length; i++) { 
+          if (locations[i].id == marker.id) {
+            let arrayID = i;
+            return this.saveUpdatedMarker(locations, position, arrayID);
+          }
+        }
+      });
+      resolve(true);
+    });
+
+// let positionArray = position.split(',');
+// console.log('lat is ' + positionArray[0]);
+// console.log('lng is ' + positionArray[1]);
+    // return new Promise((resolve) => {
+    //   if(typeof google == "undefined" || typeof google.maps == "undefined"){
+    //     console.log("Google maps JavaScript needs to be loaded.");
+    //     this.disableMap();
+  
+    //     if(this.connectivityService.isOnline()){
+    //         window['mapInit'] = () => {
+    //         this.initMap().then(() => {
+    //         resolve(true);
+    //     });
+  
+    //     this.enableMap();
     //   }
-    // })
+    
+
+        // let index = locations.length - 1;
+        // locations[index].lat = position.lat();
+        // locations[index].lng = position.lng();
+        // this.dataService.setLocationStopDetails(locations);
+      
+   
   }
 
   disableMap(): void {

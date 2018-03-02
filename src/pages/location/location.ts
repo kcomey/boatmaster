@@ -35,6 +35,31 @@ export class LocationPage {
     });
   }
 
+  addMooringLocation(): void {
+    //For adding manually when offline
+    this.image = 'assets/imgs/harbor.png';
+
+    let data = {
+      image: this.image,
+      category: 'mooring',
+    };
+
+    let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
+    prompt.onDidDismiss(data => {
+      console.log('get to add mooring');
+      if (data) {
+        data.image = 'assets/imgs/harbor.png';
+        data.category = 'mooring';
+        this.maps.addMarkerManually(data);
+      }
+      else {
+        console.log('data is cancelled 2');
+      }  
+    });
+    prompt.present();
+
+  }
+
   setMooringLocation(): void {
     this.geolocation.getCurrentPosition().then((position) => {
       this.latitude = position.coords.latitude;
@@ -62,6 +87,10 @@ export class LocationPage {
       });
       prompt.present();
     });
+  }
+
+  addDivingLocation(): void {
+    //For adding dive location manually when offline
   }
 
   setDivingLocation(): void {

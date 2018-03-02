@@ -2,7 +2,9 @@ page-location {
     #please-connect {
         position: absolute;
         background-color: #000000;
-        opacity: 0.5;
+        background-image: url('../assets/imgs/background.png');
+        background-size: cover;
+        background-position-x: 40%; 
         width: 100%;
         height: 100%;
         z-index: 1;

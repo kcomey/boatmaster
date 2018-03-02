@@ -15,10 +15,9 @@ export class DataLocationProvider {
     return this.storage.get('locationDetails');
   }
 
-  setLocationStopDetails(data): Promise<any> {
-    console.log('get here?' + data);
+  setLocationStopDetails(data): void {
     //let newData = JSON.stringify(data);
-    return this.storage.set('locationDetails', data);
+    this.storage.set('locationDetails', data);
   }
 
   getBoatDetails(): Promise<any> {
@@ -35,7 +34,6 @@ export class DataLocationProvider {
   }
 
   setLocationID(id): void {
-    console.log('getting to set?' + id)
       this.storage.set('locationID', id);
   }
 

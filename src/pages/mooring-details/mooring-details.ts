@@ -14,7 +14,7 @@ export class MooringDetailsPage {
   today: any = new Date().toISOString().slice(0,16);
   data: any;
   mooring: boolean = false;
-  index: number;
+  id: number;
 
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, 
     public dataService: DataLocationProvider, public platform: Platform) {
@@ -37,7 +37,7 @@ export class MooringDetailsPage {
         typeDive: [this.data.typeDive],
         image: [this.data.image],
         category: [this.data.category],
-        index: [this.data.index]
+        id: [this.data.id]
       });
   }
 
