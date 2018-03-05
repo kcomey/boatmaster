@@ -39,12 +39,12 @@ export class TravelLogPage {
   }
 
   showOnMap(data) {
-    console.log('show the map page with this marker');
+    console.log('show the map page with this marker ' + data.name);
   }
 
   showLocation(data) {
     //Also allows for editing
-    data.index = this.locations.indexOf(data);
+    data.id = this.locations.indexOf(data);
     let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
     prompt.onDidDismiss(data => {
       if (data) {
@@ -53,9 +53,9 @@ export class TravelLogPage {
         }).then((locations) => {
           if (locations != null) {
      
-              if (data.index > -1) {
+              if (data.id > -1) {
                 //Replace with new data
-                locations[data.index] = data;
+                locations[data.id] = data;
                 return this.dataService.setLocationStopDetails(locations);
               }
           }

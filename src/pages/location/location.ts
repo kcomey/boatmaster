@@ -46,18 +46,37 @@ export class LocationPage {
 
     let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
     prompt.onDidDismiss(data => {
-      console.log('get to add mooring');
       if (data) {
         data.image = 'assets/imgs/harbor.png';
         data.category = 'mooring';
         this.maps.addMarkerManually(data);
+
+        let prompt = this.alertCtrl.create({
+          title: 'Mooring Location Added',
+          buttons: [
+            {
+              text: 'OK',
+            }
+          ]
+        });
+        prompt.present();
       }
       else {
         console.log('data is cancelled 2');
+        let prompt = this.alertCtrl.create({
+          title: 'Cancelled - Mooring Location NOT Added',
+          buttons: [
+            {
+              text: 'OK',
+            }
+          ]
+        });
+        prompt.present();
       }  
+
+
     });
     prompt.present();
-
   }
 
   setMooringLocation(): void {
@@ -91,6 +110,46 @@ export class LocationPage {
 
   addDivingLocation(): void {
     //For adding dive location manually when offline
+    this.image = 'assets/imgs/scubadiving.png';
+
+    let data = {
+      image: this.image,
+      category: 'diving',
+    };
+
+    let prompt = this.modalCtrl.create(MooringDetailsPage, { data: data });
+    prompt.onDidDismiss(data => {
+      if (data) {
+        data.image = 'assets/imgs/scubadiving.png';
+        data.category = 'diving';
+        this.maps.addMarkerManually(data);
+
+        let prompt = this.alertCtrl.create({
+          title: 'Diving Site Added',
+          buttons: [
+            {
+              text: 'OK',
+            }
+          ]
+        });
+        prompt.present();
+      }
+      else {
+        console.log('data is cancelled 2');
+        let prompt = this.alertCtrl.create({
+          title: 'Cancelled - Diving Site NOT Added',
+          buttons: [
+            {
+              text: 'OK',
+            }
+          ]
+        });
+        prompt.present();
+      }  
+
+
+    });
+    prompt.present();
   }
 
   setDivingLocation(): void {
