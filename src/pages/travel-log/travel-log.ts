@@ -5,6 +5,7 @@ import { MooringDetailsPage } from '../mooring-details/mooring-details';
 import { JsonPipe } from '@angular/common/src/pipes/json_pipe';
 import { HashLocationStrategy } from '@angular/common';
 import { ItemSliding } from 'ionic-angular';
+import { LocationPage } from '../location/location';
 
 @IonicPage()
 @Component({
@@ -33,13 +34,12 @@ export class TravelLogPage {
       this.locations.splice(index, 1);
       console.log(this.locations);
       this.dataService.setLocationStopDetails(this.locations);
-      this.ionViewDidLoad();
     }
     slidingItem.close();
   }
 
   showOnMap(data) {
-    console.log('show the map page with this marker ' + data.name);
+    this.navCtrl.push(LocationPage, { marker: data });
   }
 
   showLocation(data) {
@@ -61,7 +61,7 @@ export class TravelLogPage {
           }
         }).then(() => {
           this.ionViewDidLoad();
-        }); 
+        });
       }
       else {
         console.log('data is cancelled');

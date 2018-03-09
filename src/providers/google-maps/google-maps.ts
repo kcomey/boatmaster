@@ -20,14 +20,14 @@ export class GoogleMapsProvider {
  
   }
 
-  init(mapElement: any, pleaseConnect: any): Promise<any> {
+  init(mapElement: any, pleaseConnect: any, travelView: boolean, marker: any): Promise<any> {
     this.mapElement = mapElement;
     this.pleaseConnect = pleaseConnect;
 
-    return this.loadGoogleMaps();
+    return this.loadGoogleMaps(travelView, marker);
   }
 
-  loadGoogleMaps(): Promise<any> {
+  loadGoogleMaps(travelView, marker): Promise<any> {
     return new Promise((resolve) => {
     if(typeof google == "undefined" || typeof google.maps == "undefined"){
       console.log("Google maps JavaScript needs to be loaded.");
@@ -35,7 +35,7 @@ export class GoogleMapsProvider {
 
       if(this.connectivityService.isOnline()){
           window['mapInit'] = () => {
-          this.initMap().then(() => {
+          this.initMap(travelView, marker).then(() => {
           resolve(true);
       });
 
@@ -54,7 +54,7 @@ export class GoogleMapsProvider {
     }
     } else {
         if(this.connectivityService.isOnline()){
-          this.initMap();
+          this.initMap(travelView, marker);
           this.enableMap();
         }
         else {
@@ -65,10 +65,10 @@ export class GoogleMapsProvider {
     });
   }
 
-  initMap(): Promise<any> {
+  initMap(travelView, marker): Promise<any> {
     return new Promise((resolve) => {
-      this.geolocation.getCurrentPosition().then((position) => {
-        let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      if (travelView) {
+        let latLng = new google.maps.LatLng(marker.lat, marker.lng);
 
         let mapOptions = {
           zoom: 15,
@@ -79,27 +79,54 @@ export class GoogleMapsProvider {
         this.map = new google.maps.Map(this.mapElement, mapOptions);
 
         this.mapInitialised = true;
-        resolve(true);
-      }).then(() => {
-          this.dataService.getLocationStopDetails().then((locations) => {
-              if (locations != null) {
-                this.addStoredMarkers(locations);
-              }
-            })
+
+        let markerToAdd = new google.maps.Marker({
+          map: this.map,
+          animation: google.maps.Animation.DROP,
+          draggable: true,
+          position: latLng,
+          icon: marker.icon,
+          category: marker.category,
+          id: marker.id
         });
+  
+        google.maps.event.addListener(markerToAdd, 'dragend', (e) => {
+          let position = markerToAdd.getPosition();
+          this.updateMarker(position, markerToAdd);
+        });
+
+        google.maps.event.addListener(markerToAdd, 'click', () => {
+          let infoWindow = new google.maps.InfoWindow({
+            content: marker.name
+          });
+          infoWindow.open(this.map, markerToAdd);
+        });
+        resolve(true);
+      }
+      else {
+        this.geolocation.getCurrentPosition().then((position) => {
+          let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+          let mapOptions = {
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            center: latLng
+          }
+
+          this.map = new google.maps.Map(this.mapElement, mapOptions);
+
+          this.mapInitialised = true;
+          resolve(true);
+        }).then(() => {
+            this.dataService.getLocationStopDetails().then((locations) => {
+                if (locations != null) {
+                  this.addStoredMarkers(locations);
+                }
+              })
+          });
+        }
       });
   }
-
-  // Potentially use this code to show the details page
-  // addInfoWindow(marker, content){
-  //   let infoWindow = new google.maps.InfoWindow({
-  //     content: content
-  //   });
-   
-  //   google.maps.event.addListener(marker, 'click', () => {
-  //     infoWindow.open(this.map, marker);
-  //   });
-  // }
 
   addStoredMarkers(markers) {
     //Need to add this function
@@ -123,9 +150,16 @@ export class GoogleMapsProvider {
           let position = markerToAdd.getPosition();
           this.updateMarker(position, markerToAdd);
         });
+
+        google.maps.event.addListener(markerToAdd, 'click', () => {
+          let infoWindow = new google.maps.InfoWindow({
+            content: marker.name
+          });
+          infoWindow.open(this.map, markerToAdd);
+        });
+
       }
     });
-
   }
 
   addMarkerManually(data) {
@@ -207,6 +241,13 @@ export class GoogleMapsProvider {
         this.updateMarker(position, marker);
       });
 
+      google.maps.event.addListener(markerToAdd, 'click', () => {
+        let infoWindow = new google.maps.InfoWindow({
+          content: marker.name
+        });
+        infoWindow.open(this.map, markerToAdd);
+      });
+
       //Cannot have position, need to put in lat, lng seperate
       markerToAdd = {
         name: data.name,
@@ -229,12 +270,6 @@ export class GoogleMapsProvider {
       };
 
       return this.dataService.getLocationStopDetails();
-      
-    //Might use this
-    //       google.maps.event.addListener(marker, 'click', () => {
-    //   infoWindow.open(this.map, marker);
-    // });
-
     }).then(function (locations) {
         if (locations != null) {
           locations.unshift(markerToAdd);
@@ -324,11 +359,11 @@ export class GoogleMapsProvider {
 
       setTimeout(() => {
         if (typeof google == "undefined" || typeof google.maps == "undefined") {
-          this.loadGoogleMaps();
+          this.loadGoogleMaps(false, null);
         }
         else {
           if (!this.mapInitialised) {
-            this.initMap();
+            this.initMap(false, null);
           }
 
           this.enableMap()

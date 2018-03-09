@@ -12,6 +12,7 @@ import { ChecklistPage } from '../pages/checklist/checklist';
 import { ChecklistDetailPage } from '../pages/checklist-detail/checklist-detail';
 import { LocationPage } from '../pages/location/location';
 import { SettingsPage } from '../pages/settings/settings';
+import { FuelPage } from '../pages/fuel/fuel';
 import { RemindersPage } from '../pages/reminders/reminders';
 import { AddReminderPage } from '../pages/add-reminder/add-reminder';
 import { BoatDetailsPage } from '../pages/boat-details/boat-details';
@@ -64,7 +65,8 @@ import { DataReminderProvider } from '../providers/data-reminder/data-reminder';
     BoatMathPage,
     RemindersPage,
     AddReminderPage,
-    SetCategoriesPage
+    SetCategoriesPage,
+    FuelPage
   ],
   imports: [
     BrowserModule,
@@ -94,7 +96,8 @@ import { DataReminderProvider } from '../providers/data-reminder/data-reminder';
     BoatMathPage,
     RemindersPage,
     AddReminderPage,
-    SetCategoriesPage
+    SetCategoriesPage,
+    FuelPage
   ],
   providers: [
     StatusBar,

@@ -4,6 +4,7 @@ import { BudgetPage } from '../budget/budget';
 import { RemindersPage } from '../reminders/reminders';
 import { ChecklistPage } from '../checklist/checklist';
 import { LocationPage } from '../location/location';
+import { FuelPage } from '../fuel/fuel';
 import { BoatDetailsPage } from '../boat-details/boat-details';
 import { BoatMathPage } from '../boat-math/boat-math';
 import { TravelLogPage } from '../travel-log/travel-log';
@@ -74,6 +75,10 @@ export class HomePage {
 
   showRemindersPage() {
     this.navCtrl.push(RemindersPage);
+  }
+
+  showFuelPage() {
+    this.navCtrl.push(FuelPage);
   }
 
   resetWaste() {

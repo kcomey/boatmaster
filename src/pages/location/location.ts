@@ -8,6 +8,7 @@ import { MooringDetailsPage } from '../mooring-details/mooring-details';
 import { detachEmbeddedView } from '@angular/core/src/view/view_attach';
 
 import { Storage } from '@ionic/storage';
+import { GESTURE_PRIORITY_TOGGLE } from 'ionic-angular/gestures/gesture-controller';
 
 @IonicPage()
 @Component({
@@ -24,15 +25,28 @@ export class LocationPage {
   longitude: number;
   image: string;
   index: number;
+  marker: any;
 
   constructor(public storage: Storage, public modalCtrl: ModalController, public app: App, public navCtrl: NavController, public maps: GoogleMapsProvider, public platform: Platform, 
     public dataService: DataLocationProvider, public alertCtrl: AlertController, public geolocation: Geolocation, public navParams: NavParams) {
+  
+    this.marker = this.navParams.get('marker');
   }
 
   ionViewDidLoad(): void {
     this.platform.ready().then(() => {
-      this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement)
+      if(this.marker) {
+        this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement, true, this.marker);
+        this.showMarkerOnMap(this.marker);
+      }
+      else {
+        this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement, false, this.marker);
+      }
     });
+  }
+
+  showMarkerOnMap(marker) {
+    console.log("show the marker now " + marker.name);
   }
 
   addMooringLocation(): void {

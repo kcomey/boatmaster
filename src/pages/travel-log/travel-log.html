@@ -11,39 +11,22 @@
     <ion-card>
         <ion-list>
             <ion-item-sliding #slidingItem *ngFor="let entry of locations">
-                <ion-item>
-                  <div class="row">
-        
-                  <div *ngIf="entry.category == 'mooring'" class="col text">
-                    <button color="exDark" item-start ion-button clear>
-                      {{ entry.arrive | date:'M/d/yy'}}
-                    </button></div>
+             
+             <ion-item *ngIf="entry.category == 'mooring'">
+                <button color="exDark" ion-button clear>
+                    {{ entry.arrive | date:'M/d/yy'}}
+                  </button>
+                  <button color="exDark" class="text" text-capitalize ion-button clear (click)="showLocation(entry)"> {{ entry.name }}</button>
+                  <button (click)="showOnMap(entry)" item-start class="noB"><ion-img width="32" height="37" src="assets/imgs/harbor.png"></ion-img></button>
+              </ion-item>
 
-                    <div *ngIf="entry.category == 'diving'" class="col text">
-                        <button color="exDark" item-start ion-button clear>
-                          {{ entry.today | date:'M/d/yy'}}
-                        </button></div>
-  
-                    <div class="col detail">
-                        <button color="exDark" class="text" text-capitalize item-end ion-button clear (click)="showLocation(entry)"> {{ entry.name }}</button>
-                      </div>
-
-                      <div *ngIf="entry.category == 'diving'" class="col currency">
-                        <button ion-button icon-only clear>
-                        <img src='assets/imgs/scubadivingIcon.png'></button>
-                        <button ion-button icon-only clear (click)="showOnMap(entry)">
-                          <ion-icon color="exDark" name="globe"></ion-icon></button></div>
-                   
-
-                    <div *ngIf="entry.category == 'mooring'" class="col currency">
-                        <button ion-button icon-only clear>
-                        <img src='assets/imgs/harborIcon.png'></button>
-                        <button ion-button icon-only clear (click)="showOnMap(entry)">
-                          <ion-icon color="exDark" name="globe"></ion-icon></button></div>
-  
-                    </div>
-
-                  </ion-item>
+              <ion-item *ngIf="entry.category == 'diving'">
+                  <button color="exDark" ion-button clear>
+                      {{ entry.today | date:'M/d/yy'}}
+                    </button>
+                    <button color="exDark" class="text" text-capitalize ion-button clear (click)="showLocation(entry)"> {{ entry.name }}</button>
+                    <button (click)="showOnMap(entry)" item-start class="noB"><ion-img width="32" height="37" src="assets/imgs/scubadiving.png"></ion-img></button>
+                </ion-item>
     
               <ion-item-options>
                 <button ion-button outline icon-only color="warning"
