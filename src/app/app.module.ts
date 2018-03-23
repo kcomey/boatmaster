@@ -8,6 +8,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { BudgetPage } from '../pages/budget/budget';
+import { CategoryPage } from '../pages/category/category';
+import { CategoryEntryPage } from '../pages/category-entry/category-entry';
 import { ChecklistPage } from '../pages/checklist/checklist';
 import { ChecklistDetailPage } from '../pages/checklist-detail/checklist-detail';
 import { LocationPage } from '../pages/location/location';
@@ -66,7 +68,9 @@ import { DataReminderProvider } from '../providers/data-reminder/data-reminder';
     RemindersPage,
     AddReminderPage,
     SetCategoriesPage,
-    FuelPage
+    FuelPage,
+    CategoryEntryPage,
+    CategoryPage
   ],
   imports: [
     BrowserModule,
@@ -97,7 +101,9 @@ import { DataReminderProvider } from '../providers/data-reminder/data-reminder';
     RemindersPage,
     AddReminderPage,
     SetCategoriesPage,
-    FuelPage
+    FuelPage,
+    CategoryPage,
+    CategoryEntryPage
   ],
   providers: [
     StatusBar,

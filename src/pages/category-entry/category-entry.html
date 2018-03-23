@@ -1,0 +1,35 @@
+
+<ion-header>
+  <ion-navbar color="header">
+    <ion-title>Entry for {{ category.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="custom">
+  <ion-list no-lines>
+  
+  <form [formGroup]="budgetEntryForm">
+  
+  <ion-item>
+  <ion-label stacked>Date</ion-label>
+  <ion-datetime formControlName="date" displayFormat="MM/DD/YYYY"></ion-datetime>
+  </ion-item>
+  <ion-item>
+  <ion-label stacked>Amount</ion-label>
+  <ion-input formControlName="amount" type="number"></ion-input>
+  </ion-item>
+  <ion-item>
+  <ion-label stacked>Details (optional)</ion-label>
+  <ion-input formControlName="details" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+  <button ion-button type="submit" (click)="saveEntry(category, entry)">Save</button>
+  <button ion-button clear type="cancel" (click)="cancelForm()">Cancel</button>
+  </ion-item>
+  </form>
+  </ion-list>
+  </ion-content>
+  
+
+  
+

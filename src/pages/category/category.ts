@@ -8,19 +8,19 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { ItemSliding } from 'ionic-angular';
 import { CurrencyPipe } from '@angular/common';
 import { BudgetEntryPage } from '../budget-entry/budget-entry';
+import { CategoryEntryPage } from '../category-entry/category-entry';
 import { SettingsPage } from '../../pages/settings/settings';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
-import { CategoryEntryPage } from '../category-entry/category-entry';
 
 //remove storage above
 
 @IonicPage()
 @Component({
-  selector: 'page-budget',
-  templateUrl: 'budget.html'
+  selector: 'page-category',
+  templateUrl: 'category.html'
 })
-export class BudgetPage {
+export class CategoryPage {
   @ViewChild(Nav) nav: Nav;
 
   categories: CategoryModel[] = [];
@@ -30,7 +30,7 @@ export class BudgetPage {
   budget: any = false;
   archiveCategories: boolean = false;
 
-  constructor(public toastCtrl: ToastController, public events: Events, public menu: MenuController, public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage,public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
+  constructor(public toastCtrl: ToastController, public events: Events, public menu: MenuController, public navParams: NavParams, public viewCtrl: ViewController, public modalCtrl: ModalController, public currency: CurrencyPipe, public storage: Storage, public navCtrl: NavController, public alertCtrl: AlertController, public platform: Platform, 
     public keyboard: Keyboard, public dataService: DataCategoryProvider, public budgetService: DataBudgetProvider) {
       this.menu.enable(true, 'budget');
       this.menu.enable(false, 'location');
@@ -265,7 +265,7 @@ export class BudgetPage {
   }
 
   addEntry(category): void {
-    this.navCtrl.push(CategoryEntryPage, { category: category, categories: this.categories, budget: this.budget});
+    this.navCtrl.push(CategoryEntryPage, { category: category, categories: this.categories});
 
     // let prompt = this.modalCtrl.create(BudgetEntryPage, { category: category });
     // prompt.onDidDismiss(data => {

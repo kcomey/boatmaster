@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar color="header">
+    <ion-title><span>{{ today | date:'MMM' }}</span> <span *ngIf="budget">{{ budget.monthlyBudget | currency:'USD':symbol:'2.2-2' }}</span></ion-title>
+    <ion-buttons end>
+      <button class="nochange" icon-only (click)="addCategory()"><ion-icon
+      name="add-circle"></ion-icon></button>
+      </ion-buttons>
+      <button ion-button icon-only menuToggle right>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="custom">
+  <ion-card>
+      <ion-list no-lines>
+          <ion-list-header *ngIf="budget" [ngClass]="(budget.monthlyBudget - budget.monthlyBudgetSpent >= 0) ? 'number' : 'numberNegative'">
+              {{ budget.monthlyBudget - budget.monthlyBudgetSpent| currency:'USD':symbol:'2.2-2' }}
+              of budget remaining
+              <div>({{ budget.monthlyBudget - budget.amtBudgetAllocated | currency:'USD':symbol:'2.2-2' }} not allocated)</div>
+            </ion-list-header>
+          <ion-item-sliding #slidingItem *ngFor="let category of categories">
+              <ion-item >
+                  <button class="text" text-capitalize item-start ion-button clear (click)="addEntry(category)">{{ category.title }}
+                    ({{category.items.length}})
+                  </button>
+                  <button item-end ion-button clear [ngClass]="(category.amtAllocated >= 0) ? 'number' : 'numberNegative'"> {{ category.amtAllocated - category.amtSpent | currency:'USD':symbol:'2.2-2'}}</button>
+                  <button class="numberNegative" item-end ion-button clear> ({{ category.amtSpent | currency:'USD':symbol:'2.2-2'}})</button>
+                  <button class="text" item-end ion-button icon-only clear (click)="viewCategoryEntries(category)"><ion-icon name="arrow-dropright"></ion-icon></button>
+               
+                </ion-item>
+  
+            <ion-item-options>
+              <button ion-button outline icon-only color="proceed"
+              (click)="renameCategory(category, slidingItem)"><ion-icon
+              name="clipboard"></ion-icon></button>
+              <button ion-button outline icon-only color="warning"
+              (click)="removeCategory(category, slidingItem)"><ion-icon
+              name="trash"></ion-icon></button>
+            </ion-item-options>
+          </ion-item-sliding>
+          </ion-list>
+    </ion-card>
+  </ion-content>
+
+
+
+  
+
+
