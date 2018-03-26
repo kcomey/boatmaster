@@ -10,6 +10,7 @@ import { BoatMathPage } from '../boat-math/boat-math';
 import { TravelLogPage } from '../travel-log/travel-log';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
+import { StatusBar } from '@ionic-native/status-bar';
 
 @Component({
   selector: 'page-home',
@@ -21,7 +22,7 @@ export class HomePage {
   momentTodayDate: any = moment(); 
   todayDate: any = Date();
 
-  constructor(public platform: Platform, public storage: Storage, public alertCtrl: AlertController, public navCtrl: NavController, public menu: MenuController) {
+  constructor(public statusBar: StatusBar, public platform: Platform, public storage: Storage, public alertCtrl: AlertController, public navCtrl: NavController, public menu: MenuController) {
     this.menu.enable(false, 'budget');
     this.menu.enable(false, 'location');
   }
@@ -32,6 +33,7 @@ export class HomePage {
     // let diff = this.todayDate.diff(oldDate, 'days');
     // console.log('diff is ' + diff);
     this.platform.ready().then(() => {
+      this.statusBar.styleBlackOpaque();
       this.getWater().then((days) => {
         console.log('days is ' + days)
         if (days != null) {
